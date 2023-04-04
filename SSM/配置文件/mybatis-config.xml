@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!--
+        properties?,settings?,typeAliases?,typeHandlers?,
+        objectFactory?,objectWrapperFactory?,reflectorFactory?,
+        plugins?,environments?,databaseIdProvider?,mappers?
+    -->
+
+    <!--引入jdbc.properties文件，可以使用${key}的方式访问value-->
+    <properties resource="jdbc.properties"/>
+
+    <settings>
+        <!--将下划线映射为驼峰-->
+        <!--<setting name="mapUnderscoreToCamelCase" value="true"/>-->
+        <!--全局延迟加载-->
+        <!--<setting name="lazyLoadingEnabled" value="true"/>-->
+        <!--完整加载-->
+        <setting name="aggressiveLazyLoading" value="false"/>
+    </settings>
+
+    <typeAliases>
+        <!--bean包下的类型在 mapper/下的映射文件 中全部拥有默认别名-->
+        <package name="com.mybatis.bean"/>
+    </typeAliases>
+    
+    <plugins>
+        <!--配置分页器插件-->
+        <plugin interceptor="com.github.pagehelper.PageInterceptor"></plugin>
+    </plugins>
+
+    <!--
+        environments: 配置连接数据库环境
+        default: 设置默认使用的环境 id
+    -->
+    <environments default="development">
+        <!--
+            environment: 设置一个具体的连接数据库的环境
+            id: 设置环境的唯一表示，不能重复
+        -->
+        <environment id="development">
+            <!--
+                transactionManager: 设置事务管理器
+                type="JDBC" | "MANAGED"
+                JDBC: 设置使用 JDBC 原生的事务管理方式
+                MANAGED: 被管理，例如 Spring
+            -->
+            <transactionManager type="JDBC"/>
+            <!--
+                dataSource: 设置数据源
+                type="POOLED" | "UNPOOLED" | "JNDI"
+                POOLED: 表示数据库连接池
+                UNPOOLED： 表示不使用数据库连接池
+                JNDI： 表示使用上下文中的数据源
+            -->
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="root"/>
+                <property name="password" value="binn"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!--引入mybatis的映射文件-->
+    <mappers>
+        <!--<mapper resource="mappers/UserMapper.xml"/>-->
+        <!--
+            以包的方式引入映射文件，但是必须满足于
+                1. mapper 接口和映射文件所在的包名必须一致
+                2. mapper 接口和映射文件的名字必须一致
+        -->
+        <package name="com.mybatis.mapper"/>
+    </mappers>
+</configuration>

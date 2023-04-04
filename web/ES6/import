@@ -1,0 +1,29 @@
+导入模块用法
+
+```javascript
+import * as module from './module.js';
+
+import { module } from './module.js';
+
+import module from './module.js';
+
+import { module as module1 } from './module.js';
+```
+
+
+
+import * as module from './module.js';
+
+如果 ./module.js 里面有`export default` ，则使用 module.default.
+
+
+
+import { module } from './module.js';
+
+如果 ./module.js 里面有`export default` ，则使用 `import { default as module } from './module.js';`
+
+
+
+import { module as module1 } from './module.js';
+
+类似于 import { module } from './module.js'; `export default`的情况
