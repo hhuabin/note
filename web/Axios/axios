@@ -1,0 +1,123 @@
+# Axios
+
+axios拥有的元素
+
+```javascript
+export class Axios {
+  constructor(config?: AxiosRequestConfig);
+  defaults: AxiosDefaults;
+  interceptors: {
+    request: AxiosInterceptorManager<InternalAxiosRequestConfig>;
+    response: AxiosInterceptorManager<AxiosResponse>;
+  };
+  getUri(config?: AxiosRequestConfig): string;
+  request<T = any, R = AxiosResponse<T>, D = any>(config: AxiosRequestConfig<D>): Promise<R>;
+  get<T = any, R = AxiosResponse<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
+  delete<T = any, R = AxiosResponse<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
+  head<T = any, R = AxiosResponse<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
+  options<T = any, R = AxiosResponse<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
+  post<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+  put<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+  patch<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+  postForm<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+  putForm<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+  patchForm<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+}
+```
+
+```javascript
+AxiosInstance extends Axios {
+  <T = any, R = AxiosResponse<T>, D = any>(config: AxiosRequestConfig<D>): Promise<R>;
+  <T = any, R = AxiosResponse<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
+
+  defaults: Omit<AxiosDefaults, 'headers'> & {
+    headers: HeadersDefaults & {
+      [key: string]: AxiosHeaderValue
+    }
+  };
+}
+```
+
+```javascript
+AxiosStatic extends AxiosInstance {
+  create(config?: CreateAxiosDefaults): AxiosInstance;
+  Cancel: CancelStatic;
+  CancelToken: CancelTokenStatic;
+  Axios: typeof Axios;
+  AxiosError: typeof AxiosError;
+  HttpStatusCode: typeof HttpStatusCode;
+  readonly VERSION: string;
+  isCancel: typeof isCancel;
+  all: typeof all;
+  spread: typeof spread;
+  isAxiosError: typeof isAxiosError;
+  toFormData: typeof toFormData;
+  formToJSON: typeof formToJSON;
+  CanceledError: typeof CanceledError;
+  AxiosHeaders: typeof AxiosHeaders;
+}
+```
+
+
+
+# axios请求参数
+
+```javascript
+export interface AxiosRequestConfig<D = any> {
+  url?: string;
+  method?: Method | string;
+  baseURL?: string;
+  transformRequest?: AxiosRequestTransformer | AxiosRequestTransformer[];
+  transformResponse?: AxiosResponseTransformer | AxiosResponseTransformer[];
+  headers?: (RawAxiosRequestHeaders & MethodsHeaders) | AxiosHeaders;
+  params?: any;
+  paramsSerializer?: ParamsSerializerOptions;
+  data?: D;
+  timeout?: Milliseconds;
+  timeoutErrorMessage?: string;
+  withCredentials?: boolean;
+  adapter?: AxiosAdapterConfig | AxiosAdapterConfig[];
+  auth?: AxiosBasicCredentials;
+  responseType?: ResponseType;
+  responseEncoding?: responseEncoding | string;
+  xsrfCookieName?: string;
+  xsrfHeaderName?: string;
+  onUploadProgress?: (progressEvent: AxiosProgressEvent) => void;
+  onDownloadProgress?: (progressEvent: AxiosProgressEvent) => void;
+  maxContentLength?: number;
+  validateStatus?: ((status: number) => boolean) | null;
+  maxBodyLength?: number;
+  maxRedirects?: number;
+  maxRate?: number | [MaxUploadRate, MaxDownloadRate];
+  beforeRedirect?: (options: Record<string, any>, responseDetails: {headers: Record<string, string>}) => void;
+  socketPath?: string | null;
+  httpAgent?: any;
+  httpsAgent?: any;
+  proxy?: AxiosProxyConfig | false;
+  cancelToken?: CancelToken;
+  decompress?: boolean;
+  transitional?: TransitionalOptions;
+  signal?: GenericAbortSignal;
+  insecureHTTPParser?: boolean;
+  env?: {
+    FormData?: new (...args: any[]) => object;
+  };
+  formSerializer?: FormSerializerOptions;
+}
+```
+
+
+
+# axios响应参数
+
+```javascript
+AxiosResponse<T = any, D = any> {
+  data: T;
+  status: number;
+  statusText: string;
+  headers: RawAxiosResponseHeaders | AxiosResponseHeaders;
+  config: InternalAxiosRequestConfig<D>;
+  request?: any;
+}
+```
+
