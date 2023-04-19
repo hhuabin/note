@@ -61,3 +61,29 @@ try {
 }
 ```
 
+## 嵌套 try 块
+
+```javascript
+try {
+    try {
+        throw new Error("oops");
+    }
+    catch (ex) {
+        console.error("inner", ex.message);
+        throw ex;
+    }
+    finally {
+        console.log("finally");
+        // return
+    }
+}
+catch (ex) {
+  	console.error("outer", ex.message);
+}
+
+// Output:
+// "inner" "oops"
+// "finally"
+// "outer" "oops"
+```
+

@@ -15,3 +15,9 @@ arr.reduce(function(preview,current,index,arr){
 - index 可选。表示当前正在处理的数组元素的索引，若提供 init 值，则起始索引为- 0，否则起始索引为1；
 - arr 可选。表示原数组；
 - init 可选。表示初始值。
+
+
+
+# forEach
+
+- 不会改变原数组基本类型的值，但引用数据类型会改变
