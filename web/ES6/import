@@ -1,4 +1,4 @@
-导入模块用法
+# 导入模块用法
 
 ```javascript
 import * as module from './module.js';
@@ -16,6 +16,10 @@ import * as module from './module.js';
 
 如果 ./module.js 里面有`export default` ，则使用 module.default.
 
+```javascript
+module.default.a = 10;
+```
+
 
 
 import { module } from './module.js';
@@ -27,3 +31,23 @@ import { module } from './module.js';
 import { module as module1 } from './module.js';
 
 类似于 import { module } from './module.js'; `export default`的情况
+
+
+
+# 既有 default 也有一般暴露
+
+这里的 {a} 不是 解构赋值
+
+```javascript
+const a = {}
+const module = {}
+module.a = a
+
+export default module
+export a
+```
+
+```javascript
+import module, {a} from './module.js';
+```
+
