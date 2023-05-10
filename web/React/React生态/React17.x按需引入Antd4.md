@@ -1,10 +1,16 @@
-安装 antd
+安装 antd （PC端版本4.16.13）4官网 <https://4x.ant.design/docs/react/introduce-cn/>
+
+版本5自动支持按需引入
 
 ```javascript
 npm install antd --save
 ```
 
-引入 react-app-rewired和customize-cra 并修改 package.json 里的启动配置
+引入 **react-app-rewired和customize-cra** 并修改 package.json 里的启动配置
+
+- **config-overrides.js 用于覆盖 webpack 配置**
+- **customize-cra 用于执行 config-overrides.js 的修改**
+- **react-app-rewired 用于启动 App**
 
 ```javascript
 npm install react-app-rewired customize-cra --save-dev
@@ -109,6 +115,8 @@ module.exprts = override(
 
 重启项目，如果你看到一个绿色的按钮，说明你自定义主题成功
 
+
+
 附上包版本信息
 
 package.json
@@ -152,6 +160,7 @@ antd mobile 的配置与网页端只有 libraryName: 'antd-mobile',不一样。
 如果需要安装less 不需要antd,可尝试仅安装
 
 ```javascript
+npm install less less-loader -D
 npm install react-app-rewired customize-cra --save-dev
 ```
 
