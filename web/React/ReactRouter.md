@@ -54,6 +54,10 @@ history.listen((location) => {
 
 ## 路由组件通过 props 传递的仨对象
 
+PS: 在 React Router 5 中，如果你是通过 \<BrowserRouter> 或者 \<Router> 组件将你的根组件包裹起来的话，那么**在根组件内部，是无法直接访问 history 对象的**，因为它不是通过 props 传递到组件内部的。
+
+不过可以使用 withRouter 高阶组件将你的根组件包裹起来，从而让根组件能够通过 props 访问到 history 对象
+
 - **hirstory** 对象：
   - go: ƒ go(n)
   - goBack: ƒ goBack()
@@ -177,18 +181,19 @@ replace = () => {
 
 - withRouter的返回值是一个新组件
 
-```jsx
-import {withRouter} from 'react-router-dom'
+```tsx
+import { Component, ReactNode, ComponentType } from 'react';
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 
 class Header extends Component {
 
-	render() {
+	render(): ReactNode {
 		return (
 			<div></div>
 		)
 	}
 }
 
-export default withRouter(Header)
+export default withRouter((Header as ComponentType<RouteComponentProps>))
 ```
 
