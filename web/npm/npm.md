@@ -34,3 +34,9 @@ npm view 包名 version
 npm view 包名 versions
 ```
 
+装最新版本的包
+
+```
+npm install <package-name>@latest
+```
+
