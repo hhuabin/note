@@ -177,7 +177,7 @@ export default function Counter() {
   return (
     <>
       <button onClick={() => {
-        dispatch({ type: 'incremented_age' })
+        dispatch({ type: 'incremented_age' })w
       }}>
         Increment age
       </button>
@@ -363,6 +363,93 @@ export default function Hook() {
 ```
 
 
+
+## 10. useDeferredValue
+
+用于延迟更新状态的值，以优化性能。它返回一个被延迟更新的值，并确保在渲染期间不会导致额外的重渲染。
+
+`useDeferredValue(state)`：一般接收一个 state 作为参数
+
+useDeferredValue 会触发两次页面渲染
+
+额，目前来说，看不懂这个 hook 有什么卵用
+
+```jsx
+import { Suspense, useState, useDeferredValue } from 'react';
+import SearchResults from './SearchResults.js';
+
+export default function App() {
+	const [query, setQuery] = useState('');
+	const deferredQuery = useDeferredValue(query);
+	return (
+		<>
+			<label>
+				Search albums:
+				<input value={query} onChange={e => setQuery(e.target.value)} />
+			</label>
+			<Suspense fallback={<h2>Loading...</h2>}>
+				<SearchResults query={deferredQuery} />
+			</Suspense>
+		</>
+	);
+} 
+```
+
+以上代码，input 正常显示 SearchResults 等待组件加载完成时显示。
+
+
+
+## 11. useTransition
+
+用于在渲染过渡期间优化用户体验。它允许我们在异步更新状态时指定一个过渡期，以平滑地处理状态的变化，并在过渡期间显示一些加载指示或过渡效果。
+
+`const [isPending, startTransition] = useTransition()`
+
+`useTransition` 返回一个数组，其中包含两个元素：`startTransition` 和 `isPending`。
+
+- `startTransition` 是一个**函数**，用于触发过渡期的开始。我们可以在该函数中执行异步操作或更新状态。在过渡期间，React 会延迟更新组件，以提供更平滑的过渡效果。
+- `isPending` 是一个**布尔值**，指示是否处于过渡期。当调用 `startTransition` 函数开始过渡期时，`isPending` 会变为 `true`，在过渡期结束后会变为 `false`。我们可以根据 `isPending` 的值来在界面上显示加载指示或过渡效果。
+
+```jsx
+import { useState, useTransition } from 'react';
+
+function MyComponent() {
+	const [a, setA] = useState(0)
+	const [b, setB] = useState(0)
+    
+	const [startTransition, isPending] = useTransition();
+
+	const fetchData = () => {
+        // 在过渡期间更新状态
+        setA(a => a+1)
+        // startTransition 的回调函数设置setState会在其他的setState生效后才执行
+		startTransition(() => {
+			setB(b => b+1)
+		})
+	};
+
+	return (
+		<div>
+			<button onClick={fetchData} disabled={isPending}>
+				{isPending ? 'Loading...' : 'Fetch Data'}
+			</button>
+			<div>{data}</div>
+		</div>
+	);
+}
+```
+
+
+
+## 12. useId
+
+可以生成传递给无障碍属性的唯一 ID
+
+```jsx
+const id = useId()
+```
+
+**不要使用 `useId` 来生成列表中的 key**。key 应该由你的数据生成
 
 
 

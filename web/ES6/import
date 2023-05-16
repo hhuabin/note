@@ -36,12 +36,13 @@ import { module as module1 } from './module.js';
 
 # 既有 default 也有一般暴露
 
-这里的 {a} 不是 解构赋值
+这里的 {a} 不是 解构赋值，是变量a，即({})
 
 ```javascript
 const a = {}
 const module = {}
 module.a = a
+module.a = 123
 
 export default module
 export a
