@@ -1,3 +1,5 @@
+[craco官网](https://craco.js.org/docs/getting-started/)
+
 `craco` 和 `react-app-rewired`（以下简称 `rewired`）都是用于修改 `create-react-app` 的配置的工具，它们的作用类似，但是有以下几点不同：
 
 1. 实现原理不同

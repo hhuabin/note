@@ -53,6 +53,30 @@ render() {
 }
 ```
 
+在路由组件中，Suspense 只能加在 Routes 或 Outlet 外；\<Routes>，\<Route> 的直接子组件只能是 \<Route>
+
+```jsx
+<Suspense fallback={<Loading/>}>
+    <Outlet></Outlet>
+</Suspense>
+
+<Suspense fallback={<Loading/>}>
+    <Routes>
+        <Route path="/" element={<Home/>}>
+            <Route path="/home" element={<HomeComponent/>}/>
+        </Route>
+    </Routes>
+</Suspense>
+```
+
+在 React 中，**异步组件第一次加载执行两次**的情况通常是由于 React 的工作机制所导致的。
+
+当使用异步组件（例如 React.lazy 和 Suspense）时，React 首先会触发组件的加载过程。在加载过程中，React 会渲染出一个占位符（placeholder），以便在异步组件加载完成前展示该占位符。这是第一次渲染。
+
+一旦异步组件加载完成，React 将会触发第二次渲染，此时会替换占位符并渲染出实际的组件内容。
+
+因此，第一次加载异步组件会经历两次渲染。这是 React 的正常行为，并且在大多数情况下不会引起问题。React 之所以采用这种方式，是为了确保组件的加载状态和渲染结果能够正确地反映出异步加载的过程。
+
 
 
 # hooks
@@ -260,6 +284,8 @@ export default function ProductPage({ productId, referrer, theme }) {
 
 在 react 中无法直接通过 `ref ` 获取子组件实例（在 vue 中可以）。**当父组件需要调用子组件的方法时**，可以使用 `forwardRef` +  `useImperativeHandle`
 
+`forwardRef` 是 React 提供的一个函数，用于向函数组件转发 `ref`。它允许你在函数组件中接收 `ref` 并将其转发给内部的子组件。
+
 `useImperativeHandle` 接受三个参数：
 
 1. ref 对象
@@ -407,7 +433,7 @@ export default function App() {
 
 `useTransition` 返回一个数组，其中包含两个元素：`startTransition` 和 `isPending`。
 
-- `startTransition` 是一个**函数**，用于触发过渡期的开始。我们可以在该函数中执行异步操作或更新状态。在过渡期间，React 会延迟更新组件，以提供更平滑的过渡效果。
+- `startTransition` 是一个**函数**，用于触发过渡期的开始。我们可以在该函数中**执行异步操作或更新状态**。在过渡期间，React 会延迟更新组件，以提供更平滑的过渡效果。
 - `isPending` 是一个**布尔值**，指示是否处于过渡期。当调用 `startTransition` 函数开始过渡期时，`isPending` 会变为 `true`，在过渡期结束后会变为 `false`。我们可以根据 `isPending` 的值来在界面上显示加载指示或过渡效果。
 
 ```jsx
@@ -424,6 +450,7 @@ function MyComponent() {
         setA(a => a+1)
         // startTransition 的回调函数设置setState会在其他的setState生效后才执行
 		startTransition(() => {
+            // 倒是可以实现 vue 中 nextick 的功能
 			setB(b => b+1)
 		})
 	};
@@ -450,6 +477,29 @@ const id = useId()
 ```
 
 **不要使用 `useId` 来生成列表中的 key**。key 应该由你的数据生成
+
+
+
+React 的 Hook 规则要求在每次渲染中使用 Hook 的数量必须是固定的，并且必须按照相同的顺序使用。如果在使用 Hook 之前提前返回组件，则会导致在返回之前未使用或渲染的 Hook。
+
+以下是一个示例，展示了一个可能导致 "Rendered fewer hooks than expected" 错误的情况：
+
+```jsx
+function MyComponent() {
+	if (condition) {
+		return null; // 提前返回语句导致错误
+	}
+
+	const [state, setState] = useState(initialState);
+	// 使用其他的 Hook...
+
+	return (
+	  // 组件的 JSX 渲染
+	);
+}
+```
+
+在上面的示例中，如果条件 `condition` 成立，组件会提前返回 `null`，导致后面定义的 Hook 没有机会使用。要解决这个问题，可以将提前返回移动到组件 JSX 渲染的部分，以确保 Hook 在组件的顶层使用。
 
 
 
@@ -617,7 +667,7 @@ context：一种组件间通信方式, 常用于【祖组件】与【后代组�
 
 # render props
 
-Vue中:  使用**slot 插槽技术**, 也就是通过组件标签体传入结构  <AA><BB/></AA>
+Vue中:  使用**slot 插槽技术**, 也就是通过组件标签体传入结构  \<AA>\<BB/>\</AA>
 
 React中:
 
