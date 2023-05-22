@@ -1,5 +1,7 @@
 # 原理
 
+**参考即可，不全是 popstate 的功劳**
+
 window.history 的方法：
 
 - **back**
