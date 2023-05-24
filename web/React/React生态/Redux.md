@@ -6,7 +6,9 @@
 npm install @reduxjs/toolkit react-redux
 ```
 
-在启动文件传 store
+## 基础使用
+
+1. 在启动文件传 store
 
 ```typescript
 // index.tsx
@@ -28,7 +30,7 @@ root.render(
 
 
 
-store/store.ts
+2. store/store.ts
 
 ```typescript
 import { configureStore } from '@reduxjs/toolkit'
@@ -48,7 +50,7 @@ export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
 ```
 
-store/slice/countersSlice.ts
+3. store/slice/countersSlice.ts
 
 ```typescript
 import { createSlice } from '@reduxjs/toolkit'
@@ -82,7 +84,7 @@ export const { increment, decrement, incrementByAmount } = counterSlice.actions
 export default counterSlice.reducer
 ```
 
-store/slice/usersSlice.ts
+4. store/slice/usersSlice.ts
 
 ```typescript
 import { createSlice } from '@reduxjs/toolkit'
@@ -106,7 +108,7 @@ export const { changeName } = usersSlice.actions
 export default usersSlice.reducer
 ```
 
-在组件中调用
+5. 在组件中调用
 
 ```tsx
 import { useAppDispatch, useAppSelector } from '../../hooks/store'
@@ -142,7 +144,9 @@ export default function Redux() {
 }
 ```
 
-关于简化 typescript，可以定义一个 hooks/store.ts 文件
+## 关于简化 typescript
+
+可以定义一个 hooks/store.ts 文件
 
 ```typescript
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
@@ -157,7 +161,9 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 
 
 
-可以**使用 store 封装高阶组件**，经过封装后，props 里面携带了 store 的相关东西，但不建议这样使用，容易摸不着头脑，过于简化的代码反而不便于阅读维护。有时候分清 props 和 store 更好维护。
+## 使用 store 封装高阶组件
+
+经过封装后，props 里面携带了 store 的相关东西，但不建议这样使用，容易摸不着头脑，过于简化的代码反而不便于阅读维护。有时候分清 props 和 store 更好维护。
 
 ```tsx
 import { connect } from 'react-redux'
@@ -200,6 +206,67 @@ export default connect<StateProps, DispatchProps, OwnProps>(
 ```
 
 
+
+# RTKQ
+
+用于使用可缓存的 api
+
+优点：可以减少发送请求
+
+缺点：容易造成和数据库数据不同步
+
+1. store.ts
+
+   ```typescript
+   import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
+   import studentApi from './studentApi'
+   
+   const store = configureStore({
+   	reducer: {
+   		[studentApi.reducerPath]: studentApi.reducer
+   	},
+   	middleware: getDefaultMiddleware => {
+   		return getDefaultMiddleware().concat(studentApi.middleware)
+   	}
+   })
+   export default store
+   ```
+
+2. xxxApi.ts
+
+   ```typescript
+   import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/dist/query/react"
+   
+   const studentApi = createApi({
+   	reducerPath: "studentApi",
+   	baseQuery: fetchBaseQuery({
+   		baseUrl: "http://localhost:5000",
+   	}),
+   	endpoints(build) {
+   		return {
+   			getStudent: build.query({
+   				query: () => {
+   					return "/user/search"
+   				},
+   				// 修改返回值格式
+   				/* transformResponse: (baseQuery) => {
+   					return baseQuery.data
+   				} */
+   			}),
+   		}
+   	}
+   })
+   
+   export const {
+   	useGetStudentQuery,
+   } = studentApi
+   
+   export default studentApi
+   ```
+
+   以上代码会对 http://localhost:5000/user/search 返回的数据作一个缓存。
+
+不建议使用 RTKQ，前端不需要缓存请求。缓存请求数据容易造成与数据库信息不同步。特别是不止一个用户能操作的接口绝对不能使用 RTKQ。
 
 
 

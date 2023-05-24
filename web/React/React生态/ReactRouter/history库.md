@@ -70,3 +70,9 @@ const transitionManager = createTransitionManager()
 - 对于浏览器的“前进”或“后退”按钮跳转：
 
   事实上，单击“前进”或“后退”按钮，只能监听到 `popstate`、`hashchange` 事件，但是此时浏览器的地址栏已经改变了。监听到跳转之后需要对地址栏做人工回复。在此情况下，可调用 `revertPop` 方法进行地址回复。
+  
+  - revertPop 基本逻辑：
+  
+    history 对象维护了一个对象 `allKeys`，`allKeys` 存储每个路由的 `history.location.key(window.history.state.key)` ，根据跳转前后的 key 判断前后路由的距离 delta，再使用，`history.go(delta)`，即可回到当前页。
+  
+  

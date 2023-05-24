@@ -1,10 +1,12 @@
+[craco官网](https://craco.js.org/docs/getting-started/)
+
 # 使用 less
 
 1. **安装相关依赖**
 
    需要安装 **@craco/craco**、**less** 和 **craco-less**：
 
-   craco 只能配和 craco.config.js 文件使用， [craco官网](https://craco.js.org/docs/getting-started/)
+   craco 只能配和 craco.config.js 文件使用
 
    ```
    npm install @craco/craco less craco-less --save-dev

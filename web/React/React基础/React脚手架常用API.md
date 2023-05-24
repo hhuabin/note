@@ -392,7 +392,7 @@ export default function Hook() {
 
 ## 10. useDeferredValue
 
-用于延迟更新状态的值，以优化性能。它返回一个被延迟更新的值，并确保在渲染期间不会导致额外的重渲染。
+**用于延迟更新状态的值，以优化性能。**它返回一个被延迟更新的值，并确保在渲染期间不会导致额外的重渲染。
 
 `useDeferredValue(state)`：一般接收一个 state 作为参数
 
@@ -427,7 +427,7 @@ export default function App() {
 
 ## 11. useTransition
 
-用于在渲染过渡期间优化用户体验。它允许我们在异步更新状态时指定一个过渡期，以平滑地处理状态的变化，并在过渡期间显示一些加载指示或过渡效果。
+用于在渲染过渡期间优化用户体验。它允许我们在异步更新状态时指定一个过渡期，以平滑地处理状态的变化，并在过渡期间显示一些加载指示或过渡效果。**可以实现类似 vue 中 nextick 的功能**
 
 `const [isPending, startTransition] = useTransition()`
 
@@ -774,3 +774,15 @@ render() {
 4. conText
 
    生产者-消费者模式
+
+
+
+# 副作用
+
+react 并不会自动帮助你去发现副作用，但是它会想办法让它显现出来，从而让你发现它。React 的严格模式，在开发模式下，会主动额重复调用一些函数，以使副作用显现。所以**在处于开发模式并且开启了React的严格模式时，这些函数会被调用两次**：
+
+- 函数的函数体
+- 状态更新器函数（setstate的第一个参数）
+- 传递给 usestate、useMemo 或 useReducer 的函数
+- 类组件的 constructor，render，shouldComponentUpdate 方法
+- 类组件的静态方法 getDerivedStateFromProps
