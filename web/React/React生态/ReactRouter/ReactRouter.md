@@ -51,7 +51,36 @@ history.listen((location) => {
 
 - **\<Route/>**
 
-  \<Route caseSensitive/>：属性用于指定路由路径的大小写
+  - `path`：指定路由的匹配路径。可以使用字符串、数组或正则表达式来定义多个路径匹配规则。
+
+    You can have multiple dynamic segments in one route path:
+
+    ```jsx
+    <Route path="/c/:categoryId/p/:productId" />;
+    // both will be available
+    params.categoryId;
+    params.productId;
+    ```
+
+    Dynamic segments **cannot be "partial"**:
+
+    - 🚫 `"/teams-:teamId"`
+
+    - ✅ `"/teams/:teamId"`
+    - 🚫 `"/:category--:productId"`
+    - ✅ `"/:productSlug"`
+
+  - `element`：指定路由匹配成功后要渲染的组件或元素。
+
+  - `children`：可以使用函数作为子元素来定义路由匹配成功后要渲染的内容。
+
+  - `caseSensitive`：指定路径匹配是否区分大小写，默认为 `false`。
+
+  - `index`：指定是否将当前路由作为其父路由的默认子路由，默认为 `false`。
+
+    请注意，`index` 属性与 children 属性互斥
+
+  Route 的匹配是无条件渲染的。即 / 的组件为 \<Home/>， /about 的组件为 \<About/>。当此时的路由为 /about 的时候 \<Home/> 和 \<About/> 都会被渲染，要想只匹配到一个，需要使用 \<Routes/> 包裹
 
 - **\<NavLink>**
 
@@ -172,8 +201,6 @@ const { state } = useLocation()
 
 ## 编程式路由导航 useNavigate
 
-### useNavigate
-
 ```tsx
 import { useNavigate } from 'react-router-dom';
 
@@ -200,6 +227,38 @@ export default function Home() {
 }
 ```
 
+
+
+## 弹窗返回关闭/表单返回保存
+
+由于 ReactRouter6 去掉了 Prompt 组件，使得 ReactRouter6 并不具备返回拦截功能。下面提供两种思路实现此功能
+
+1. 使用 `window.history.pushState` 跳转至该路由下的子路由，假性增加路由层级。再使用 `history.popstate` 监听路由返回，实现此功能。注意移除监听
+
+   ```tsx
+   const handlePopstate = (event: PopStateEvent) => {
+       console.log("handlePopstate");
+       // 在这里执行 popstate 事件触发时的逻辑
+       setIsModalOpen(false)
+   };
+   
+   useEffect(() => {
+   
+       // 添加 popstate 事件监听
+       window.addEventListener('popstate', handlePopstate);
+   
+       // 在组件卸载时移除事件监听
+       return () => {
+           window.removeEventListener('popstate', handlePopstate);
+       };
+   
+   }, []);
+   ```
+
+1. 使用 `window.location.hash` 跳转至该路由下的子路由，假性增加路由层级。再使用 `history.hashchange` 监听路由返回，实现此功能。
+
+
+
 PS: 
 
 1. 在 React Router 中，当**父级路由加载子路由时，父级路由组件会被重新渲染**，
@@ -209,8 +268,6 @@ PS:
    当父级路由加载子路由时，父级路由组件会首先被渲染，然后再渲染匹配的子路由组件。这是为了确保在渲染子路由之前，父级路由组件能够执行一些必要的操作，比如准备数据、执行路由守卫等。
 
    因此，父级路由的重新加载可能是正常的行为，并且符合 React Router 的设计原则。如果你希望在父级路由加载子路由时避免父级路由的重新加载，可以考虑优化父级路由组件的逻辑，避免不必要的操作和副作用，以减少重新渲染的开销。
-
-
 
 
 
@@ -385,3 +442,4 @@ class Header extends Component {
 export default withRouter((Header as ComponentType<RouteComponentProps>))
 ```
 
+5

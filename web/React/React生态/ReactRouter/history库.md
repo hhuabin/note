@@ -74,5 +74,7 @@ const transitionManager = createTransitionManager()
   - revertPop 基本逻辑：
   
     history 对象维护了一个对象 `allKeys`，`allKeys` 存储每个路由的 `history.location.key(window.history.state.key)` ，根据跳转前后的 key 判断前后路由的距离 delta，再使用，`history.go(delta)`，即可回到当前页。
+    
+  - 对地址栏做人工回复，**不响应组件变化**，所以组件的状态得以保存。
   
   

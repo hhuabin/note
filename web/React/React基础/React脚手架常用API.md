@@ -505,9 +505,13 @@ function MyComponent() {
 
 # React.memo()
 
-用于缓存组件，当子组件的 props 发生变化的时候再重新渲染，父组件的 state 变化的时候不会触发重新渲染。类似于 PureComponent 和 shouldComponentUpdate 方法的集合体。
+用于缓存组件，当子组件的 props 发生变化的时候再重新渲染，父组件的 state 变化的时候不会触发重新渲染。类似于 `PureComponent` 和 `shouldComponentUpdate` 方法的集合体。
 
-用法：直接包裹组件即可
+需要注意的是，React.memo() 只进行浅比较，即对于复杂对象或数组等引用类型的 props，只会比较它们的引用是否相等，而不会逐个比较对象的属性或数组的元素。如果传递给组件的引用类型的 props 在内容上发生了变化，但引用仍然相等，React.memo() 将无法检测到变化并重新渲染组件。在这种情况下，可以考虑使用其他深度比较的库或手动进行比较和更新。
+
+用法：直接包裹组件即可 React.memo(Component, areEqual)
+
+- `areEqual` 是一个函数，用于定义比较 props 的逻辑。它接受两个参数，分别是**上一次的 props (`prevProps`)** 和**当前的 props (`nextProps`)**。该函数应返回一个布尔值，指示两个 props 是否相等。如果返回 `true`，表示两个 props 相等，不会触发组件的重新渲染；如果返回 `false`，表示两个 props 不相等，会触发组件的重新渲染。
 
 ```jsx
 // 定义组件
@@ -626,9 +630,13 @@ context：一种组件间通信方式, 常用于【祖组件】与【后代组�
 
 **原因：Component中的shouldComponentUpdate()总是返回true**
 
+
+
 ## 效率高的做法
 
 只有当组件的state或props数据发生改变时才重新render()
+
+
 
 ## 解决办法 PureComponent
 
