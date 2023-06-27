@@ -1,7 +1,7 @@
 创建 ts 项目
 
 ```
-create-react-app react-learn --template typescript
+create-react-app react --template typescript
 ```
 
 创建 js 项目
