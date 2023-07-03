@@ -1,0 +1,39 @@
+# 多表查询
+
+内连接
+
+```sql
+SELECT ......., .......
+FROM ...
+INNER JOIN ... ON ... = ...
+```
+
+左外连接
+
+```sql
+SELECT ......., .......
+FROM ...
+LEFT OUTER JOIN ... ON ... = ...
+```
+
+右外连接
+
+```sql
+SELECT ......., .......
+FROM ...
+RIGHT OUTER JOIN ... ON ... = ...
+```
+
+满外连接
+
+```sql
+# Oracle用
+SELECT ......., .......
+FROM ...
+FULL OUTER JOIN ... ON ... = ...
+
+# MySql 用
+UNION          # 去重
+UNION ALL      # 不去重
+```
+
