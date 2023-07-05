@@ -16,13 +16,19 @@
 ###### 六级标题
 ```
 
+
+
 # 2. 段落
 
 要创建段落，请使用空白行将一行或多行文本进行分隔
 
+
+
 # 3. 换行
 
 在一行的末尾添加两个或多个空格，然后按回车键,即可创建一个换行(`<br>`)
+
+
 
 # 4. 强调语法
 
@@ -46,13 +52,17 @@
 
 ~~删除线~~
 
+
+
 # 5. 引用语法
 
 要创建块引用，请在段落前添加一个`>`符号
 
 > 引用
-> 
+>
 > > 二级引用
+
+
 
 # 6. 列表语法
 
@@ -76,8 +86,9 @@
 
 + 无序列表
 - 无序列表
-
 - - 无序列表
+
+
 
 # 7. 代码语法
 
@@ -95,6 +106,8 @@
 int a = 0;
 ```
 
+
+
 # 8. 分隔线语法
 
 要创建分隔线，请在单独一行上使用三个或多个星号 (`***`)、破折号 (`---`) 或下划线 (`___`) ，并且不能包含其他内容
@@ -105,17 +118,21 @@ int a = 0;
 
 ___
 
+
+
 # 9. 链接语法
 
-`<https://www.bilibili.com>`
+`<https://github.com/hhuabin>`
 
-`[B站](https://www.bilibili.com "B站")`
+`[github](https://github.com/hhuabin "github")`
 
 链接文本放在中括号内，链接地址放在后面的括号中，链接title可选
 
-<https://www.bilibili.com>
+<https://github.com/hhuabin>
 
-[B站](https://www.bilibili.com "B站")
+[github](https://github.com/hhuabin "github")
+
+
 
 # 10. 图片语法
 
@@ -127,29 +144,36 @@ ___
 ![这是图片](/assets/img/philly-magic-garden.jpg "Magic Gardens")
 ```
 
-<img title="avatat" src="file:///C:/Users/gzyct/Desktop/pictures/avatar.jpg" alt="" width="245">
+<img title="avatat" src="./Image/markdown/avatar.jpg" alt="" width="245">
 
 ```
 链接图片
 [![沙漠中的岩石图片](/assets/img/shiprock.jpg "Shiprock")](https://markdown.com.cn)
 ```
 
-[<img title="avatar" src="file:///C:/Users/gzyct/Desktop/pictures/avatar.jpg" alt="" width="252">](https://www.bilibili.com)
+[<img title="avatar" src="./Image/markdown/avatar.jpg" alt="" width="252">](https://github.com/hhuabin)
+
+
 
 # 11. 转义字符语法
 
 要显示原本用于格式化 Markdown 文档的字符，请在字符前面添加反斜杠字符`\`
 
+
+
 # 12. 内嵌HTML语法
 
 <html>
+
     <p>
-        <a href="https://www.bilibili.com">B站</a>
+        <a href="https://github.com/hhuabin">github</a>
     <p/>
     <p>
         <h1>这是HTML内容</h1>
     </p>
 </html>
+
+
 
 # 13. 表格
 
@@ -162,11 +186,19 @@ ___
 | Paragraph   | Text        |
 ```
 
+
+
 # 14. 任务列表语法
 
+```
 - [x] 任务一
-
 - [ ] 任务二
+```
+
+- [x] 任务一
+- [ ] 任务二
+
+
 
 # 15. 标题编号 {#custom-id}
 
