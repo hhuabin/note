@@ -22,11 +22,18 @@ console.log(str.indexOf("o",8)) //14
 
 `substring()` **不会修改原始字符串**，而是返回一个新字符串
 
-```javascript
-const str = "Hello, World!";
-const result = str.substring(0, 5);
-console.log(result); // 输出 "Hello"
-```
+1. 基础用法
+
+   ```javascript
+   substring(indexStart)
+   substring(indexStart, indexEnd)
+   ```
+
+   ```javascript
+   const str = "Hello, World!";
+   const result = str.substring(0, 5);
+   console.log(result); // 输出 "Hello"
+   ```
 
 与 `slice` 的区别：
 

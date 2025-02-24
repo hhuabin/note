@@ -6,8 +6,8 @@ x 默认取值 x ，当 x < 0 取 0 ，当 x > 100 取 100 ，
 
 ```javascript
 获取中间数值
-const getMiddleNumer = (num: number, min: number, max: number) => Math.min(Math.max(num, min), max)
+const clamp = (num: number, min: number, max: number) => Math.min(Math.max(num, min), max)
 
-getMiddleNumer(0, x, 100)
+clamp(0, x, 100)
 ```
 
