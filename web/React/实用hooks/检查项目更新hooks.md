@@ -32,18 +32,17 @@ import type { ConfigEnv } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import { visualizer } from 'rollup-plugin-visualizer'
 
-import pck from './package.json'
+import { version } from './package.json'
 
 // https://vitejs.dev/config/
 export default defineConfig((env: ConfigEnv) => ({
     base: './',
     plugins: [
         react(),
-        // 修改 index.html 中的 version
         {
             name: "inject-version",
             transformIndexHtml(html) {
-                html = html.replace(/__VERSION__/g, pck.version)
+                html = html.replace(/__VERSION__/g, version)
                     .replace(/__BUILD_TIME__/g, String(new Date().getTime()))
                 return html
             },
@@ -77,7 +76,7 @@ const useProjectAutoUpdate = (projectLink = '/', realTime = false) => {
     useEffect(() => {
         if (import.meta.env.MODE !== 'production') return
         getVersionAndTimeFromLocalHtmlMeta()
-        startRefresh()
+        startCheckRefresh()
     }, [])
 
     /**
@@ -95,7 +94,7 @@ const useProjectAutoUpdate = (projectLink = '/', realTime = false) => {
      * @param { string } link 项目部署地址
      * @returns { Promise<[string, string]> } [版本号, 时间戳]
      */
-    const extractVersionAndBuildTimeMeta = (link = projectLink): Promise<[string, string]> => {
+    const extractMetaFromLink = (link = projectLink): Promise<[string, string]> => {
         // fetch('/?timestamp='+Date.now()).then(resp=>resp.text()).then(res=>console.log(res))
         return fetch(link + '?timestamp=' + Date.now())
             .then(response => response.text())
@@ -119,8 +118,8 @@ const useProjectAutoUpdate = (projectLink = '/', realTime = false) => {
     }
 
     // 检测项目是否需要更新
-    const isProjectNeedUpdate = async () => {
-        const [version, buildTime] = await extractVersionAndBuildTimeMeta()
+    const isProjectNeedUpdate = async (): Promise<boolean> => {
+        const [version, buildTime] = await extractMetaFromLink(projectLink)
         let isNeedUpdate = false
         // 版本号和构建打包时间都不同，则需要更新
         if (version !== projectVersion.current && buildTime !== projectBuildTime.current) {
@@ -136,16 +135,20 @@ const useProjectAutoUpdate = (projectLink = '/', realTime = false) => {
     }
 
     // 实时检查项目是否需要更新
-    const startRefresh = () => {
+    const startCheckRefresh = () => {
         setTimeout(async () => {
             const willUpdate = await isProjectNeedUpdate()
-            if (willUpdate && window.confirm('检测到更新，是否刷新页面？')) {
-                window.location.reload()
-            } else {
-                return
+            if (willUpdate) {
+                // 弹出用户更新的弹窗
+                if (window.confirm('检测到更新，是否刷新页面？')) {
+                    window.location.reload()
+                } else {
+                    // 用手取消更新，不再轮询更新
+                    return
+                }
             }
             // 实时检查项目是否需要更新
-            realTime && startRefresh()
+            realTime && startCheckRefresh()
         }, REALTIME_DURATION)
     }
 }
