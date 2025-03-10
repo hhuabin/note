@@ -93,6 +93,7 @@ border-bottom: 20px solid red;
   ```css
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   ```

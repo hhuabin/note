@@ -99,3 +99,22 @@ str.match(regexp)
 
 
 
+
+
+# endsWith
+
+```javascript
+endsWith(searchString)
+endsWith(searchString, endPosition)
+```
+
+- endPosition：默认值是 `str.length`
+
+```javascript
+const str = "生存还是毁灭，这是一个问题。";
+
+console.log(str.endsWith("问题。")); // true
+console.log(str.endsWith("毁灭")); // false
+console.log(str.endsWith("毁灭", 6)); // true
+```
+

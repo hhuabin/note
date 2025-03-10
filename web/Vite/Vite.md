@@ -11,6 +11,12 @@
    ```bash
    yarn create vite
    ```
+   
+   ```typescript
+   TypeScript + SWC
+   ```
+   
+   `SWC` 是一个用 `Rust` 编写的高性能 JavaScript 和 TypeScript 编译器，比 Babel 更快
 
 
 
