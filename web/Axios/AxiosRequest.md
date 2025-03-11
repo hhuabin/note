@@ -19,9 +19,9 @@ import formatDate from '@/utils/stringUtils/formatDate'
 /**
  * AxiosRequest
  * 1. cancelLastRequest：取消上次请求，适合用在请求数据接口，不适合在提交数据接口使用，以避免重复提交
- * 2. cancelLoading：默认开启loading，可使用cancelLastRequest取消loading
+ * 2. cancelLoading：默认开启loading，可使用cancelLoading取消loading
  * 3. refreshToken：配置token过期的result_code，配置新token请求的url
- * 4. requestRetry 存在间隔 loading 问题，建议修复
+ * 4. requestRetry 存在间隔 loading 问题，建议修复为只有一个loading
  */
 
 type CommonParams = {
@@ -83,6 +83,7 @@ export default class AxiosRequest {
                  * 防止上一个 loading 有值但是未 clear
                  * 适用于：阻止多个请求都有 loading 时，timerId未清除导致的 loading一直存在
                  */
+                if (data.cancelLoading === false) delete data.cancelLoading
                 if (this.timerId) clearTimeout(this.timerId)
                 this.timerId = setTimeout(() => {
                     Toast.show({
@@ -190,6 +191,7 @@ export default class AxiosRequest {
      * @param config InternalAxiosRequestConfig 无需解压 config.data
      * @param response AxiosResponse 错误响应
      * @param maxRetries 最大重试次数， 默认值为 2
+     * @param retryDelay  重试延迟时间， 默认值为 0
      * @returns Promise<AxiosResponse<any, any>>
      */
     private requestRetry = (
@@ -198,20 +200,26 @@ export default class AxiosRequest {
         data: Record<any, any>,
         response: AxiosResponse,
         maxRetries = 3,
-    ): Promise<AxiosResponse> => {
-        const requestRetryNumber = (config.requestRetryNumber || 0)
-        if (+requestRetryNumber > maxRetries) {
-            console.error("请求重发次数过多", config)
-            return Promise.reject(response)
-        }
-        // 每个data都需要解压
-        config.data = {
-            ...JSON.parse(response.config.data),
-            ...data,
-        }
-        config.requestRetryNumber = requestRetryNumber + 1
+        retryDelay = 0,
+    ): Promise<AxiosResponse<unknown>> => {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                const requestRetryNumber = (config.requestRetryNumber || 0)
+                if (+requestRetryNumber > maxRetries) {
+                    console.error("请求重发次数过多", config)
+                    reject(response)
+                    return
+                }
+                // 每个data都需要解压
+                config.data = {
+                    ...JSON.parse(response.config.data),
+                    ...data,
+                }
+                config.requestRetryNumber = requestRetryNumber + 1
 
-        return this.instance(config)
+                resolve(this.instance(config))
+            }, retryDelay)
+        })
     }
 
     /**
@@ -383,9 +391,9 @@ import formatDate from '../stringUtils/formatDate'
 /**
  * AxiosRequest
  * 1. cancelLastRequest：取消上次请求，适合用在请求数据接口，不适合在提交数据接口使用，以避免重复提交
- * 2. cancelLoading：默认开启loading，可使用cancelLastRequest取消loading
+ * 2. cancelLoading：默认开启loading，可使用cancelLoading取消loading
  * 3. refreshToken：配置token过期的result_code，配置新token请求的url
- * 4. requestRetry 存在间隔 loading 问题，建议修复
+ * 4. requestRetry 存在间隔 loading 问题，建议修复为只有一个loading
  */
 
 interface CommonParams {
@@ -445,6 +453,7 @@ export default class AxiosRequest {
             }
 
             if (!data.cancelLoading) {
+                if (data.cancelLoading === false) delete data.cancelLoading
                 const loadingSymbol = Symbol('loading')
                 let loadingHandler: () => void
                 const timerId = setTimeout(() => {
@@ -547,6 +556,7 @@ export default class AxiosRequest {
      * @param config InternalAxiosRequestConfig 无需解压 config.data
      * @param response AxiosResponse 错误响应
      * @param maxRetries 最大重试次数， 默认值为 2
+     * @param retryDelay  重试延迟时间， 默认值为 0
      * @returns Promise<AxiosResponse<any, any>>
      */
     private requestRetry = (
@@ -555,20 +565,26 @@ export default class AxiosRequest {
         data: Record<any, any>,
         response: AxiosResponse,
         maxRetries = 3,
-    ): Promise<AxiosResponse> => {
-        const requestRetryNumber = (config.requestRetryNumber || 0)
-        if (+requestRetryNumber > maxRetries) {
-            console.error("请求重发次数过多", config)
-            return Promise.reject(response)
-        }
-        // 每个data都需要解压
-        config.data = {
-            ...JSON.parse(response.config.data),
-            ...data,
-        }
-        config.requestRetryNumber = requestRetryNumber + 1
+        retryDelay = 0,
+    ): Promise<AxiosResponse<unknown>> => {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                const requestRetryNumber = (config.requestRetryNumber || 0)
+                if (+requestRetryNumber > maxRetries) {
+                    console.error("请求重发次数过多", config)
+                    reject(response)
+                    return
+                }
+                // 每个data都需要解压
+                config.data = {
+                    ...JSON.parse(response.config.data),
+                    ...data,
+                }
+                config.requestRetryNumber = requestRetryNumber + 1
 
-        return this.instance(config)
+                resolve(this.instance(config))
+            }, retryDelay)
+        })
     }
 
     /**
