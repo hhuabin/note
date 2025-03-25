@@ -11,9 +11,9 @@ import axios from 'axios'
 import type { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
 import { Toast } from 'antd-mobile'
 
-// import { navigate } from '@/hooks/router'
+// import { navigate } from '@/hooks/useRouter'
 import store from '@/store/store'
-import { saveToken, removeToken } from '@/store/slice/userSlice'
+import { saveUserInfo, removeUserInfo } from '@/store/slice/userSlice'
 import formatDate from '@/utils/stringUtils/formatDate'
 
 /**
@@ -24,7 +24,7 @@ import formatDate from '@/utils/stringUtils/formatDate'
  * 4. requestRetry 存在间隔 loading 问题，建议修复为只有一个loading
  */
 
-type CommonParams = {
+type PublicParams = {
     version: string;
     charset: string;
     req_source: string;
@@ -50,7 +50,7 @@ export default class AxiosRequest {
     private controller: AbortController | null = null
     private timerId: NodeJS.Timeout | null = null
     private refreshTokenPromise: Promise<void> | null = null
-    private commonParams: CommonParams = {
+    private publicParams: PublicParams = {
         version: '1.0',
         charset: 'UTF-8',
         req_source: 'PROJECT',
@@ -79,10 +79,6 @@ export default class AxiosRequest {
             }
 
             if (!data.cancelLoading) {
-                /**
-                 * 防止上一个 loading 有值但是未 clear
-                 * 适用于：阻止多个请求都有 loading 时，timerId未清除导致的 loading一直存在
-                 */
                 if (data.cancelLoading === false) delete data.cancelLoading
                 if (this.timerId) clearTimeout(this.timerId)
                 this.timerId = setTimeout(() => {
@@ -98,19 +94,19 @@ export default class AxiosRequest {
             }
 
             // 深拷贝数据，令对象不被改变
-            const commonParams = { ...this.commonParams }
+            const publicParams = { ...this.publicParams }
             // requestSerial 请求序列号
             let requestSerial: string = new Date().getTime().toString()
             for (let i = 0; i < 6; i++) {
                 requestSerial += Math.floor(Math.random() * 10)
             }
-            commonParams.requestSerial = requestSerial
+            publicParams.requestSerial = requestSerial
             // timestamp 请求时间
             const timestamp: string = formatDate(new Date(), 'YYYY-MM-DD hh:mm:ss')
-            commonParams.timestamp = timestamp
+            publicParams.timestamp = timestamp
 
-            commonParams.token = store.getState().user.token
-            config.data = { ...commonParams, ...data }
+            publicParams.token = store.getState().user.userInfo.token
+            config.data = { ...publicParams, ...data }
             // 默认使用POST方法
             config.method = config.method || 'POST'
             return config
@@ -130,7 +126,7 @@ export default class AxiosRequest {
                     // 重新发送请求，如果此时接口还是报token过期，则会继续请求
                     return this.requestRetry(
                         response.config,
-                        { token: store.getState().user.token },
+                        { token: store.getState().user.userInfo.token },
                         response,
                     )
                 } catch (error) {
@@ -232,7 +228,7 @@ export default class AxiosRequest {
         if (this.refreshTokenPromise) return this.refreshTokenPromise
 
         console.log("refresh-token")
-        store.dispatch(removeToken())
+        store.dispatch(removeUserInfo())
         // 开发者自行修改
         const refreshToken = "refreshToken"
 
@@ -249,7 +245,7 @@ export default class AxiosRequest {
                 const newToken = res.data.token
                 if (newToken) {
                     // 存储新的 token 到 store 中
-                    store.dispatch(saveToken({
+                    store.dispatch(saveUserInfo({
                         token: newToken,
                     }))
                     resolve()
@@ -305,6 +301,7 @@ export default class AxiosRequest {
         return Promise.reject({ ...(error as AxiosError), data: { err_msg: errorMessage } })
     }
 
+    // 暴露实例
     public getAxiosInstance = () => {
         return this.instance
     }
@@ -383,9 +380,9 @@ import axios from 'axios'
 import type { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
 import { message } from 'antd'
 
-// import { navigate } from '@/hooks/router'
+// import { navigate } from '@/hooks/useRouter'
 import store from '@/store/store'
-import { saveToken, removeToken } from '@/store/slice/userSlice'
+import { saveUserInfo, removeUserInfo } from '@/store/slice/userSlice'
 import formatDate from '../stringUtils/formatDate'
 
 /**
@@ -396,7 +393,7 @@ import formatDate from '../stringUtils/formatDate'
  * 4. requestRetry 存在间隔 loading 问题，建议修复为只有一个loading
  */
 
-interface CommonParams {
+type PublicParams = {
     version: string;
     charset: string;
     req_source: string;
@@ -407,9 +404,9 @@ interface CommonParams {
 }
 
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
-    loadingSymbol?: symbol;
-    timerId?: NodeJS.Timeout;
-    requestRetryNumber?: number;
+    loadingSymbol?: symbol;           // loading的取消函数标识
+    timerId?: NodeJS.Timeout;         // loading的定时器
+    requestRetryNumber?: number;      // 请求失败重试次数
 }
 
 export default class AxiosRequest {
@@ -424,7 +421,7 @@ export default class AxiosRequest {
     private controller: AbortController | null = null
     private loadingMessage = new Map<symbol, () => void>()
     private refreshTokenPromise: Promise<void> | null = null
-    private commonParams: CommonParams = {
+    private publicParams: PublicParams = {
         version: '1.0',
         charset: 'UTF-8',
         req_source: 'PROJECT',
@@ -467,19 +464,19 @@ export default class AxiosRequest {
             }
 
             // 深拷贝数据，令对象不被改变
-            const commonParam = { ...this.commonParams }
+            const publicParams = { ...this.publicParams }
             // requestSerial 请求序列号
             let requestSerial: string = new Date().getTime().toString()
             for (let i = 0; i < 6; i++) {
                 requestSerial += Math.floor(Math.random() * 10)
             }
-            commonParam.requestSerial = requestSerial
+            publicParams.requestSerial = requestSerial
             // timestamp 请求时间
             const timestamp: string = formatDate(new Date(), 'YYYY-MM-DD hh:mm:ss')
-            commonParam.timestamp = timestamp
+            publicParams.timestamp = timestamp
 
-            commonParam.token = store.getState().user.token
-            config.data = { ...commonParam, ...data }
+            publicParams.token = store.getState().user.userInfo.token
+            config.data = { ...publicParams, ...data }
             // 默认使用POST方法
             config.method = config.method || 'POST'
             return config
@@ -500,7 +497,7 @@ export default class AxiosRequest {
                     // 重新发送请求，如果此时接口还是报token过期，则会继续请求
                     return this.requestRetry(
                         config,
-                        { token: store.getState().user.token },
+                        { token: store.getState().user.userInfo.token },
                         response,
                     )
                 } catch (error) {
@@ -597,7 +594,7 @@ export default class AxiosRequest {
         if (this.refreshTokenPromise) return this.refreshTokenPromise
 
         console.log("refresh-token")
-        store.dispatch(removeToken())
+        store.dispatch(removeUserInfo())
         // 开发者自行修改
         const refreshToken = "refreshToken"
 
@@ -614,7 +611,7 @@ export default class AxiosRequest {
                 const newToken = res.data.token
                 if (newToken) {
                     // 存储新的 token 到 store 中
-                    store.dispatch(saveToken({
+                    store.dispatch(saveUserInfo({
                         token: newToken,
                     }))
                     resolve()
@@ -642,6 +639,11 @@ export default class AxiosRequest {
         let errorMessage = "请求失败，请稍后再试"
         if (axios.isCancel(error)) {
             console.warn('请求被取消', error.message)
+            /**
+             * 在返回 pendding 状态的时候，要确保请求函数的.catch没有什么必须要处理的逻辑
+             * 比如清除组件的loading状态、以及函数防抖等
+             * 若有此类逻辑，该接口不能使用取消请求功能，或者此处返回一个失败状态的 Promise
+             */
             return new Promise(() => { })
         } else if (axios.isAxiosError(error)) {
             if (error.response?.status === 403) {
@@ -666,7 +668,7 @@ export default class AxiosRequest {
         return Promise.reject({ ...(error as AxiosError), data: { err_msg: errorMessage } })
     }
 
-    // 获取实例，用于请求
+    // 暴露实例
     public getAxiosInstance = () => {
         return this.instance
     }
