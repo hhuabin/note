@@ -1,3 +1,84 @@
+# 字符串遍历
+
+1. for 循环（最快）
+
+   ```javascript
+   const str = "hello";
+   
+   for (let i = 0; i < str.length; i++) {
+       console.log(str[i]); // 依次输出: h, e, l, l, o
+   }
+   ```
+
+2. for...of（快）
+
+   ```javascript
+   const str = "world";
+   
+   for (const char of str) {
+       console.log(char); // 依次输出: w, o, r, l, d
+   }
+   ```
+
+3. 扩展运算符（中等）
+
+   ```javascript
+   const str = "advanced";
+   
+   [...str].forEach((char, index) => {
+       console.log(`字符 ${char} 位于位置 ${index}`);
+   });
+   ```
+
+4. 特殊字符处理
+
+   ```javascript
+   const str = "a😊b";
+   
+   // 错误方式（会把表情符号拆开）
+   str.split(''); // ['a', '�', '�', 'b']
+   
+   // 正确方式
+   [...str]; // ['a', '😊', 'b']
+   Array.from(str); // ['a', '😊', 'b']
+   ```
+
+   
+
+
+
+# String To Array
+
+1. `str.split('')`
+2. `[...str]`
+3. `Array.from(str)`
+
+
+
+# 字符编码
+
+## 编码
+
+1. `Unicode`码，`Unicode`码兼容`ASCII`码，所以`ASCII`码也通用
+
+   返回指定位置字符的`Unicode`码
+
+   ```javascript
+   "ab".charCodeAt(1);  // 97
+   ```
+
+## 解码
+
+1. `Unicode`码
+
+   从 `Unicode` 码点创建字符
+
+   ```javascript
+   String.fromCharCode(97);  // "a"
+   ```
+
+
+
 # indexOf
 
 1. 查找字符串中某一字符从头开始第一次出现的索引，没有返回 -1

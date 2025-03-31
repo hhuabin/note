@@ -75,6 +75,7 @@ window.history 的方法：
 		 */
 		go(path) {
 			history.pushState({ path }, null, path)
+            // 因为 pushState 不会触发 popstate 事件，所以需要手动调用函数
 			this.routes[path] && this.routes[path]()
 		}
 	}
