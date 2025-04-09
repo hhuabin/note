@@ -13,11 +13,55 @@ export default defineConfig((env: ConfigEnv) => ({
 
 ## resolve
 
-```typescript
-resolve: {
-    alias: { '@': new URL('./src', import.meta.url).pathname },
-},
-```
+### alias
+
+1. `@`别名
+
+   ```typescript
+   resolve: {
+       alias: { '@': new URL('./src', import.meta.url).pathname },
+   },
+   ```
+
+2. 其他库别名，如`wx-js-sdk`
+
+   下载`https://res.wx.qq.com/open/js/jweixin-1.6.0.js`到`public`下：`/public/static/js/`中
+
+   `jweixin-1.6.0.js`源码末尾增加导出：
+
+   ```typescript
+   /* eslint-disable */
+   // 把 this 改成 window
+   export default window.wx || window.jWeixin;
+   ```
+
+   ```typescript
+   resolve: {
+       alias: {
+           '@': new URL('./src', import.meta.url).pathname,
+           // 导入public目录的静态js文件需要加上 ?url，用于明确表示你希望获取某个静态资源的 URL 路径 而不是资源内容本身
+           'jweixin': '/static/js/jweixin-1.6.0.js?url',
+       },
+   },
+   ```
+
+   ```typescript
+   // jweixin.d.ts
+   /* eslint-disable @typescript-eslint/no-explicit-any */
+   
+   declare module 'jweixin' {
+       const wx: any
+       export default wx
+   }
+   ```
+
+   `ES Module (ESM)`支持`export default`
+
+   ```typescript
+   import wx from 'jweixin'
+   ```
+
+   
 
 
 

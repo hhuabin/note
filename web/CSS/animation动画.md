@@ -122,6 +122,29 @@ animation: fade 2s 1s infinite;
 
 
 
+### 注意
+
+1. `css`无法实现从固定高度到auto的动画。故而`height: auto;`无法设置动画
+
+   可以使用`grid-template-rows`解决
+
+   `grid-template-rows: 10px 0fr;` -> `grid-template-rows: 10px 1fr;`
+
+   ```css
+   .box {
+       display: grid;
+       grid-template-rows: 10px 0fr;
+   }
+   .hidden {
+       overflow: hidden;
+   }
+   .open {
+       grid-template-rows: 10px 1fr;
+   }
+   ```
+
+   
+
 # transform
 
 变形就是指通过CSS来改变元素的形状或位置，变形不会影响到页面的布局
