@@ -134,6 +134,7 @@ animation: fade 2s 1s infinite;
    .box {
        display: grid;
        grid-template-rows: 10px 0fr;
+       transition: all 150ms ease;
    }
    .hidden {
        overflow: hidden;
@@ -142,7 +143,7 @@ animation: fade 2s 1s infinite;
        grid-template-rows: 10px 1fr;
    }
    ```
-
+   
    
 
 # transform

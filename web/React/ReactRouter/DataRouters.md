@@ -126,6 +126,33 @@ lazy: async () => {
 
 
 
+## `index`默认匹配
+
+1. 默认匹配子路由，使用 `children` + `index: true` + `Navigate`
+
+   ```tsx
+   {
+       path: '/parent',
+       lazy: async () => {
+           const { default: ParentLayout } = await import('@/pages/parent/ParentLayout')
+           return { Component: ParentLayout }
+       },
+       children: [
+           {
+               index: true,
+               element: <Navigate to="children" replace />,
+           },
+           {
+               path: 'children',
+               lazy: async () => {
+                   const { default: Children } = await import('@/pages/children/Children/Children')
+                   return { Component: Children }
+               },
+           },
+       ],
+   },
+   ```
+
 
 
 ### 错误边界（`errorElement`）

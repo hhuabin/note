@@ -57,7 +57,7 @@ export const routes: RouteConfig[] = [
 ```tsx
 import { Suspense } from 'react'
 import { createHashRouter, redirect, RouterProvider } from 'react-router-dom'
-import type { RouteObject, LoaderFunction } from 'react-router-dom'
+import type { RouteObject, LoaderFunction, NonIndexRouteObject } from 'react-router-dom'
 
 import store from '@/store/store'
 import { routes } from './router'
@@ -79,6 +79,7 @@ const createRoutes = (routes: RouteConfig[]): RouteObject[] => {
         return {
             path: route.path ?? undefined,
             id: route.id ?? undefined,
+            index: (route.index as NonIndexRouteObject['index']) ?? undefined,
             element: route.element ?? undefined,
             loader: route.loader ?? loader,
             lazy: route.lazy ?? undefined,
