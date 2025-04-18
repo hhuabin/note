@@ -95,3 +95,9 @@ const user: BasicUserInfo = {
 };
 ```
 
+```typescript
+interface UserPreview extends Pick<UserInfo, "id" | "name"> {
+    // 可以在此添加额外属性（如果需要）
+}
+```
+

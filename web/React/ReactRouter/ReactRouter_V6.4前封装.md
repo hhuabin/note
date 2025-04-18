@@ -198,7 +198,34 @@ export default GuardedRoute
 
 
 
-### 5.`App.tsx`加载整个路由配置
+### 5.`main.tsx`引入`BrowserRouter/HashRouter`路由配置
+
+```tsx
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { HashRouter } from 'react-router-dom'
+import { Provider } from 'react-redux'
+
+import store from './store/store'
+import App from './App.tsx'
+import './styles/tailwind.css'
+
+createRoot(document.getElementById('root')!)
+.render(
+    <StrictMode>
+        <Provider store={store}>
+            <HashRouter>
+                <App />
+            </HashRouter>
+        </Provider>
+    </StrictMode>,
+)
+
+```
+
+
+
+### 6.`App.tsx`加载整个路由配置
 
 ```tsx
 import { useEffect } from 'react'
@@ -218,6 +245,8 @@ const App: React.FC = () => {
 export default App
 
 ```
+
+
 
 
 

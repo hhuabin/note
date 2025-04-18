@@ -43,7 +43,7 @@ export default App;
 
 
 
-### 使用模式特定的环境变量
+## 使用模式特定的环境变量
 
 你可以创建模式特定的 `.env` 文件。例如，为生产环境创建一个 `.env.production` 文件：
 
@@ -55,4 +55,29 @@ VITE_API_URL=https://api.example.com/production
 当你使用 `vite build --mode production` 时，Vite 会加载 `.env.production` 中的变量。
 
 
+
+## `vite.config.ts`中使用环境变量
+
+使用`loadEnv`方法shi'xian
+
+```typescript
+import { defineConfig, loadEnv } from 'vite'
+
+export default defineConfig(({ mode }) => {
+    const env = loadEnv(mode, process.cwd())
+    console.log('当前环境变量：', env.VITE_API_BASE_URL)
+
+    return {
+        server: {
+            proxy: {
+                '/api': {
+                    target: env.VITE_API_BASE_URL,
+                    changeOrigin: true,
+                    rewrite: path => path.replace(/^\/api/, '')
+                }
+            }
+        }
+    }
+})
+```
 

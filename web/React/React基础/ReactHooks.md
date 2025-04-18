@@ -118,42 +118,45 @@ render() {
 
 **useState用法**
 
-1. setXxx(setName)的两种写法
+setXxx(setName)的两种写法
 
-   1. setXxx(newState)：参数为非函数值
-   2. setXxx(precState => newState)：参数为函数，接收原本的状态值，`newState` 和 `precState` 不能为同一值，否则不会触发页面更新。**尤其注意对象**，地址容易一样
+- **setXxx(newState)**：参数为非函数值**（单次调用）**
 
-   ```jsx
-   import { useState } from 'react'
-   export default function Demo() {
-       const [name, setName] = useState(['bin'])
-       const [age, setAge] = useState(18)
-       const [age1, setAge1] = useState(0)
-       
-       const changeAge = () => {
-           setAge1(18)
-           setAge(age + age1)    // 18
-       }
-       
-       const changeName = () => {
-   		//setName("huabin") //第一种写法
-   		setName(prevState  => {
-               const newValue = [...prevState]
-               newValue[0] = "hhuabin"
-               return newValue
-           })
-   	}
-       
-       return(
-           <div>
-   			<div>名字：{name}</div>
-               <div onClick={changeName}>改名字</div>
-   		</div>
-       )
-   }
-   ```
+- **setXxx(precState => newState)**：参数为函数，接收原本的状态值，`newState` 和 `precState` 不能为同一值，否则不会触发页面更新。**尤其注意对象**，地址容易一样==**（连续调用）**==
 
-2. **根据先前的 state 更新 state**
+```jsx
+import { useState } from 'react'
+export default function Demo() {
+    const [name, setName] = useState(['bin'])
+    const [age, setAge] = useState(18)
+    const [age1, setAge1] = useState(0)
+    
+    const changeAge = () => {
+        setAge1(18)
+        setAge(age + age1)    // 18
+    }
+    
+    const changeName = () => {
+		//setName("huabin") //第一种写法
+		setName(prevState  => {
+            const newValue = [...prevState]
+            newValue[0] = "hhuabin"
+            return newValue
+        })
+	}
+    
+    return(
+        <div>
+			<div>名字：{name}</div>
+            <div onClick={changeName}>改名字</div>
+		</div>
+    )
+}
+```
+
+示例：
+
+1. **连续调用**：**根据先前的 state 更新 state**
 
    假设 `age` 为 `42`，这个处理函数三次调用 `setAge(age + 1)`：
 
@@ -189,7 +192,7 @@ render() {
 
    按照惯例，通常将待定状态参数命名为状态变量名称的第一个字母，如 `age` 为 `a`。然而，你也可以把它命名为 `prevAge` 或者其他你觉得更清楚的名称。
 
-3. **更新状态中的对象和数组**
+2. 更新状态中的**对象和数组**
 
    你可以将对象和数组放入状态中。在 React 中，状态被认为是只读的，因此 **你应该替换它而不是改变现有对象**。例如，如果你在状态中保存了一个 `form` 对象，请不要改变它：
 
@@ -345,6 +348,8 @@ export default function Counter() {
 
 `const cachedValue = useMemo(calculateValue, dependencies)`
 
+**用途**：缓存==**计算结果（函数返回值）**==，避免每次渲染时重复执行**复杂**计算。**适用场景**：当某个值的==**计算成本较高**==，且依赖项未变化时。当计算过程并不复杂时，慎用，请勿乱用
+
 `useMemo` 是一个 React Hook，所以你只能 **在组件的顶层** 或者自定义 Hook 中调用它。你不能在循环语句或条件语句中调用它。如有需要，将其提取为一个新组件并使用 state。
 
 - `calculateValue`：要缓存计算值的函数。它应该是**一个没有任何参数的纯函数**，并且可以返回任意类型。React 将会在首次渲染时调用该函数；在之后的渲染中，如果 `dependencies` 没有发生变化，React 将直接返回相同值。否则，将会再次调用 `calculateValue` 并返回最新结果，然后缓存该结果以便下次重复使用。
@@ -360,6 +365,7 @@ export default function Counter() {
    import { useMemo } from 'react';
    
    function TodoList({ todos, tab, theme }) {
+       // ✅ 只有当 todos 或 tab 改变时才会发生改变
      	const visibleTodos = useMemo(() => filterTodos(todos, tab), [todos, tab]);
        
        return (
@@ -369,92 +375,72 @@ export default function Counter() {
    }
    ```
 
-2. **跳过组件的重新渲染**，根本上使用的还是 `React.memo`
 
-   假设这个 `TodoList` 组件将 `visibleTodos` 作为 props 传递给子 `List` 组件
 
-   ```jsx
-   export default function TodoList({ todos, tab, theme }) {
-       return (
-           <div className={theme}>
-             	<List items={visibleTodos} />
-           </div>
-       );
-   }
-   
-   // 优化
-   export default function TodoList({ todos, tab, theme }) {
-       // 告诉 React 在重新渲染之间缓存你的计算结果...
-       const visibleTodos = useMemo(
-           () => filterTodos(todos, tab),
-           [todos, tab] // ...所以只要这些依赖项不变...
-       );
-       return (
-           <div className={theme}>
-               {/* ... List 也就会接受到相同的 props 并且会跳过重新渲染 */}
-               <List items={visibleTodos} />
-           </div>
-       );
-   }
-   
-   // 注意这里List使用了memo，详情请看React.memo
-   const List = React.memo(function List({ items }) {
-   	
-   })
-   ```
+## `React.memo`
 
-   **通过此更改，如果 `List` 的所有 props 都与上次渲染时相同，则 `List` 将跳过重新渲染**
+```typescript
+memo(Component, arePropsEqual?)
+```
 
-3. 记忆另一个 Hook 的**依赖**
+- `arePropsEqual`：比较函数，接收参数`(prevProps, nextProps)`都是`Readonly<Props>`
 
-   ```jsx
-   function Dropdown({ allItems, text }) {
-       const searchOptions = { matchMode: 'whole-word', text };
-   
-       const visibleItems = useMemo(() => {
-       	return searchItems(allItems, searchOptions);
-   	}, [allItems, searchOptions]); // 🚩 提醒：依赖于在组件主体中创建的对象
-   }
-   ```
+  返回 `true` 表示 `props` 相等，不重新渲染；返回 `false` 表示 `props` 不相等，重新渲染
 
-   这时候可以使用 `useMemo` 记下searchOptions，其实可以考虑使用 `useRef`
+`React.memo`和`useMemo`不是一个东西
 
-   ```jsx
-   const searchOptions = useMemo(() => {
-       return { matchMode: 'whole-word', text };
-   }, [text]); // ✅ 只有当 text 改变时才会发生改变
-   ```
+- **用途**：作为高阶组件，用于包裹函数组件，使其仅在 `props` 发生变化时重新渲染（默认对 `props` 进行浅比较）。
+- **作用对象**：**组件**。
+- **适用场景**：当父组件频繁渲染，但子组件的 `props` 未变化时，避免子组件不必要的渲染。
 
-4. **记忆一个函数**，要使用 `useMemo` 记忆函数，你的计算函数必须返回另一个函数
+```tsx
+import { memo } from 'react'
 
-   当一个函数处于一个 **被记忆的组件** 的`props` 时，函数地址变化会触发记忆组件的更新，当不需要组件更新时，可以使用 `useMemo` 记忆函数，就不会触发组件更新，与用法2几乎相同。
+type Props = {
+    data: string;
+    setIdentityInfo: (identityInfo: Partial<IdentityInfo>) => void;
+}
 
-   ```jsx
-   export default function Page({ productId, referrer }) {
-   	const handleSubmit = useMemo(() => {
-           return (orderDetails) => {
-               post('/product/' + productId + '/buy', {
-                   referrer,
-                   orderDetails
-               });
-           };
-       }, [productId, referrer]);
-   
-   	return <Form onSubmit={handleSubmit} />;
-   }
-   
-   // 假设 Form 组件被包裹在 memo 中，你想将一个函数作为 props 传递给它
-   const Form = React.memo(function Form({ onSubmit }) {
-   })
-   ```
+// ✅推荐使用。使用默认推导类型 React.NamedExoticComponent<Props>
+const MemoizedComponent = memo((props: Props) => {
+    return <div>{data}</div>;
+}, (prevProps, nextProps) => {
+    // 返回 true 表示 props 相等，不重新渲染
+    // 返回 false 表示 props 不相等，重新渲染
+    // (prevProps as Readonly<Props>, nextProps)
+    const { id: prevId } = prevProps
+    const { id: nextId } = prevProps
+    return prevId === nextId
+})
+// 或者使用这种，但是不推荐
+const MemoizedComponent: React.NamedExoticComponent<Props> = memo((props) => {
+    return <div>{data}</div>;
+})
 
-   但是可以直接使用`useCallback`解决更好，详见 `useCallback` 的 `1`
+export default MemoizedComponent
+```
+
+强制推推导类型
+
+```tsx
+const Component: React.FC<Props> = (props) => {
+    return <div>{data}</div>;
+}
+
+const MemoizedComponent = memo(Component)
+
+export default MemoizedComponent
+```
+
+
 
 
 
 ## 6. useCallback
 
 `useCallback(fn, dependencies)`
+
+**用途**：==**缓存函数（函数内存地址）**==，优化子组件渲染，**作为依赖函数**时候的优化
 
 - `fn`：在多次渲染中需要缓存的函数。此函数可以接受任何参数并且返回任何值。React 将会在初次渲染而非调用时返回该函数
 - `dependencies`：有关是否更新 `fn` 的所有响应式值的一个列表。响应式值包括 props、state，和所有在你组件内部直接声明的变量和函数
@@ -468,20 +454,42 @@ export default function Counter() {
 1. **跳过组件的重新渲染**
 
    ```jsx
-   export default function Page({ productId, referrer }) {
-   	const handleSubmit = useCallback((orderDetails) => {
-           post('/product/' + productId + '/buy', {
-               referrer,
-               orderDetails
-           });
-       }, [productId, referrer]);
+   import React, { useCallback } from 'react';
    
-   	return <Form onSubmit={handleSubmit} />;
+   function ParentComponent() {
+       const [count, setCount] = useState(0);
+       const [userInfo, setUserInfo] = useState({
+           username: "bin",
+           age: 18,
+       })
+   
+       // 仅当 `count` 变化时生成新的回调函数
+       const handleClick = useCallback(() => {
+           console.log('点击次数:', count);
+       }, [count]); // 依赖项是 `count`
+       
+       const changeUserInfo = useCallback((username) => {
+           // 禁止使用以下方式，如需使用，依赖项中需要添加 userInfo，不然获取的userInfo永远是旧值
+           /* setUserInfo({
+               ...userInfo,
+               username,
+           }) */
+           // 正确写法，避免依赖 userInfo
+           setUserInfo(prev => {
+               return {
+                   ...prev,
+                   username,
+               }
+           })
+       }, [])
+   
+       return <ChildComponent onClick={handleClick} />;
    }
    
-   // 假设 Form 组件被包裹在 memo 中，你想将一个函数作为 props 传递给它
-   const Form = React.memo(function Form({ onSubmit }) {
-   })
+   // 子组件使用 React.memo 优化
+   const ChildComponent = React.memo(({ onClick }) => {
+       return <button onClick={onClick}>点击</button>;
+   });
    ```
 
    **将 `handleSubmit` 传递给 `useCallback` 就可以确保它在多次重新渲染之间是相同的函数**，直到依赖发生改变。注意，除**非出于某种特定原因，否则不必将一个函数包裹在 `useCallback` 中**。在本例中，你将它传递到了包裹在 `memo` 中的组件，这允许它跳过重新渲染。
@@ -513,24 +521,6 @@ export default function Counter() {
    }
    ```
 
-
-
-- 返回值：返回记忆的回调函数
-- **用途**：适用于避免在每次渲染时创建新的回调函数，特别是当将回调函数作为 props 传递给子组件时，可以提高性能
-
-```jsx
-import { useCallback } from 'react';
-
-export default function ProductPage({ productId, referrer, theme }) {
-    
-    const [name, setName] = React.useState('bin')
-    
-    const cachedFn = useCallback(() => {
-        setName("")
-    }, [name]);
-}
-```
-
 - `useCallback` 是一个 Hook，所以应该在 **组件的顶层** 或自定义 Hook 中调用。你不应在循环或者条件语句中调用它。如果你需要这样做，请新建一个组件，并将 state 移入其中。
 
 
@@ -551,15 +541,25 @@ export default function ProductPage({ productId, referrer, theme }) {
 
 通过在函数组件中调用 `useImperativeHandle`，你可以自定义子组件向外暴露的实例或方法。
 
+ :bulb: 此时使用`React.memo`的话，`memo`需要包裹`forwardRef`
+
 ```tsx
-import React, { useImperativeHandle, forwardRef, ForwardedRef } from 'react';
+import { forwardRef, useImperativeHandle } from 'react'
+import type {
+    ForwardedRef,
+    ForwardRefExoticComponent,
+    PropsWithoutRef,
+    RefAttributes,
+} from 'react'
 
 export type ChildComponentRef = {
     increment: () => void
 }
 
 // 子组件， 用 forwardRef 包裹
-const ChildComponent = forwardRef((props, ref: ForwardedRef<ChildComponentRef>) => {
+// ChildComponent类型不需要具体写明，会自动推导的
+// 具体类型是 ForwardRefExoticComponent<PropsWithoutRef<Props> & RefAttributes<AddressFromRef>>
+const ChildComponent = forwardRef((props, ref: ForwardedRef<ChildComponentRef>): JSX.Element => {
 	// 子组件的内部状态
 	const [count, setCount] = useState(0);
 
@@ -571,7 +571,9 @@ const ChildComponent = forwardRef((props, ref: ForwardedRef<ChildComponentRef>) 
 	// 使用 useImperativeHandle 定义向外暴露的方法
 	useImperativeHandle(ref, () => {
         // 暴露 increment 函数即可
-		return increment
+		return {
+            increment
+        }
 	});
 
 	return (
@@ -599,12 +601,14 @@ function ParentComponent() {
 	);
 }
 
-export default ParentComponent;
+export default ParentComponent
 ```
 
 在上面的示例中，通过使用 `useImperativeHandle`，子组件 `ChildComponent` 可以将 `increment` 方法暴露给父组件，然后父组件可以通过子组件的引用来调用这个方法。
 
 总之，`useImperativeHandle` 允许你在函数组件中自定义向外暴露的实例或方法，以供父组件通过子组件的引用进行调用。
+
+
 
 
 

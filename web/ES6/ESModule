@@ -144,3 +144,33 @@ module.default.a = 10;
 import { module } from './module.js';
 
 如果 ./module.js 里面有`export default` ，则使用 `import { default as module } from './module.js';`
+
+
+
+## import json
+
+1. 直接导入
+
+   ```typescript
+   import GFArea  from '@/assets/json/GFArea.json' assert { type: 'json' }
+   ```
+
+   会自动反序列化
+
+2. 动态导入（异步加载）
+
+   ```typescript
+   const loadData = async () => {
+       const { default: gdData } = await import('./guangdong.json', { assert: { type: 'json' } })
+       console.log(gdData.province.code); // 输出：440000
+   };
+   ```
+
+#### 注意事项：
+
+- **Node.js**：需确保 `package.json` 中设置了 `"type": "module"`。
+- **浏览器**：需通过 `<script type="module">` 加载，或使用构建工具。
+- **TypeScript**：需在 `tsconfig.json` 中启用 `"resolveJsonModule": true`。
+
+
+

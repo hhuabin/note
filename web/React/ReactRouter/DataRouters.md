@@ -18,7 +18,9 @@
 
 
 
-### 数据预加载（`loader`）
+### `loader`数据预加载
+
+在组件加载之前请求数据，一般为`get`方法
 
 1. 重定向及向组件发送数据
 
@@ -52,6 +54,8 @@
 
    ==**`loader`的`throw redirect("")`不可重定向值子路由，会造成逻辑死循环问题**==，重定向至子路由可以使用`element`或者`lazy`
 
+   建议`loader`默认返回`{}`。当组件不依赖`useLoaderData`时候可以返回`null`但是不建议如此
+
 2. `loader`参数解析
 
    `loader` 接收包含以下属性的对象参数：
@@ -70,12 +74,80 @@
        return searchUsers(searchTerm, userId);
    }
    ```
-
+   
+   示例：
+   
+   ```typescript
+   // loader.ts
+   import type { LoaderFunction } from 'react-router-dom'
+   
+   import { Toast } from 'antd-mobile'
+   
+   import store from '@/store/store'
+   
+   const loader: LoaderFunction = ({ request, params, context }) => {
+       console.log(request, params, context)
+       const identityInfo = store.getState().user.identityInfo
+       return new Promise((resolve) => {
+           reqEducationInfo({
+               stuName: identityInfo.stuName,
+           })
+           .then((res) => {
+               resolve({
+                   response: res,
+               })
+           })
+           .catch((error) => {
+               Toast.show({
+                   content: error.data.err_msg,
+                   position: 'top',
+               })
+               resolve({})
+           })
+       })
+   }
+   
+   export default loader
+   ```
+   
+   ```typescript
+   // 组件函数
+   import { useLoaderData } from 'react-router-dom'
+   
+   import type { AxiosResponse } from 'axios'
+   
+   const ApplyStudentInfo: React.FC = () => {
+       const loaderData = useLoaderData() as {response: AxiosResponse<string>}
+   }
+   ```
+   
    
 
 
 
-### 懒加载（`lazy`）和嵌套路由
+
+### `action`表单提交
+
+在 React Router v6.4+ 的 Data Mode 中，`action` 函数始终与当前路由关联。当用户通过 `<Form>` 组件或 `useSubmit` 钩子提交数据时，React Router 会根据当前匹配的路由路径调用该路由配置中的 `action` 函数
+
+```tsx
+const router = createBrowserRouter([
+    {
+        path: "/profile",
+        element: <ProfilePage />,
+        action: async ({ request }) => {
+            const formData = await request.formData();
+            // 处理表单数据
+        },
+    },
+])
+```
+
+当用户在 `/profile` 页面提交表单时，React Router 会调用与 `/profile` 路由关联的 `action` 函数来处理提交的数据
+
+
+
+### `lazy`懒加载和嵌套路由
 
 `lazy` 可以返回`loader`和`errorElement`等
 
@@ -95,9 +167,9 @@ lazy: async () => {
 
 `lazy()` 是异步加载模块，允许你**动态返回**一整套 `Component`、`loader`、`action`、`ErrorBoundary`
 
-所以如果你定义了 `lazy`，它会**接管所有配置**，会**覆盖**掉`element`、`loader`等
+所以如果你定义了 `lazy`，它会**接管所有配置**，会**覆盖**掉`element`、`loader`等，若返回了`loader`，原来的`loader`也不再被调用
 
-##### 重定向
+#### 重定向
 
 ```tsx
 {
@@ -126,7 +198,7 @@ lazy: async () => {
 
 
 
-## `index`默认匹配
+### `index`默认匹配
 
 1. 默认匹配子路由，使用 `children` + `index: true` + `Navigate`
 
@@ -155,7 +227,7 @@ lazy: async () => {
 
 
 
-### 错误边界（`errorElement`）
+### `errorElement`错误边界
 
 ```tsx
 errorElement: <ErrorPage />, // 错误处理

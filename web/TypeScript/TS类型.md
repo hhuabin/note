@@ -148,6 +148,14 @@ interface Person {
 let personProps: keyof Person; // 'name' | 'age'
 ```
 
+```typescript
+for (const key in user) {
+            if (Object.prototype.hasOwnProperty.call(user, key)) {
+                user[key as keyof User].name = bin
+            }
+    }
+```
+
 
 
 # `instanceof`类型保护
@@ -192,6 +200,22 @@ if (padder instanceof StringPadder) {
 
 
 # 继承
+
+一个接口可以继承多个接口，创建出多个接口的合成接口
+
+```typescript
+interface Shape {
+    color: string;
+}
+
+interface PenStroke {
+    penWidth: number;
+}
+
+interface Square extends Shape, PenStroke {
+    sideLength: number;
+}
+```
 
 
 
