@@ -25,7 +25,7 @@ export default defineConfig((env: ConfigEnv) => ({
 
 2. 其他库别名，如`wx-js-sdk`
 
-   下载`https://res.wx.qq.com/open/js/jweixin-1.6.0.js`到`public`下：`/public/static/js/`中
+   下载`https://res.wx.qq.com/open/js/jweixin-1.6.0.js`到`assets`下：`/assets/js/`中
 
    `jweixin-1.6.0.js`源码末尾增加导出：
 
@@ -39,8 +39,7 @@ export default defineConfig((env: ConfigEnv) => ({
    resolve: {
        alias: {
            '@': new URL('./src', import.meta.url).pathname,
-           // 导入public目录的静态js文件需要加上 ?url，用于明确表示你希望获取某个静态资源的 URL 路径 而不是资源内容本身
-           'jweixin': '/static/js/jweixin-1.6.0.js?url',
+           'jweixin': new URL('./src/assets/js/jweixin-1.6.0.js', import.meta.url).pathname,
        },
    },
    ```
@@ -59,6 +58,16 @@ export default defineConfig((env: ConfigEnv) => ({
 
    ```typescript
    import wx from 'jweixin'
+   ```
+
+3. `/public`下的文件不能使用`import`导入
+
+   ❗ **Vite 不允许用 `import` 引入放在 `public/` 目录下的 JS 文件**
+
+   可以在`index.html`中以`script`的方式导入。
+
+   ```html
+   <script type="module" src="/static/js/jweixin-1.6.0.js"></script>
    ```
 
    

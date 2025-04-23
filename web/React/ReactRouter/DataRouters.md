@@ -33,7 +33,8 @@
            loader: async ({ params }) => {
                // 检查用户权限
                if (!isAuthenticated()) {
-                   throw redirect("/login")  // 重定向到登录页
+                   // Promise中要用resolve而不是return
+                   return redirect("/login")  // 重定向到登录页
                }
                const res = await fetch(`/api/users/${params.id}`)
                if (!res.ok) throw new Error("User not found")

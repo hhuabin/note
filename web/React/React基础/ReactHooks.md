@@ -106,13 +106,38 @@ render() {
 
 
 
-## 1. State Hook
+## 1. `useState`状态更新
 
 `const [state, setState] = useState(initialState);`
 
 **initialState**：**第一次初始化**指定的值在内部作缓存
 
-**返回值**：包含2个元素的数组,，第1个为内部当前状态值，第2个为更新状态值的函数
+**返回值**：包含2个元素的数组
+
+- `state`为`initialState`值**本身**（object时，也是其本身，故而修改状态时，需要注意有没有改变初始化对象）
+
+  ```typescript
+  const initTitle = [{
+      status: ""
+  }]
+  
+  const ApplyExamined: React.FC = () => {
+      // 不应该如此初始化对象
+      const [title, setTitle] = useState(initTitle)
+      // 应该使用下面的写法（不包括redux）
+      // const [title, setTitle] = useState(DeepCopy.deepCopy(initTitle))
+  
+      useEffect(() => {
+          const errorTitle = [...title]
+          // 此时，初始化对象initTitle也会被改变，**再次**进入该组件时，initTitle[0].status === 'error'
+          // 故而初始化对象时。应该使用初始化对象的深复制值
+          errorTitle[0].status = 'error'
+          setTitle(errorTitle)
+      }, [])
+  }
+  ```
+
+- `setState`为更新状态值的函数
 
 
 
@@ -213,7 +238,7 @@ export default function Demo() {
 
 
 
-## 2. Effect Hook，生命周期
+## 2. `useEffect`生命周期
 
 可以让在函数组件中执行副作用操作(用于模拟类组件中的生命周期钩子)
 
@@ -258,7 +283,7 @@ useEffect(() => {
 
 
 
-## 3. Ref Hook
+## 3.`useRef`
 
 `useRef` 是一个 React Hook，它能帮助引用**一个不需要渲染的值**
 
@@ -300,7 +325,7 @@ showData = ()=>{
 
 ## 4. useReducer
 
-作用：useReducer 是 useState 的替代方案
+作用：`useReducer` 是 `useState` 的**替代方案**
 
 `useReducer(reducer, initialArg, init?)`
 
@@ -344,7 +369,7 @@ export default function Counter() {
 
 
 
-## 5. useMemo
+## 5.useMemo
 
 `const cachedValue = useMemo(calculateValue, dependencies)`
 
@@ -436,7 +461,7 @@ export default MemoizedComponent
 
 
 
-## 6. useCallback
+## 6.`useCallback`
 
 `useCallback(fn, dependencies)`
 
@@ -525,7 +550,7 @@ export default MemoizedComponent
 
 
 
-## 7. useImperativeHandle
+## 7.`useImperativeHandle`
 
 在 react 中无法直接通过 `ref ` 获取**子组件实例**（在 vue 中可以）。**当父组件需要调用子组件的方法时**，可以使用 `forwardRef` +  `useImperativeHandle`
 
@@ -790,7 +815,7 @@ function MyComponent() {
 
 
 
-## 14. createPortal
+## 14.`createPortal`
 
 允许组件挂载在父组件以外的其他元素。==可用于Modal框，或者弹出层等等==
 
