@@ -157,7 +157,8 @@ animation: fade 2s 1s infinite;
   - translateZ()：沿着z轴方向平移，z轴平移属于**立体效果**(近大远小)
 
   ```css
-   transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+  transform: translate3d(x,y,z);
   ```
 
 - rotate：旋转

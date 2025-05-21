@@ -384,7 +384,7 @@ background:
 1. 起始末尾颜色
 
    ```html
-   <div class="h-14 bg-gradient-to-r from-cyan-500 to-blue-500"></div>
+   <div class="h-14 bg-gradient-to-r from-cyan-500 to-blue-500"></div> 
    ```
 
 2. 中间颜色

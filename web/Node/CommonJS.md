@@ -72,12 +72,6 @@ console.log(module.exports)  // {d: 4}
 
 
 
-
-
-
-
-
-
 # require源码
 
 ```javascript

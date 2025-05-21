@@ -68,6 +68,24 @@ arr.myReduce((prev, current, index) => {
 
 
 
+# slice
+
+`slice()` **不会修改原数组**，而是返回一个新数组
+
+1. 基础用法，start、end可以是负数，负数从末尾开始算
+
+   ```javascript
+   arr.slice(start[, end])
+   ```
+
+2. 只接受一个start参数
+
+   ```javascript
+   "abcd".slice(-2)       // cd
+   ```
+
+
+
 # join
 
 **Array -> String**
