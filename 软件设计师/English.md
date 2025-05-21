@@ -10,8 +10,8 @@
 | distribute  | 分配   | optimized   | 优化   |
 | layer       | 层     | platform    | 平台   |
 | software    | 软件   | hardware    | 硬件   |
-|             |        |             |        |
-|             |        |             |        |
+| constructe  | 建造   | maintenance | 维护   |
+| recover     | 恢复   | trigger     | 触发   |
 |             |        |             |        |
 |             |        |             |        |
 |             |        |             |        |
