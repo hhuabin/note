@@ -106,6 +106,35 @@ npm update package-name[@version]        // 更新指定包
 npm cache clean --force
 ```
 
+
+
+## package version
+
+**package版本号自动更新**
+
+```bash
+npm version major --no-git-tag-version
+```
+
+- 更新 `package.json` 中的 `version` 字段
+- 同步更新 `package-lock.json` 中的版本号（`package-lock.json`是`npm`的锁定文件，不会被yarn处理）
+- **不会** 生成 Git commit 或 tag
+
+| 参数                   | 作用                                             |
+| :--------------------- | :----------------------------------------------- |
+| `patch`                | 将版本号的 **补丁号** +1（如 `1.0.0` → `1.0.1`） |
+| `minor`                | 更新次版本号（如 `1.0.0` → `1.1.0`）             |
+| `major`                | 更新主版本号（如 `1.0.0` → `2.0.0`）             |
+| `--no-git-tag-version` | 禁止自动创建 Git commit 和 tag                   |
+
+```typescript
+"major": "npm version major --no-git-tag-version",
+```
+
+
+
+# Vue
+
 **生产环境打包命令**
 
 ```json

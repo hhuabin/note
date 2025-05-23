@@ -98,7 +98,37 @@ yarn eject
 
 
 
-**生产环境打包命令**（React）
+## package version
+
+**package版本号自动更新**
+
+```bash
+yarn version --patch --no-git-tag-version
+```
+
+- `package.json` 和 `yarn.lock` 的版本号更新。
+- **不会** 生成 Git commit 或 tag
+
+| 参数                   | 作用                                             |
+| :--------------------- | :----------------------------------------------- |
+| `--patch`              | 将版本号的 **补丁号** +1（如 `1.0.0` → `1.0.1`） |
+| `--minor`              | 更新次版本号（如 `1.0.0` → `1.1.0`）             |
+| `--major`              | 更新主版本号（如 `1.0.0` → `2.0.0`）             |
+| `--no-git-tag-version` | 禁止自动创建 Git commit 和 tag                   |
+
+```typescript
+"major": "yarn version --major --no-git-tag-version",
+"minor": "yarn version --minor --no-git-tag-version",
+"patch": "yarn version --patch --no-git-tag-version"
+
+"build": "tsc && yarn patch && vite build",      // 打生产包自动更新小版本号
+```
+
+
+
+# Webpack(Vite自动忽略)
+
+**生产环境打包命令**（craco）
 
 ```json
 "build": "react-scripts build"
@@ -112,7 +142,7 @@ yarn run build
 
 
 
-**开发环境打包命令**（React）
+**开发环境打包命令**（Webpack）
 
 1. 使用`dotenv`(推荐)
 
