@@ -54,3 +54,72 @@ const Home: React.FC = () => {
 ```
 
 用 `isComposition` 判定是否为输入法输入，是则不触发`setValue`
+
+
+
+# `type`&`inputMode`
+
+<table>
+    <tr style="text-align:center;">
+        <td>组合</td> 
+        <td>默认弹起键盘</td> 
+    </tr>
+    <tr>
+        <td style="color:deeppink;">type="text" inputmode="numeric"</td>    
+        <td rowspan="3">弹起数字键盘</td> 
+    </tr>
+    <tr>
+        <td style="color:deeppink;">type="text" inputmode="decimal"</td>  
+    </tr>
+    <tr>
+        <td style="color:deeppink;">type="tel" inputmode="tel"</td> 
+    </tr>
+    <tr>
+        <td style="color:deeppink;">type="text" inputmode="text`</td>    
+        <td rowspan="4">弹起 拼音/英文 输入键盘</td> 
+    </tr>
+    <tr>
+        <td style="color:deeppink;">type="search" inputmode="search"</td> 
+    </tr>
+    <tr>
+        <td style="color:deeppink;">type="email" inputmode="email"</td> 
+    </tr>
+    <tr>
+        <td style="color:deeppink;">type="url" inputmode="url"</td> 
+    </tr>
+    <tr>
+        <td style="color:deeppink;">type="text" inputmode="none"</td>    
+        <td rowspan="4">不弹起键盘，自定义键盘</td> 
+    </tr>
+</table>
+
+
+
+# `enterKeyHint`键盘回车键显示
+
+| enterKeyHint参数值 | 移动端键盘右下角文字                                         |
+| ------------------ | ------------------------------------------------------------ |
+| `enter`            | 回车符                                                       |
+| `done`             | "完成" 或 "Done"                                             |
+| `go`               | "开始" 或 "Go"                                               |
+| `next`             | "下一步" 或 "Next"                                           |
+| `previous`         | "上一步" 或 "Prev"                                           |
+| `search`           | 搜索图案                                                     |
+| `send`             | "发送" 或 "Send"                                             |
+| `undefined`        | 默认为 "开始" 或 "Go"<br />当输入框下还有输入框时，显示为"下一步"，点击跳转至下一个输入框 |
+
+```tsx
+const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+        submitMessage()
+    }
+}
+
+return (
+    <input
+        enterKeyHint='next'
+        onChange={event => handleChangeName(event)}
+        onKeyDown={event => handleKeyDown(event)}
+    ></input>
+)
+```

@@ -278,7 +278,12 @@ export default class AxiosRequest {
             return new Promise(() => { })
         } else if (axios.isAxiosError(error)) {
             const status = error.response?.status ?? 0
-            if ([401, 403].includes(status)) {
+            if (error.code === "ERR_NETWORK") {
+                errorMessage = "网络竟然崩溃了"
+                if (!window.navigator.onLine) errorMessage = "网络已断开"
+            } else if (error.code === "ECONNABORTED") {
+                errorMessage = "请求超时"
+            } else if ([401, 403].includes(status)) {
                 errorMessage = "无权限访问，请登录或联系管理员"
             } else if (status === 404) {
                 errorMessage = "请求资源不存在"
@@ -378,7 +383,7 @@ import { message } from 'antd'
 // import { navigate } from '@/hooks/useRouter'
 import store from '@/store/store'
 import { saveUserInfo, removeUserInfo } from '@/store/slice/userSlice'
-import formatDate from '../stringUtils/formatDate'
+import formatDate from '@/utils/stringUtils/formatDate'
 
 /**
  * AxiosRequest
@@ -640,7 +645,12 @@ export default class AxiosRequest {
             return new Promise(() => { })
         } else if (axios.isAxiosError(error)) {
             const status = error.response?.status ?? 0
-            if ([401, 403].includes(status)) {
+            if (error.code === "ERR_NETWORK") {
+                errorMessage = "网络竟然崩溃了"
+                if (!window.navigator.onLine) errorMessage = "网络已断开"
+            } else if (error.code === "ECONNABORTED") {
+                errorMessage = "请求超时"
+            } else if ([401, 403].includes(status)) {
                 errorMessage = "无权限访问，请登录或联系管理员"
             } else if (status === 404) {
                 errorMessage = "请求资源不存在"

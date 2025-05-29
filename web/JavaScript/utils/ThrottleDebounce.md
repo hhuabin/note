@@ -155,3 +155,29 @@ const searchSchool = FunctionUtil.debounce<string>((key = searchKey) => {
 }, 200)
 ```
 
+
+
+
+
+# 非立即执行防抖函数
+
+```typescript
+/**
+ * 防抖函数： 一个需要频繁触发的函数，在规定时间内触发，只让最后一次生效，前面的不生效
+ * @param { Function } callback 回调函数
+ * @param {number } delay 延迟时间
+ * @returns { Function } debounced防抖函数
+ */
+public static debounce = <T>(callback: (...args: Array<T>) => void, delay = 500) => {
+    let timerId: number | null = null
+    return (...args: Array<T>) => {
+        if (timerId) clearTimeout(timerId)
+        timerId = setTimeout(() => {
+            // callback.call(this)
+            callback(...args)
+            timerId = null
+        }, delay)
+    }
+}
+```
+
