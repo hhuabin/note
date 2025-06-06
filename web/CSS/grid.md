@@ -80,10 +80,15 @@ fr：浮动宽度
    ```css
    // 最小宽100px, 最大1fr
    // 以最小100px尽可能的向上布局
-   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
    ```
 
-   
+   | 关键词        | 会折叠空列         | 最终是否铺满整行 | 推荐场景     |
+   | ------------- | ------------------ | ---------------- | ------------ |
+   | `auto-fit` ✅  | ✅ 会自动“压缩”空列 | ✅ 会铺满整行     | ✅ 推荐使用   |
+   | `auto-fill` ❌ | ❌ 会保留空列       | ❌ 可能留白       | 特殊布局需求 |
+
+
 
 ## grid-template-rows
 
