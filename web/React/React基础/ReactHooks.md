@@ -333,6 +333,22 @@ showData = ()=>{
 }
 ```
 
+:exclamation: :exclamation: :exclamation:：在`React`中，==禁止使用函数防抖==，React每次更新都会重刷一遍`submitOrder()`导致`isLoading`一直被重置成`false`
+
+```typescript
+// 禁止使用
+const submitOrder = (
+    let isLoading = false   // 此处 isLoading 需要使用useRef
+    return () => {
+        if (isLoading) return
+        console.log('提交订单', isLoading)
+        isLoading = true
+    }
+)()
+```
+
+
+
 
 
 ## 4. useReducer
@@ -562,7 +578,11 @@ export default MemoizedComponent
 
 
 
-## 7.`useImperativeHandle`
+## 7.`forwardRef`, `useImperativeHandle`
+
+```typescript
+useImperativeHandle(ref, createHandle, dependencies?)
+```
 
 在 react 中无法直接通过 `ref ` 获取**子组件实例**（在 vue 中可以）。**当父组件需要调用子组件的方法时**，可以使用 `forwardRef` +  `useImperativeHandle`
 
@@ -570,9 +590,9 @@ export default MemoizedComponent
 
 `useImperativeHandle` 接受三个参数：
 
-1. ref 对象
+1. ref 对象，即父组件的`useRef<ChildComponentRef>(null)`
 
-2. 创建的实例或**方法的获取函数**
+2. **工厂函数**：返回你想要暴露的 `ref` 的句柄，即给父组件的 `ref` 变量赋值
 
 3. 依赖项数组。
 
@@ -643,9 +663,18 @@ export default ParentComponent
 
 在上面的示例中，通过使用 `useImperativeHandle`，子组件 `ChildComponent` 可以将 `increment` 方法暴露给父组件，然后父组件可以通过子组件的引用来调用这个方法。
 
+原理：`useImperativeHandle` 的作用就是自定义这个 `ref.current` 应该暴露什么值给父组件。就是给传入的`ref`也就是`ParentComponent`的 `childRef` 赋值
+
+```typescript
+useImperativeHandle(ref, () => {
+    // 暴露 increment 函数即可
+    return {
+        increment
+    }
+}
+```
+
 总之，`useImperativeHandle` 允许你在函数组件中自定义向外暴露的实例或方法，以供父组件通过子组件的引用进行调用。
-
-
 
 
 

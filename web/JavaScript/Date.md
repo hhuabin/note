@@ -1,5 +1,9 @@
 [MDN Date](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Date "MDN")
 
+时间戳是指从 **UTC 1970-01-01 00:00:00** 开始计算的秒数（或毫秒数），无论你身处哪个时区，**同一时刻**的时间戳都是相同的。
+
+
+
 # 构造函数 DateConstructor
 
 ```typescript
@@ -26,7 +30,7 @@ const birthday = new Date(1995, 11, 17, 3, 24, 0);
 ## 创建日期
 
 ```javascript
-new Date()    // -> Date
+new Date()    // -> Date        // 新建当前时区时间
 
 Date.UTC(1970, 0, 1, 0, 0, 0)    // -> 0 number         月份从0开始
 

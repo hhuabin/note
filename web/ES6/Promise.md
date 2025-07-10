@@ -45,6 +45,9 @@ Promise有三种状态：pending、resovled、rejected
    .catch(error => {
        console.error(error);
    })
+   .finally(() => {
+       console.log('finally');
+   })
    ```
 
 2. 直接调用成功或者失败，用于异步执行（微任务）

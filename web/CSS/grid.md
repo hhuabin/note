@@ -9,25 +9,25 @@
 }
 ```
 
-- `grid-column-gap`：网格列间隙
+- `column-gap`：网格列间隙
 
   ```css
   .grid-container {
       display: grid;
-      grid-column-gap: 50px;
+      column-gap: 50px;
   }
   ```
 
-- `grid-row-gap`：网格行间隙
+- `row-gap`：网格行间隙
 
   ```css
   .grid-container {
       display: grid;
-      grid-row-gap: 50px;
+      row-gap: 50px;
   }
   ```
 
-- `grid-gap`：`grid-column-gap`和`grid-row-gap`的简写
+- `grid-gap`：`column-gap`和`row-gap`的简写
 
   ```css
   .grid-container {
@@ -44,11 +44,11 @@
 
    
 
-# grid-template-columns | grid-template-rows
+# `grid-template-columns`、`grid-template-rows`
 
-## grid-template-columns
+## `grid-template-columns`、`grid-template-rows`
 
-grid模板列
+**设置模板的行列数目**
 
 fr：浮动宽度
 
@@ -90,22 +90,28 @@ fr：浮动宽度
 
 
 
-## grid-template-rows
+## `grid-auto-columns`、`grid-auto-rows`
 
-grid模板行高
+设置行列的单元大小
 
+`grid-auto-columns` 用于设置 **隐式创建的网格列**（即超出 `grid-template-columns` 定义的列）的默认大小。即`grid-template-columns`未指定的列宽
 
+`grid-auto-rows` 用于设置 **隐式创建的网格行**（即超出 `grid-template-rows` 定义的列）的默认大小
 
-## grid-auto-rows
+可选值：
 
-grid-template-rows未指定的行高
+- `grid-auto-columns: 100px;`：所有隐式列宽固定为 100px
+- `grid-auto-columns: 20%;`：隐式列占容器宽度的 20%
+- `grid-auto-columns: min-content;`：列宽 = 该列所有单元格中 **最大内容宽度**（不换行时的完整宽度）。
+- `grid-auto-columns: auto;`：默认值，列宽由浏览器决定（通常类似 `max-content`，但受 `min-width`/`max-width` 影响）
+- 
 
 ```css
-// 第一、二行高100px，第三行及以后高200px
+// 第一、二行列宽100px，第三列及以后宽200px
 .grid-container {
     display: grid;
-    grid-template-rows: 100px 100px;
-    grid-auto-rows: 200px;
+    grid-template-columns: 100px 100px;
+    grid-auto-columns: 200px;
 }
 ```
 

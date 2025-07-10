@@ -138,7 +138,7 @@ user-select: none;
 </ul>
 ```
 
-1. first-child
+1. `first-child`
 
    表示选择列表中的第一个标签
 
@@ -146,35 +146,35 @@ user-select: none;
    li:first-child{background: #000}
    ```
 
-2. last-child
+2. `last-child`
 
    表示选择列表中的最后一个标签
 
-3. nth-child(1)
+3. `nth-child(1)`
 
    表示选择列表中的第1个标签
 
-4. nth-child(2n)
+4. `nth-child(2n)`
 
    表示选择列表中的偶数标签，即选择 第2、第4、第6…… 标签。
 
-5. nth-child(2n-1)
+5. `nth-child(2n-1)`
 
    表示选择列表中的奇数标签，即选择 第1、第3、第5、第7……标签。
 
-6. nth-child(n+3)
+6. `nth-child(n+3)`
 
    表示选择列表中的标签从第3个开始到最后。
 
-7. nth-child(-n+3)
+7. `nth-child(-n+3)`
 
    表示选择列表中的标签从0到3，即小于3的标签。
 
-8. nth-last-child(3)
+8. `nth-last-child(3)`
 
    表示选择列表中的倒数第3个标签。
 
-9. li:nth-last-child(-n+2)
+9. `li:nth-last-child(-n+2)`
 
    选择最后两个 `<li>` 元素
 

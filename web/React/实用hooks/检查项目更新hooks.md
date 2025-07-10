@@ -193,23 +193,25 @@ export default useProjectAutoUpdate
 利用打包后`<script>`的`hash`值不一样实现自动更新
 
 ```typescript
-import { useRef, useEffect } from "react"
+import { useRef, useEffect } from 'react'
 
 /**
- * 自动刷新页面，用于检测项目是否需要更新，仅生产环境生效
+ * bug: 该方法有个巨大的bug，就是会捕获 index.html 所有的 <script> 标签，哪怕是被注释的
+ * @description 自动刷新页面，用于检测项目是否需要更新，仅生产环境生效
  * vite.config.ts 的 output.entryFileNames 需设置为 'js/[name]-[hash].js'
  * @param projectLink 项目部署地址，默认为域名根路径
  * @param realTime 是否实时检查，默认为 false
  */
 const useProjectAutoUpdate = (projectLink = '/', realTime = false) => {
 
-    // <script type="module" crossorigin src="./js/index.js"></script>
-    const scriptReg = new RegExp(/<script\b[^>]*src=["'](?<src>[^"']*)["'][^>]*(>[^<]*<\/script>|\/>)/, 'gm')
+    // <script type='module' crossorigin src='./js/index.js'></script>
+    const scriptReg = /<script\b[^>]*src=["']([^"']*)["'][^>]*(>[^<]*<\/script>|\/>)/gi
     const localScripts = useRef<string[]>([])
     const REALTIME_DURATION = 3000
 
     useEffect(() => {
-        if (import.meta.env.MODE !== 'production') return
+        // if (import.meta.env.MODE !== 'production') return
+        // if (process.env.NODE_ENV !== 'production') return   // webpack
         getFirstLevelHeadAndBodyScripts()
         if (realTime) {
             realTimeRefresh()
@@ -222,12 +224,14 @@ const useProjectAutoUpdate = (projectLink = '/', realTime = false) => {
     const getFirstLevelHeadAndBodyScripts = () => {
         const headChildren: HTMLCollection = document.head.children        // 获取 head 的直接子元素，伪数组
         const bodyChildren: HTMLCollection = document.body.children        // 获取 body 的直接子元素，伪数组
-        const scriptsValue = [...headChildren, ...bodyChildren].reduce((prev, current) => {
+
+        const scriptsValue = [...Array.from(headChildren), ...Array.from(bodyChildren)].reduce((prev, current) => {
             if (current.tagName.toLowerCase() === 'script') {
+                if (current.getAttribute('data-webpack')) return prev   // 移除 webpack 打包生成并用于懒加载模块
+
                 const src = current.getAttribute('src')
-                if (src) {
-                    return [...prev, src]
-                }
+                if (src) return [...prev, src]
+                return prev
             }
             return prev
         }, [] as string[])
@@ -243,12 +247,12 @@ const useProjectAutoUpdate = (projectLink = '/', realTime = false) => {
         // fetch('/?timestamp='+Date.now()).then(resp=>resp.text()).then(res=>console.log(res))
         return fetch(link + '?timestamp=' + Date.now())
             .then(response => response.text())
-            .then(html => {
+            .then(htmlString => {
                 scriptReg.lastIndex = 0
                 const result: string[] = []
                 let match: RegExpExecArray | null
-                while ((match = scriptReg.exec(html)) !== null) {
-                    result.push(match.groups!.src)
+                while ((match = scriptReg.exec(htmlString)) !== null) {
+                    result.push(match[1])
                 }
                 return Promise.resolve(result)
             })
@@ -272,6 +276,7 @@ const useProjectAutoUpdate = (projectLink = '/', realTime = false) => {
                 break
             }
         }
+        if (result) console.log(newScripts, localScripts.current)
         localScripts.current = newScripts
         return result
     }
