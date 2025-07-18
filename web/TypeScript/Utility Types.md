@@ -101,3 +101,46 @@ interface UserPreview extends Pick<UserInfo, "id" | "name"> {
 }
 ```
 
+
+
+# infer
+
+`infer R` 是 TypeScript 类型系统中的一个关键字，用于在 **条件类型**中进行类型“**推断**”
+
+```typescript
+T extends SomeType<infer R> ? R : Fallback
+```
+
+- `infer R` 表示：**如果 T 能匹配 `SomeType<...>`，就从中提取出类型变量 R。**否则使用 `Fallback` 类型。
+
+1. 提取 Promise 的值类型
+
+   ```typescript
+   type UnwrapPromise<T> = T extends Promise<infer R> ? R : T
+   
+   type A = UnwrapPromise<Promise<string>>  // string
+   type B = UnwrapPromise<number>           // number
+   ```
+
+2. 提取函数返回值
+
+   ```typescript
+   type ReturnTypeOf<T> = T extends (...args: any[]) => infer R ? R : never
+   
+   type F = () => number
+   
+   type Result = ReturnTypeOf<F> // number
+   ```
+
+3. 提取数组元素类型
+
+   ```typescript
+   type ElementType<T> = T extends (infer U)[] ? U : T
+   
+   type A = ElementType<string[]>   // string
+   type B = ElementType<number[]>   // number
+   type C = ElementType<boolean>    // boolean
+   ```
+
+   
+

@@ -139,6 +139,20 @@ render() {
 
 - `setState`为更新状态值的函数
 
+### 避免重复创建初始状态
+
+```typescript
+const [todos, setTodos] = useState(createInitialTodos())
+```
+
+尽管 `createInitialTodos()` 的结果仅用于初始渲染，但仍然会在每次渲染时调用此函数
+
+```typescript
+const [todos, setTodos] = useState(createInitialTodos)   // React 在并且仅在初始化期间会调用该函数
+```
+
+传递的是 `createInitialTodos` **函数本身**，而不是 `createInitialTodos()` 调用该函数的结果。如果将函数传递给 `useState`，**React 仅在初始化期间调用它**
+
 
 
 **useState用法**

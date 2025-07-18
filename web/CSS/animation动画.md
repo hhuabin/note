@@ -120,6 +120,8 @@ transition: 2s margin-left 1s cubic-bezier(.24,.95,.82,-0.88);
 animation: fade 2s 1s infinite;
 ```
 
+！！！attention：在设置关键帧的时候不能将元素设置成`display: none;`，否则元素动画将不会执行
+
 
 
 ### 注意
