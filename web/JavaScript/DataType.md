@@ -29,6 +29,7 @@
 5. 判断对象（不包括数组）：
 
    ```javascript
+   typrof []        // 'object'
    typeof obj === 'object' && !Array.isArray(obj)
    ```
 
@@ -41,6 +42,8 @@
 7. 判断 null：
 
    ```javascript
+   typeof null   // 'object'
+   
    obj === null
    ```
 

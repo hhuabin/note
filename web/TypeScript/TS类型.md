@@ -284,5 +284,19 @@ let myIdentity: GenericIdentityFn<number> = identity;
 
 
 
+## 如何定义泛型
 
+在函数中，如果我们需要从函数的 参数 中自动推导出函数 返回值 的类型，比如
+
+```typescript
+export const runTasksWithLimitSettled = <T extends (() => Promise<any>)[]>(
+    // 保持传入参数的“元组精度”并允许 as const 修饰的只读数组被正确推导，使用 tasks: T 的话，结果会被推导为宽泛数组
+    tasks: readonly [...T],
+    limit: number,
+): Promise<{[K in keyof T]: T[K] extends () => Promise<infer R> ? TaskResult<R> : never}>
+```
+
+我们需要将参数定义为 `T` ，然后从参数中提取 类型 组成结果
+
+- `readonly [...T]`：保持传入参数的“元组精度”并允许 as const 修饰
 

@@ -69,7 +69,7 @@ git remote rm 仓库别名
 强制推送
 
 ```shell
-git push--force
+git push --force
 ```
 
 
