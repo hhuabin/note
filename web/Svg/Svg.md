@@ -2,9 +2,9 @@
 
 SVG（Scalable Vector Graphics）可缩放矢量图形
 
-- `fill`：填充
+- `fill`：填充，`fill='currentColor'`继承父级`color`颜色 
 
-- `stroke`：边颜色 
+- `stroke`：边颜色，`stroke='currentColor'`继承父级`color`颜色 
 
 - `stroke-width`：边宽度
 
@@ -21,9 +21,9 @@ SVG（Scalable Vector Graphics）可缩放矢量图形
 - `stroke-dasharray`：虚线序列
 
   ```xml
-  <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <path d="M20 50 L80 50" fill="none" stroke="#f00" strokeWidth="4" />
-      <path d="M20 50 L80 50" fill="none" stroke="#333" strokeWidth="4" strokeDasharray="20 5 5 5" />
+  <svg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
+      <path d='M20 50 L80 50' fill='none' stroke='#f00' strokeWidth='4' />
+      <path d='M20 50 L80 50' fill='none' stroke='#333' strokeWidth='4' strokeDasharray='20 5 5 5' />
       <!-- 20 5 5 5 -->
       <!-- 20实线 5实线 5实线 5实线 -->
       <!-- 往复循环，实线先开始，实虚交替 -->
@@ -32,7 +32,7 @@ SVG（Scalable Vector Graphics）可缩放矢量图形
 
 间隔符问题：
 
-在坐标中，正数可以使用空格` `或者`,`连接。而带有符号的数可以不使用空格` `或者逗号`,`连接，如`d="M-100-100"`，负号会被自动识别
+在坐标中，正数可以使用空格` `或者`,`连接。而带有符号的数可以不使用空格` `或者逗号`,`连接，如`d='M-100-100'`，负号会被自动识别
 
 - `M100 100`=`M100,100`=`M+100+100`等价
 
@@ -41,8 +41,8 @@ SVG（Scalable Vector Graphics）可缩放矢量图形
 ## rect 矩形
 
 ```xml
-<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <rect x="20" y="30" width="60" height="40" rx="10" ry="10" fill="none" stroke="#333" strokeWidth="4"></rect >
+<svg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
+    <rect x='20' y='30' width='60' height='40' rx='10' ry='10' fill='none' stroke='#333' strokeWidth='4'></rect >
 </svg>
 ```
 
@@ -58,8 +58,8 @@ SVG（Scalable Vector Graphics）可缩放矢量图形
 ## circle 圆形
 
 ```xml
-<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="50" cy="50" r="30" fill="none" stroke="#333" strokeWidth="4"></circle>
+<svg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
+    <circle cx='50' cy='50' r='30' fill='none' stroke='#333' strokeWidth='4'></circle>
 </svg>
 ```
 
@@ -72,8 +72,8 @@ SVG（Scalable Vector Graphics）可缩放矢量图形
 ## ellipse 椭圆
 
 ```xml
-<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <ellipse cx="50" cy="50" rx="30" ry="20" fill="none" stroke="#333" strokeWidth="4"></ellipse>
+<svg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
+    <ellipse cx='50' cy='50' rx='30' ry='20' fill='none' stroke='#333' strokeWidth='4'></ellipse>
 </svg>
 ```
 
@@ -87,8 +87,8 @@ SVG（Scalable Vector Graphics）可缩放矢量图形
 ## line 线条
 
 ```xml
-<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <line x1="20" y1="50" x2="80" y2="50" stroke="#333" strokeWidth="8" strokeLinecap="round" />
+<svg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
+    <line x1='20' y1='50' x2='80' y2='50' stroke='#333' strokeWidth='8' strokeLinecap='round' />
 </svg>
 ```
 
@@ -103,8 +103,8 @@ SVG（Scalable Vector Graphics）可缩放矢量图形
 
 ```xml
 <!-- 楼梯 -->
-<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <polyline points="20,20 20,40 40,40 40,60 60,60 60,80 80,80" fill="none" stroke="#333" strokeWidth="4" strokeLinejoin="round" />
+<svg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
+    <polyline points='20,20 20,40 40,40 40,60 60,60 60,80 80,80' fill='none' stroke='#333' strokeWidth='4' strokeLinejoin='round' />
 </svg>
 ```
 
@@ -114,8 +114,8 @@ SVG（Scalable Vector Graphics）可缩放矢量图形
 
 ```xml
 <!-- 五角星 -->
-<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <polygon points="50,20 30,80 80,40 20,40 70,80" fill="none" stroke="#333" strokeWidth="4" strokeLinejoin="round" />
+<svg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
+    <polygon points='50,20 30,80 80,40 20,40 70,80' fill='none' stroke='#333' strokeWidth='4' strokeLinejoin='round' />
 </svg>
 ```
 
@@ -131,16 +131,16 @@ SVG（Scalable Vector Graphics）可缩放矢量图形
 
 ```xml
 <!-- 斜线 -->
-<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <path d="M20 20 L80 80" fill="none" stroke="#333" strokeWidth="4" strokeLinecap="round" />
+<svg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
+    <path d='M20 20 L80 80' fill='none' stroke='currentColor' strokeWidth='4' strokeLinecap='round' />
 </svg>
 
 <!-- 贝塞尔曲线 -->
-<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="50" cy="20" r="4" fill="#f00" />
-    <circle cx="20" cy="80" r="4" fill="#f00" />
-    <circle cx="80" cy="80" r="4" fill="#f00" />
-    <path d="M20,80 Q50,20 80,80 " fill="none" stroke="#333" strokeWidth="4" strokeLinecap="round" />
+<svg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
+    <circle cx='50' cy='20' r='4' fill='#f00' />
+    <circle cx='20' cy='80' r='4' fill='#f00' />
+    <circle cx='80' cy='80' r='4' fill='#f00' />
+    <path d='M20,80 Q50,20 80,80 ' fill='none' stroke='#333' strokeWidth='4' strokeLinecap='round' />
 </svg>
 ```
 
@@ -163,13 +163,13 @@ SVG（Scalable Vector Graphics）可缩放矢量图形
 可以为一组标签定义相同的属性
 
 ```xml
-<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <g r="4" fill="#f00">
-        <circle cx="50" cy="20" r="4" />
-        <circle cx="20" cy="80" r="4" />
-        <circle cx="80" cy="80" r="4" />
+<svg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
+    <g r='4' fill='#f00'>
+        <circle cx='50' cy='20' r='4' />
+        <circle cx='20' cy='80' r='4' />
+        <circle cx='80' cy='80' r='4' />
     </g>
-    <path d="M20 80 Q50 20 80 80 " fill="none" stroke="#333" strokeWidth="4" strokeLinecap="round" />
+    <path d='M20 80 Q50 20 80 80 ' fill='none' stroke='#333' strokeWidth='4' strokeLinecap='round' />
 </svg>
 ```
 
@@ -179,7 +179,7 @@ SVG（Scalable Vector Graphics）可缩放矢量图形
 
 ```xml
 <defs>
-    <filter id="filter1"></filter>
+    <filter id='filter1'></filter>
 </defs>
 ```
 
@@ -189,6 +189,23 @@ SVG（Scalable Vector Graphics）可缩放矢量图形
 
 ```xml
 <defs>
-    <linearGradient id="grad1"></linearGradient>
+    <linearGradient id='grad1'></linearGradient>
 </defs>
 ```
+
+- 比如背景渐变
+
+  ```xml
+  <svg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
+      <defs>
+          <linearGradient id='grad1' x1='0%' y1='0%' x2='100%' y2='100%'>
+              <stop offset='0%' stopColor='currentColor' stopOpacity='0' />
+              <stop offset='100%' stopColor='currentColor' stopOpacity='1' />
+          </linearGradient>
+      </defs>
+      <rect x='20' y='30' width='60' height='40' rx='10' ry='10' fill='url(#grad1)' stroke='currentColor' strokeWidth='4'></rect >
+  </svg>
+  ```
+
+  
+

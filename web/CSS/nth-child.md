@@ -38,11 +38,11 @@ background-repeat: no-repeat;
 background: url("") center/contain no-repeat;
 ```
 
-- cover                图片的比例不变，将元素铺满
+- `cover`：图片的比例不变，将元素铺满
 
-- contain            图片比例不变，将图片在元素中完整显示
+- `contain`：图片比例不变，将图片在元素中完整显示（用这个）
 
-- linear-gradient()
+- `linear-gradient()`
 
   to left、 to right、 to bottom、to top、turn 表示圈
 

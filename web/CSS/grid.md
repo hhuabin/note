@@ -1,4 +1,72 @@
-# grid
+# 应用
+
+1. 一行多列的`grid`（固定列宽）
+
+   ```css
+   display: grid;
+   grid-auto-flow: column;     /* 控制纵向排列 */
+   column-gap: 10px;
+   grid-auto-columns: 100px;   /* 列宽固定100px */// 
+   overflow-x: scroll;         /* 横轴滚动 */
+   scrollbar-width: none;      /* 隐藏滚动条 */
+   ```
+
+2. 一列多行（固定行高）
+
+   ```css
+   display: grid;
+   grid-auto-flow: row;      /* 默认值，可省略 */
+   row-gap: 10px;            /* 行间距 */
+   grid-auto-rows: 100px;    /* 每行高度固定 100px */
+   ```
+
+3. 一列多行（动态高度）
+
+   ```css
+   grid grid-cols-1 gap-y-6
+   ```
+
+4. 多行多列自适应`grid`（列宽行高都不固定）
+
+   ```html
+   <div class='flex-start'>
+       <ul>
+           <li></li>
+           <li></li>
+       </ul>
+   </div>
+   ```
+
+   ```less
+   /*
+    * 外层加上flex，当元素比较少时，li按照100px基础值宽度（除非由内容撑大li）
+    * 外层不加上flex，当元素比较少时按照1fr宽度
+    * 若对元素最小值比较敏感，不建议使用 minmax，转而使用repeat(auto-fit, 100px)固定宽度反而更好
+   */
+   .flex-start {
+       width: 100%;
+       display: flex;            // 不让 ul 默认宽100%
+       justify-content: start;  // 当 ul 元素较少时居中
+       
+       ul {
+           display: grid;
+           gap: 8px;
+           grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));      // 最小宽度 100px，最大 1fr
+           // grid-template-columns: repeat(auto-fit, minmax(100px, 200px));   // 不可使用该方式限制最大列宽，如有需要给 li 加上最大宽即可
+           max-width: 100%;
+           
+           li {
+               max-width: 200px;        // 如果觉得 1fr 太大不好控制，可以直接给子元素加上最大宽度，li 宽度即可在 100-200px之间
+           }
+       }
+   }
+   ```
+
+   
+
+
+
+# `grid`
 
 当 HTML 元素的 `display` 属性设置为 `grid` 或 `inline-grid` 时，它就会成为网格容器
 
@@ -42,9 +110,10 @@
   }
   ```
 
-   
 
-# `grid-template-columns`、`grid-template-rows`
+
+
+# `grid-template`
 
 ## `grid-template-columns`、`grid-template-rows`
 
@@ -87,6 +156,31 @@ fr：浮动宽度
    | ------------- | ------------------ | ---------------- | ------------ |
    | `auto-fit` ✅  | ✅ 会自动“压缩”空列 | ✅ 会铺满整行     | ✅ 推荐使用   |
    | `auto-fill` ❌ | ❌ 会保留空列       | ❌ 可能留白       | 特殊布局需求 |
+
+
+
+# `grid-auto`
+
+## `grid-auto-flow`
+
+控制**隐式网格**的排列方向
+
+```css
+grid-auto-flow: [row | column] || [dense]
+```
+
+- **`row`**：(默认值)，网格项按行依次填充
+- **`column`**：网格项按列依次填充
+
+```css
+// 创建一行多列的 grid
+display: grid;
+grid-auto-flow: column;      // 按照列排列
+column-gap: 10px;
+grid-auto-columns: 100px;    // 每列宽100px
+overflow-x: scroll;
+scrollbar-width: none;       // 隐藏滚动条
+```
 
 
 
@@ -150,3 +244,13 @@ repeat(count, value)
 - `auto-fit`：在容器中尽可能地填满列，当列的宽度超过容器宽度时，列会收缩
 - `auto-fill`：始终填满网格容器，即使容器中有多余的空间，也不会改变列数，会留空格
 - `minmax(200px, 1fr)`：定义列的最小值和最大值。在这个例子中，列的最小宽度为 `200px`，最大宽度为 `1fr`
+
+```css
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+gap: 8px;
+
+
+// 创建最小宽度为100px的重复列，列数较多时换行。有需要可以在容器外层加上flex使其居中
+```
+

@@ -20,139 +20,151 @@ npm install @reduxjs/toolkit react-redux
 
 1. 在启动文件传 store
 
-```tsx
-// index.tsx
-import { Provider } from 'react-redux';
+   ```typescript
+   // index.tsx
+   import { Provider } from 'react-redux';
+   
+   import store from "./store/store"
+   
+   const root = ReactDOM.createRoot(
+   	document.getElementById('root') as HTMLElement
+   );
+   root.render(
+       <Provider store={store}>
+           {/* 路由模式 */}
+           <BrowserRouter>
+               <App />
+           </BrowserRouter>
+       </Provider>
+   );
+   ```
 
-import store from "./store/store"
+2. `store/store.ts`
 
-const root = ReactDOM.createRoot(
-	document.getElementById('root') as HTMLElement
-);
-root.render(
-    <Provider store={store}>
-        {/* 路由模式 */}
-        <BrowserRouter>w
-            <App />
-        </BrowserRouter>
-    </Provider>
-);
-```
+   ```typescript
+   import { configureStore } from '@reduxjs/toolkit'
+   import counterReducer from './slice/counterSlice'
+   import usersReducer from './slice/usersSlice'
+   
+   const store = configureStore({
+   	reducer: {
+   		counter: counterReducer,
+   		users: usersReducer,
+   	},
+   })
+   export default store
+   
+   // 声明 state, dispath 类型
+   export type RootState = ReturnType<typeof store.getState>
+   export type AppDispatch = typeof store.dispatch
+   ```
 
+3. `store/slice/countersSlice.ts`
 
+   ```typescript
+   import { createSlice } from '@reduxjs/toolkit'
+   
+   export const counterSlice = createSlice({
+   	// 用来自动生成 action 中的 type
+   	name: 'counter',
+   	// state 初始值
+   	initialState: {
+   		countNumber: 0,
+   	},
+   	reducers: {
+   		increment: (state) => {
+   			state.countNumber += 1
+   		},
+   		decrement: (state) => {
+   			state.countNumber -= 1
+   		},
+   		incrementByAmount: (state, action) => {
+   			state.countNumber += action.payload
+   		},
+   	},
+   })
+   
+   // 切片对象会自动生成 action
+   // actions 存储的是 slice 自动生成 action 创建器（一个函数）
+   // action 对象的结构：{type: "counter/increment"}...，payload：函数的参数
+   export const { increment, decrement, incrementByAmount } = counterSlice.actions
+   
+   export default counterSlice.reducer
+   ```
 
-2. store/store.ts
+4. `store/slice/usersSlice.ts`
 
-```typescript
-import { configureStore } from '@reduxjs/toolkit'
-import counterReducer from './slice/counterSlice'
-import usersReducer from './slice/usersSlice'
-
-const store = configureStore({
-	reducer: {
-		counter: counterReducer,
-		users: usersReducer,
-	},
-})
-export default store
-
-// 声明 state, dispath 类型
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
-```
-
-3. store/slice/countersSlice.ts
-
-```typescript
-import { createSlice } from '@reduxjs/toolkit'
-
-export const counterSlice = createSlice({
-	// 用来自动生成 action 中的 type
-	name: 'counter',
-	// state 初始值
-	initialState: {
-		countNumber: 0,
-	},
-	reducers: {
-		increment: (state) => {
-			state.countNumber += 1
-		},
-		decrement: (state) => {
-			state.countNumber -= 1
-		},
-		incrementByAmount: (state, action) => {
-			state.countNumber += action.payload
-		},
-	},
-})
-
-// 切片对象会自动生成 action
-// actions 存储的是 slice 自动生成 action 创建器（一个函数）
-// action 对象的结构：{type: "counter/increment"}...，payload：函数的参数
-export const { increment, decrement, incrementByAmount } = counterSlice.actions
-
-export default counterSlice.reducer
-```
-
-4. store/slice/usersSlice.ts
-
-```typescript
-import { createSlice } from '@reduxjs/toolkit'
-
-export const usersSlice = createSlice({
-	// 用来自动生成 action 中的 type
-	name: 'users',
-	// state 初始值
-	initialState: {
-		name: "",
-	},
-	reducers: {
-		changeName: (state, action) => {
-			state.name = action.payload
-		},
-	},
-})
-
-export const { changeName } = usersSlice.actions
-
-export default usersSlice.reducer
-```
+   ```typescript
+   import { createSlice } from '@reduxjs/toolkit'
+   
+   export const usersSlice = createSlice({
+   	// 用来自动生成 action 中的 type
+   	name: 'users',
+   	// state 初始值
+   	initialState: {
+   		name: "",
+   	},
+   	reducers: {
+   		changeName: (state, action) => {
+   			state.name = action.payload
+   		},
+   	},
+   })
+   
+   export const { changeName } = usersSlice.actions
+   
+   export default usersSlice.reducer
+   ```
 
 5. 在组件中调用
 
-```tsx
-import { useAppDispatch, useAppSelector } from '@/hooks/store'
-import { useSelector, useDispatch } from 'react-redux'
-import { decrement, increment } from '@/store/slice/counterSlice'
-import { RootState } from '@/store/store'
+   ```typescript
+   import { useAppDispatch, useAppSelector } from '@/hooks/store'
+   import { useSelector, useDispatch } from 'react-redux'
+   import { decrement, increment } from '@/store/slice/counterSlice'
+   import { RootState } from '@/store/store'
+   
+   export default function Redux() {
+   
+   	// const count = useAppSelector(state => state.counter.countNumber)
+   	const count = useSelector((state: RootState) => state.counter.countNumber)
+    	const dispatch = useAppDispatch()
+   
+   	return (
+   		<div>
+   			<div>
+   				<button
+   					aria-label="Increment countNumber"
+   					onClick={() => dispatch(increment())}
+   				>
+   					Increment
+   				</button>
+   				<span>{count}</span>
+   				<button
+   					aria-label="Decrement countNumber"
+   					onClick={() => dispatch(decrement())}
+   				>
+   					Decrement
+   				</button>
+   			</div>
+   		</div>
+   	)
+   }
+   ```
 
-export default function Redux() {
+6. 作`state`初始化的值
 
-	// const count = useAppSelector(state => state.counter.countNumber)
-	const count = useSelector((state: RootState) => state.counter.countNumber)
- 	const dispatch = useAppDispatch()
+   ```typescript
+   // 避免不必要的状态复制
+   const storeRenewalInfo = useSelector((state: RootState) => state.renewalInfo.renewalInfo)
+   const [renewalInfo, setRenewalInfo] = useState(storeRenewalInfo)
+   
+   const [renewalInfo, setRenewalInfo] = useState(useSelector((state: RootState) => state.renewalInfo.renewalInfo))  // 不推荐此写法
+   ```
 
-	return (
-		<div>
-			<div>
-				<button
-					aria-label="Increment countNumber"
-					onClick={() => dispatch(increment())}
-				>
-					Increment
-				</button>
-				<span>{count}</span>
-				<button
-					aria-label="Decrement countNumber"
-					onClick={() => dispatch(decrement())}
-				>
-					Decrement
-				</button>
-			</div>
-		</div>
-	)
-}
-```
+
+
+
 
 ## 关于简化 typescript
 
