@@ -261,6 +261,27 @@ export default function Demo() {
 
 
 
+## `flushSync `
+
+- **同步执行**：`flushSync` 会**绕过 React 的批处理（batching）机制**，立即触发 DOM 更新。
+
+```typescript
+import { flushSync } from 'react-dom';
+
+flushSync(() => {
+    // 在这里的状态更新会立即触发同步渲染
+    setState(newValue);
+});
+```
+
+React 默认采用**异步批处理更新**机制，多个 `setState` 可能被合并成一次渲染，以提高性能。但某些场景下，我们需要**立即获取更新后的 DOM**，例如：
+
+- **测量 DOM 元素**（如计算元素尺寸、位置）。
+- **第三方库依赖同步渲染**（如某些动画库、富文本编辑器）。
+- **在事件回调中确保 UI 立即更新**（如滚动位置调整）。
+
+
+
 ## 2. `useEffect`生命周期
 
 可以让在函数组件中执行副作用操作(用于模拟类组件中的生命周期钩子)
