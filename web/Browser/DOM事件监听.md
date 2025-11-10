@@ -11,6 +11,8 @@ element.addEventListener(event, function, useCapture=false);
   
   // 添加 click 事件监听器
   button.addEventListener('click', (event) => {});
+  
+  // event.target.dataset
   ```
 
 - 第一个参数是事件的类型（比如 "click" 或 "mousedown"）。

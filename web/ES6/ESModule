@@ -1,0 +1,176 @@
+# export
+
+JavaScript 引擎在解析 `export` 时，会将它添加到模块的导出映射表中，以便其他模块可以通过 `import` 语句引用这些内容。
+
+**内部过程：**
+
+1. **创建导出映射**：当引擎检测到 `export` 语句时，它会在模块的上下文中**为导出的变量创建映射表**。
+2. **绑定导出的值**：导出映射表中会记录导出内容的内存地址，而不是复制导出的值。这样，当导出的变量发生更改时，其他模块在使用该变量时会获得最新的值。
+3. **模块加载顺序**：由于 `export` 是静态的，引擎可以提前分析模块依赖关系，从而确保按正确顺序加载模块。
+
+
+
+## `export` 的类型
+
+- `export` 和 `export default` 是**语法关键字**
+
+- CommonJs的`module.exports`是对象，是对象则可以被修改
+
+1. 命名导出
+
+   ```javascript
+   const a = 42
+   export { a }
+   ```
+
+   ```javascript
+   import { a } from './module.js'
+   ```
+
+2. **命名导出**
+
+   ```javascript
+   export const a = 42;
+   export function add(a, b) { return a + b; }
+   export class Calculator { /* ... */ }
+   ```
+
+   ```javascript
+   import { a } from './module.js'
+   ```
+
+3. **默认导出**
+
+   ```javascript
+   const a = 42
+   export default a
+   ```
+
+   ```javascript
+   import a from './module'
+   ```
+
+4. 混合使用（既有 default 也有一般暴露）
+
+   ```javascript
+   const a = {}
+   const module = {}
+   module.a = a
+   module.a = 123
+   
+   export default module
+   export a
+   ```
+   
+   ```javascript
+   import module, {a} from './module.js';
+   ```
+   
+   - **`export`**
+   
+     加`{}`：通过 `{}` 指定导入的内容名称，表示从同一个模块中可能存在多个命名导出，而你需要明确指出你想要的具体哪些导出
+   
+     ```javascript
+     export const a = 1; 
+     export const b = 2; 
+     ```
+   
+   - `export defaul`
+   
+     不加`{}`：默认导出是一个模块的主要内容，可以没有名称限制，你可以用任何合法的标识符来命名它，且每个模块只能有一个默认导出
+   
+     ```javascript
+     const a = 1;
+     export default a
+     ```
+
+---
+
+**`export`导出的是一个映射表**，命名导出通过对象的形式管理的，每个模块的命名导出被放置在一个**隐式的对象**中，导入时可以使用解构赋值的语法来提取所需的值
+
+在下面这种情况下，模块导出的不是类似于CommonJS的`{a:1,b:2}`，而是 JavaScript 引擎在编译阶段记录的一个结构，用来让导入模块找到正确的值，其可以理解为这个模块隐式地导出了一个对象
+
+默认导出可以被看作是模块的主要值，**它并不在上面提到的命名导出的隐式对象中**。使用默认导出时，你会单独引用这个导出
+
+```javascript
+export const a = 1;
+export const b = 2;
+
+// 隐式对象（伪代码表示）
+export default {
+    a: 1,
+    b: 2
+};
+
+export default a;
+```
+
+导入时，JavaScript 引擎通过映射表找到 `a` 和 `b` 的值
+
+```javascript
+import { a, b } from './example.js';
+```
+
+
+
+
+
+# import
+
+```javascript
+import module from './module.js';
+
+import { module } from './module.js';
+
+import { module as module1 } from './module.js';
+
+import * as module from './module.js';
+
+import { default as module } from './module.js'
+```
+
+---
+
+import * as module from './module.js';
+
+如果 ./module.js 里面有`export default` ，则使用 module.default.
+
+```javascript
+module.default.a = 10;
+```
+
+---
+
+import { module } from './module.js';
+
+如果 ./module.js 里面有`export default` ，则使用 `import { default as module } from './module.js';`
+
+
+
+## import json
+
+1. 直接导入
+
+   ```typescript
+   import GFArea  from '@/assets/json/GFArea.json' assert { type: 'json' }
+   ```
+
+   会自动反序列化
+
+2. 动态导入（异步加载）
+
+   ```typescript
+   const loadData = async () => {
+       const { default: gdData } = await import('./guangdong.json', { assert: { type: 'json' } })
+       console.log(gdData.province.code); // 输出：440000
+   };
+   ```
+
+#### 注意事项：
+
+- **Node.js**：需确保 `package.json` 中设置了 `"type": "module"`。
+- **浏览器**：需通过 `<script type="module">` 加载，或使用构建工具。
+- **TypeScript**：需在 `tsconfig.json` 中启用 `"resolveJsonModule": true`。
+
+
+

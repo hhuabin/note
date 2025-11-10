@@ -1,4 +1,8 @@
-[react 官网](https://react.dev/learn)
+[react 官网](https://react.dev/learn "react")
+
+[react 中文网](https://react.docschina.org/reference/react "react")
+
+
 
 # 全局对象 React, ReactDOM
 
@@ -10,6 +14,10 @@
 
 引入 prop-types.js，全局多了 **PropTypes** 对象（适用于props相关）
 
+Node 全局变量 process
+
+**React不能直接打印 `process`，真正的前端运行时是没有process的，编译时会把process.env.xxx当作宏替换，需要打印`process.env`**
+
 
 
 # 关于虚拟DOM：
@@ -20,7 +28,7 @@
 
 - 使用 jsx 创建虚拟 dom
 
-```javascript
+```jsx
 //1.创建虚拟DOM
 const VDOM = (  /* 此处一定不要写引号，因为不是字符串 */
     <h1 id="title">
@@ -37,10 +45,14 @@ ReactDOM.render(VDOM,document.getElementById('test'))
 //1.创建虚拟DOM
 const VDOM = React.createElement('h1',{id:'title'},React.createElement('span',{},'Hello,React'))
 //2.渲染虚拟DOM到页面
-ReactDOM.render(VDOM,document.getElementById('test'))
+ReactDOM.render(VDOM,document.getElemewntById('test'))
 ```
 
 **jsx 是 js 的语法糖**
+
+- `React.ReactNode`用于表示任何可以作为React节点的类型。
+- `React.FC`用于定义React函数组件，带有泛型参数指定props类型。
+- `JSX.Element`用于表示React元素，通常由JSX语法创建。
 
 
 
@@ -259,6 +271,27 @@ constructor(props){
 
 
 
+# 样式绑定
+
+```tsx
+import React from 'react';
+
+function MyComponent(props) {
+  const dynamicColor = props.isError ? 'red' : 'green';
+  const dynamicFontSize = props.size === 'large' ? '20px' : '16px';
+
+  return (
+    <div style={{ color: dynamicColor, fontSize: dynamicFontSize }}>
+      Hello, World!
+    </div>
+  );
+}
+
+export default MyComponent;
+```
+
+
+
 # 事件处理
 
 通过onXxx（如 onClick）属性指定事件处理函数(注意大小写)
@@ -286,13 +319,14 @@ function sum(a){
 
 使用函数柯里化实现事件处理传参
 
-```javascript
+```tsx
 <input onChange={this.saveFormData('username')} type="text" name="username"/>
 ```
 
-```javascript
+```tsx
 saveFormData = (dataType)=>{
-    return (event)=>{
+    return (event: React.MouseEvent)=>{
+        event.stopPropagation()            // 阻止事件冒泡
         this.setState({[dataType]:event.target.value})
     }
 }
@@ -300,12 +334,12 @@ saveFormData = (dataType)=>{
 
 不使用函数柯里化实现事件处理传参（推荐使用这种事件处理方式）
 
-```javascript
+```tsx
 <input onChange={event => this.saveFormData('username',event) } type="text" name="username"/>
 ```
 
-```javascript
-saveFormData = (dataType,event)=>{
+```tsx
+saveFormData = (dataType, event: React.ChangeEvent<HTMLInputElement>)=>{
     this.setState({[dataType]:event.target.value})
 }
 ```
@@ -405,6 +439,77 @@ componentDidUpdate --> componentWillUnmount
       console.log('componentDidUpdate',preProps,preState,snapshot);
   }
   ```
+
+
+
+# 引入第三方SDK
+
+1. 在`public`下当成静态文件直接引入
+
+   在public目录下存放该文件，然后在HTML中通过`<script>`引入
+
+   ```html
+   <script src="%PUBLIC_URL%/libs/jweixin-1.6.0.js"></script>
+   
+   <!-- 或者直接引用线上文件 -->
+   <script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+   ```
+
+   使用：在项目的任何地方都能直接使用
+
+   ```tsx
+   // eslint-disable-next-line
+   console.log("weixin", (window as any).wx);
+   ```
+
+2. 直接安装`weixin-js-sdk`包
+
+   ```bash
+   yarn add weixin-js-sdk@1.6.0
+   ```
+
+   使用：
+
+   ```tsx
+   const wx = require('weixin-js-sdk')
+   
+   console.log("weixin", wx);
+   ```
+
+3. 使用 `craco`
+
+   在src下引入SDK文件 `src/static/jweixin-1.6.0.js`，不能在根目录引入，尽量在 `src` 下
+
+   在 `craco.config.ts` 下配置路径别名 `"jweixin"`
+
+   ```typescript
+   export default {
+   	webpack: {
+   		alias: {
+   			'@': resolve(__dirname, 'src'), // 将 @ 符号指向 src 目录
+   			'jweixin': resolve(__dirname, 'src/static/jweixin-1.6.0.js'),
+   		},
+   	},
+   };
+   ```
+
+   声明模块文件 `jweixin.d.ts`
+
+   ```typescript
+   declare module 'jweixin'
+   ```
+
+   在组件中把他当模块引入即可，建议使用require的方式导入
+
+   ```tsx
+   const wx = require('jweixin')
+   ```
+
+   配置到这里**只会在开发环境中生效**，生产环境不打包生效。请另外寻找办法。
+
+
+
+
 
 
 

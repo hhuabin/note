@@ -14,7 +14,7 @@ Listener先要从 META-INF/spring.factories 读到
 
    contextLoaded：         ioc容器加载。主配置类加载进去了。但是ioc容器还没刷新（我们的bean没创建）。
 
-   =======截止以前，ioc容器里面还没造bean呢=======
+   ==截止以前，ioc容器里面还没造bean呢==
 
    started：               ioc容器刷新了（所有bean造好了），但是 runner 没调用。
 
@@ -40,7 +40,7 @@ Listener先要从 META-INF/spring.factories 读到
 
 5. `ApplicationStartedEvent`： 容器刷新完成， runner未调用
 
-   =========以下就开始插入了**探针机制**============
+   ==以下就开始插入了**探针机制**==
 
 6. `AvailabilityChangeEvent`： `LivenessState.CORRECT`应用存活； **存活探针**
 

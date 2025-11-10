@@ -1,65 +1,57 @@
 # try catch
 
-```javascript
+```typescript
 try {
-   try_statements
+    tryStatements
+} catch [(exceptionVar)] {
+    catchStatements
+} finally {
+    finallyStatements
 }
-[catch (exception_var_1 if condition_1) { // non-standard
-   catch_statements_1
-}]
-...
-[catch (exception_var_2) {
-   catch_statements_2
-}]
-[finally {
-   finally_statements
-}]
 ```
 
-- try_statements 需要被执行的语句。
+- `tryStatements`：要执行的语句
 
-- catch_statements_1, catch_statements_2 如果在try块里有异常被抛出时执行的语句。
+- `catchStatements`：`try` 块抛出异常后执行的语句
 
-- exception_var_1, exception_var_2 用于保存关联catch子句的异常对象的标识符。
-- condition_1 一个条件表达式。
-- finally_statements 在try语句块之后执行的语句块。无论是否有异常抛出或捕获这些语句都将执行。
+  `exceptionVar`：可选，用于保存关联的 `catch` 块所捕获到的异常。如果 `catch` 块不使用异常的值，你可以省略 `exceptionVar` 及其周围的括号
 
-
-
-例1，但该写法不符合ECMAscript 规范。
-
-​	在下面的代码中，`try`块的代码可能会抛出三种异常：[`TypeError`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/TypeError)，[`RangeError`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/RangeError)和[`EvalError`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/EvalError)。当一个异常抛出时，控制将会进入与其对应的`catch`语句。如果这个异常不是特定的，那么控制将转移到无条件`catch`子句。
-
-​	当用一个无条件`catch`子句和一个或多个条件语句时，无条件`catch`子句必须放在最后。否则当到达条件语句之前所有的异常将会被非条件语句拦截。
+- `finallyStatements`：在控制流退出 `try...catch...finally` 结构之前执行的语句。这些语句无论是否抛出或捕获异常都会执行
 
 ```javascript
 try {
-    myroutine(); // may throw three types of exceptions
-} catch (e if e instanceof TypeError) {
-    // statements to handle TypeError exceptions
-} catch (e if e instanceof RangeError) {
-    // statements to handle RangeError exceptions
-} catch (e if e instanceof EvalError) {
-    // statements to handle EvalError exceptions
+    myRoutine();
 } catch (e) {
-    // statements to handle any unspecified exceptions
-    logMyErrors(e); // pass exception object to error handler
+    if (e instanceof RangeError) {
+    	// statements to handle this very common expected error
+    } else {
+    	throw e;  // re-throw the error unchanged
+    }
 }
 ```
 
-例2，符合 ECMAscript 规范。显然更加冗长的，但是可以在任何地方运行
 
-```javascript
+
+##　异步　try catch
+
+`try catch`不能捕获异步的错误。比如`Promise.catch()`的错误。此时就不能使用`try catch`
+
+```typescript
 try {
-  myRoutine();
-} catch (e) {
-  if (e instanceof RangeError) {
-    // statements to handle this very common expected error
-  } else {
-    throw e;  // re-throw the error unchanged
-  }
+    new Promise((reslove, reject) => {
+        reject()
+    })
+    .catch(() => {
+        throw new Error()
+    })
+} catch {
+    // 此处不能捕获 Promise.catch 的错误
 }
 ```
+
+
+
+
 
 ## 嵌套 try 块
 
@@ -78,7 +70,7 @@ try {
     }
 }
 catch (ex) {
-  	console.error("outer", ex.message);
+	console.error("outer", ex.message);
 }
 
 // Output:

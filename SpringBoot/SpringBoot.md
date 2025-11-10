@@ -108,3 +108,30 @@ SpringBoot 应用启动时会自动寻找application.properties和application.ya
 - - profile配置 > 默认配置
   - properties配置 > yaml配置
 
+
+
+# 打包运行
+
+1. 打包
+
+   ```java
+   clear
+   
+   package
+   ```
+
+2. 运行
+
+   ```shell
+   java -jar yourjarfile.jar
+   ```
+
+3. 通过命令行改变参数
+
+   ```shell
+   java -jar -Dserver.port=<新端口号> yourjarfile.jar
+   
+   java -jar -Dserver.port=8080 yourjarfile.jar
+   ```
+
+   

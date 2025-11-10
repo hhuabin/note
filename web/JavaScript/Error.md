@@ -1,13 +1,14 @@
 # constructor
 
-```javascript
-Error(message?, options?)
+```typescript
+new (message?: string, options?: ErrorOptions): Error;
+
 new Error("message", {cause: unknown})
 ```
 
 - message (可选) 人类可读的错误信息。
 - options (可选) 一个包含以下属性的对象：
-- - cause (可选) 指示错误的具体原因，反映在 cause 属性中。当捕获并重新抛出带有更具体或有用的错误消息的错误时，可以使用此属性传递原始错误。
+  - cause (可选) 指示错误的具体原因，反映在 cause 属性中。当捕获并重新抛出带有更具体或有用的错误消息的错误时，可以使用此属性传递原始错误。
 
 以下属性仅火狐浏览器兼容（不建议使用）
 
@@ -18,7 +19,7 @@ new Error("message", {cause: unknown})
 
 # 属性
 
-```
+```javascript
 cause
 Error.prototype.message
 Error.prototype.name

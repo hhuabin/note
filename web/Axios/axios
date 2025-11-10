@@ -1,123 +1,227 @@
 # Axios
 
+[Axios官网](https://axios-http.com/zh/docs/intro "Axios官网")
+
+
+
+## header
+
+```javascript
+headers: {
+    'Authorization': 'Bearer <token>',
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Cache-Control': 'no-cache',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+    'Referer': 'https://example.com/page',
+    'Origin': 'https://example.com',
+    'If-None-Match': '<etag-value>',
+    'If-Modified-Since': 'Wed, 21 Oct 2015 07:28:00 GMT'
+}
+```
+
+1. **Authorization**：
+
+   用于身份验证。常见的值包括 `Basic`、`Bearer`、`Digest`等
+
+2. **Content-Type**
+
+   指定请求体的数据格式。常见的值包括 `application/json`、`application/x-www-form-urlencoded`、`multipart/form-data`等
+
+3. **Accept**
+
+   指定客户端能够处理的响应内容类型。常见的值包括 `application/json`、`text/html`、`application/xml`等
+
+4. **Cache-Control**
+
+   用于控制缓存行为。常见的指令包括 `no-cache`、`no-store`、`max-age`、`private`等
+
+5. **User-Agent**
+
+   包含关于客户端软件的信息。服务器可以根据这个头部字段来提供特定的响应
+
+6. **Referer**
+
+   指示请求来源页面的URL。服务器可以根据这个头部字段来进行防盗链、统计等
+
+7. **Origin**
+
+   指示请求的原始来源，用于跨域请求（CORS）。服务器可以根据这个头部字段来决定是否允许跨域请求
+
+8. **If-None-Match**
+
+   用于协商缓存，包含先前响应的ETag值。如果资源未修改，服务器返回304状态码
+
+9. **If-Modified-Since**
+
+   用于协商缓存，包含先前响应的最后修改时间。如果资源未修改，服务器返回304状态码
+
+
+
+# Axios实例
+
+```typescript
+const instance = axios.create({
+    baseURL: 'https://some-domain.com/api/',
+    timeout: 1000,
+    headers: {'X-Custom-Header': 'foobar'}
+});
+```
+
+
+
+# POST
+
+post的请求数据是data
+
+```typescript
+return service({
+    url: 'url',
+    data: {
+        ...param,
+    },
+    method: 'post',
+})
+```
+
+
+
+# GET
+
+get 的请求参数是 params
+
+```typescript
+return service({
+    url: 'url',
+    params: {
+        ...param,
+    },
+    method: 'GET',
+})
+```
+
+
+
+# Axios
+
 axios拥有的元素
 
-```javascript
+```typescript
 export class Axios {
-  constructor(config?: AxiosRequestConfig);
-  defaults: AxiosDefaults;
-  interceptors: {
-    request: AxiosInterceptorManager<InternalAxiosRequestConfig>;
-    response: AxiosInterceptorManager<AxiosResponse>;
-  };
-  getUri(config?: AxiosRequestConfig): string;
-  request<T = any, R = AxiosResponse<T>, D = any>(config: AxiosRequestConfig<D>): Promise<R>;
-  get<T = any, R = AxiosResponse<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
-  delete<T = any, R = AxiosResponse<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
-  head<T = any, R = AxiosResponse<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
-  options<T = any, R = AxiosResponse<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
-  post<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
-  put<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
-  patch<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
-  postForm<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
-  putForm<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
-  patchForm<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+    constructor(config?: AxiosRequestConfig);
+    defaults: AxiosDefaults;
+    interceptors: {
+        request: AxiosInterceptorManager<InternalAxiosRequestConfig>;
+        response: AxiosInterceptorManager<AxiosResponse>;
+    };
+    getUri(config?: AxiosRequestConfig): string;
+    request<T = any, R = AxiosResponse<T>, D = any>(config: AxiosRequestConfig<D>): Promise<R>;
+    get<T = any, R = AxiosResponse<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
+    delete<T = any, R = AxiosResponse<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
+    head<T = any, R = AxiosResponse<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
+    options<T = any, R = AxiosResponse<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
+    post<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+    put<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+    patch<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+    postForm<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+    putForm<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+    patchForm<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
 }
 ```
 
-```javascript
+```typescript
 AxiosInstance extends Axios {
-  <T = any, R = AxiosResponse<T>, D = any>(config: AxiosRequestConfig<D>): Promise<R>;
-  <T = any, R = AxiosResponse<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
+    <T = any, R = AxiosResponse<T>, D = any>(config: AxiosRequestConfig<D>): Promise<R>;
+    <T = any, R = AxiosResponse<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
 
-  defaults: Omit<AxiosDefaults, 'headers'> & {
-    headers: HeadersDefaults & {
-      [key: string]: AxiosHeaderValue
-    }
-  };
+    defaults: Omit<AxiosDefaults, 'headers'> & {
+        headers: HeadersDefaults & {
+        	[key: string]: AxiosHeaderValue
+        }
+    };
 }
 ```
 
-```javascript
+```typescript
 AxiosStatic extends AxiosInstance {
-  create(config?: CreateAxiosDefaults): AxiosInstance;
-  Cancel: CancelStatic;
-  CancelToken: CancelTokenStatic;
-  Axios: typeof Axios;
-  AxiosError: typeof AxiosError;
-  HttpStatusCode: typeof HttpStatusCode;
-  readonly VERSION: string;
-  isCancel: typeof isCancel;
-  all: typeof all;
-  spread: typeof spread;
-  isAxiosError: typeof isAxiosError;
-  toFormData: typeof toFormData;
-  formToJSON: typeof formToJSON;
-  CanceledError: typeof CanceledError;
-  AxiosHeaders: typeof AxiosHeaders;
+    create(config?: CreateAxiosDefaults): AxiosInstance;
+    Cancel: CancelStatic;
+    CancelToken: CancelTokenStatic;          // 取消令牌，可以用于取消请求 xhr.abort(); 已废弃
+    Axios: typeof Axios;
+    AxiosError: typeof AxiosError;
+    HttpStatusCode: typeof HttpStatusCode;
+    readonly VERSION: string;
+    isCancel: typeof isCancel;
+    all: typeof all;
+    spread: typeof spread;
+    isAxiosError: typeof isAxiosError;
+    toFormData: typeof toFormData;
+    formToJSON: typeof formToJSON;
+    CanceledError: typeof CanceledError;
+    AxiosHeaders: typeof AxiosHeaders;
 }
 ```
 
 
 
-# axios请求参数
+# axios请求参数\<AxiosRequest>
 
-```javascript
+```typescript
 export interface AxiosRequestConfig<D = any> {
-  url?: string;
-  method?: Method | string;
-  baseURL?: string;
-  transformRequest?: AxiosRequestTransformer | AxiosRequestTransformer[];
-  transformResponse?: AxiosResponseTransformer | AxiosResponseTransformer[];
-  headers?: (RawAxiosRequestHeaders & MethodsHeaders) | AxiosHeaders;
-  params?: any;
-  paramsSerializer?: ParamsSerializerOptions;
-  data?: D;
-  timeout?: Milliseconds;
-  timeoutErrorMessage?: string;
-  withCredentials?: boolean;
-  adapter?: AxiosAdapterConfig | AxiosAdapterConfig[];
-  auth?: AxiosBasicCredentials;
-  responseType?: ResponseType;
-  responseEncoding?: responseEncoding | string;
-  xsrfCookieName?: string;
-  xsrfHeaderName?: string;
-  onUploadProgress?: (progressEvent: AxiosProgressEvent) => void;
-  onDownloadProgress?: (progressEvent: AxiosProgressEvent) => void;
-  maxContentLength?: number;
-  validateStatus?: ((status: number) => boolean) | null;
-  maxBodyLength?: number;
-  maxRedirects?: number;
-  maxRate?: number | [MaxUploadRate, MaxDownloadRate];
-  beforeRedirect?: (options: Record<string, any>, responseDetails: {headers: Record<string, string>}) => void;
-  socketPath?: string | null;
-  httpAgent?: any;
-  httpsAgent?: any;
-  proxy?: AxiosProxyConfig | false;
-  cancelToken?: CancelToken;
-  decompress?: boolean;
-  transitional?: TransitionalOptions;
-  signal?: GenericAbortSignal;
-  insecureHTTPParser?: boolean;
-  env?: {
-    FormData?: new (...args: any[]) => object;
-  };
-  formSerializer?: FormSerializerOptions;
+    url?: string;
+    method?: Method | string;
+    baseURL?: string;
+    transformRequest?: AxiosRequestTransformer | AxiosRequestTransformer[];
+    transformResponse?: AxiosResponseTransformer | AxiosResponseTransformer[];
+    headers?: (RawAxiosRequestHeaders & MethodsHeaders) | AxiosHeaders;
+    params?: any;
+    paramsSerializer?: ParamsSerializerOptions;
+    data?: D;
+    timeout?: Milliseconds;
+    timeoutErrorMessage?: string;
+    withCredentials?: boolean;
+    adapter?: AxiosAdapterConfig | AxiosAdapterConfig[];
+    auth?: AxiosBasicCredentials;
+    responseType?: ResponseType;
+    responseEncoding?: responseEncoding | string;
+    xsrfCookieName?: string;
+    xsrfHeaderName?: string;
+    onUploadProgress?: (progressEvent: AxiosProgressEvent) => void;
+    onDownloadProgress?: (progressEvent: AxiosProgressEvent) => void;
+    maxContentLength?: number;
+    validateStatus?: ((status: number) => boolean) | null;
+    maxBodyLength?: number;
+    maxRedirects?: number;
+    maxRate?: number | [MaxUploadRate, MaxDownloadRate];
+    beforeRedirect?: (options: Record<string, any>, responseDetails: {headers: Record<string, string>}) => void;
+    socketPath?: string | null;
+    httpAgent?: any;
+    httpsAgent?: any;
+    proxy?: AxiosProxyConfig | false;
+    cancelToken?: CancelToken;            // 取消令牌，可以用于取消请求 xhr.abort();
+    decompress?: boolean;
+    transitional?: TransitionalOptions;
+    signal?: GenericAbortSignal;
+    insecureHTTPParser?: boolean;
+    env?: {
+    	FormData?: new (...args: any[]) => object;
+    };
+    formSerializer?: FormSerializerOptions;
 }
 ```
 
 
 
-# axios响应参数
+# axios响应参数\<AxiosResponse>
 
-```javascript
+```typescript
 AxiosResponse<T = any, D = any> {
-  data: T;
-  status: number;
-  statusText: string;
-  headers: RawAxiosResponseHeaders | AxiosResponseHeaders;
-  config: InternalAxiosRequestConfig<D>;
-  request?: any;
+    data: T;
+    status: number;
+    statusText: string;
+    headers: RawAxiosResponseHeaders | AxiosResponseHeaders;
+    config: InternalAxiosRequestConfig<D>;
+    request?: any;
 }
 ```
 
