@@ -379,7 +379,6 @@ background:
 | bg-gradient-to-bl                 | background-image: linear-gradient(to bottom left, var(--tw-gradient-stops)); |
 | bg-gradient-to-l                  | background-image: linear-gradient(to left, var(--tw-gradient-stops));           /* 270deg */ |
 | bg-gradient-to-tl                 | background-image: linear-gradient(to top left, var(--tw-gradient-stops)); |
-|                                   |                                                              |
 
 1. 起始末尾颜色
 
@@ -637,11 +636,11 @@ left: 0px;
 
 ### color
 
-| Class              | Properties               |
-| ------------------ | ------------------------ |
-| **text-[#50d71e]** | color: #50d71e;          |
-| text-black         | color: rgb(0 0 0);       |
-| text-white         | color: rgb(255 255 255); |
+| Class              | Properties                 |
+| ------------------ | -------------------------- |
+| **text-[#50d71e]** | color: #50d71e;            |
+| text-black         | color: rgb(0, 0, 0);       |
+| text-white         | color: rgb(255, 255, 255); |
 
 ### text-align
 

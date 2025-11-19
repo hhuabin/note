@@ -26,18 +26,18 @@
 # URL 引入
 
 ```typescript
-const homeUrl = new URL('/images/home-selected.png', import.meta.url).href;
-(homeRef.value as HTMLImageElement).src = homeUrl;
+const homeUrl = new URL('/images/home-selected.png', import.meta.url).href
+(homeRef.value as HTMLImageElement).src = homeUrl
 ```
 
 
 
-# import引入
+# import引入 use this
 
 静态引入（`Vite + React`使用）
 
 ```tsx
-import logo from './assets/logo.png';
+import logo from './assets/logo.png'
 
 function App() {
 	return <img src={logo} alt="Logo" />;
@@ -47,10 +47,10 @@ function App() {
 动态引入
 
 ```tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 
 function MyComponent() {
-    const [image, setImage] = useState(null);
+    const [image, setImage] = useState(null)
 
     useEffect(() => {
         import('./path/to/image.jpg')
@@ -59,9 +59,9 @@ function MyComponent() {
     	});
     }, []);
 
-    if (!image) return <p>Loading...</p>;
+    if (!image) return <p>Loading...</p>
 
-    return <img src={image} alt="description" />;
+    return <img src={image} alt="description" />
 }
 ```
 

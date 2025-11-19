@@ -1,3 +1,15 @@
+# 格式
+
+控制规则是否启用+
+
+| 值        | 含义                                           | 等价写法 |
+| --------- | ---------------------------------------------- | -------- |
+| `'off'`   | 关闭此规则，不进行检查                         | `0`      |
+| `'warn'`  | 违反规则时发出警告（黄色提示，不影响构建）     | `1`      |
+| `'error'` | 违反规则时报错（红色提示，通常会导致构建失败） | `2`      |
+
+
+
 # 常用配置
 
 1. **模块导入规则**
@@ -74,27 +86,63 @@ module.exports = {
     parser: '@typescript-eslint/parser',
     plugins: ['react-refresh'],
     rules: {
-        'unicode-bom': ['warn', 'never'],                  // must use utf-8
-        'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
-        'react-hooks/exhaustive-deps': 'off',
-        '@typescript-eslint/no-unused-vars': 'off',
-        '@typescript-eslint/no-explicit-any': 'warn',      // 避免滥用 any
-        '@typescript-eslint/no-inferrable-types': 'off',   // 禁止对推断类型的多余注解
+        // React
+        'react-refresh/only-export-components': ['warn', { 'allowConstantExport': true }],
+        'react-hooks/rules-of-hooks': 'error',                     // 检查 Hook 使用规则
+        'react-hooks/exhaustive-deps': 'warn',                     // 检查依赖数组完整性
+        // TS
+        '@typescript-eslint/no-unused-vars': 'off',                // 允许未使用的变量
+        '@typescript-eslint/no-explicit-any': 'warn',              // 避免滥用 any
+        '@typescript-eslint/no-inferrable-types': 'off',           // 禁止对推断类型的多余注解
         '@typescript-eslint/consistent-type-imports': ['warn', { 'prefer': 'type-imports' }],      // 强制使用 type imports
-        'no-var': ['error'],                               // use const
-        'prefer-const': ['error'],                         // not use let
-        'indent': ['warn', 4, { 'MemberExpression': 'off' }],      // 4 spaces
+        // Eslint
+        // JS
+        'unicode-bom': ['warn', 'never'],                          // must use utf-8
+        'no-var': ['error'],                                       // use const no var
+        'no-undef': ['error'],                                     // 禁止使用未定义变量
+        'prefer-const': ['error'],                                 // not use let
+        'quotes': ['warn', 'single'],                              // use single quotes
+        'no-extra-boolean-cast': 'off',                            // allow !! and Boolean()
+        'prefer-arrow-callback': 'warn',                           // 回调优先用箭头函数  [1,2].map(x => x*2)
+        'no-duplicate-imports': 'warn',                            // 禁止重复 import，不分开导入,  import a, {b} from 'x'
+        'no-unused-vars': ['off'],                                 // 允许未使用的变量
+        // space
+        'comma-spacing': ['warn', { before: false, after: true }], // 逗号后有空格  let a, b;
+        'semi-spacing': ['warn', { before: false, after: true }],  // 分号后有空格  let a; let b;
+        'space-in-parens': ['warn', 'never'],                      // 括号内无空格  let a = (1 + 2) * 3;
+        'space-infix-ops': ['warn'],                               // 运算符两边必须空格  a + b
+        'block-spacing': ['warn', 'always'],                       // {} 块内加空格  function() { return 1 }
+        'keyword-spacing': ['warn', { 'before': true, 'after': true }],                            // add space before and after keywords
+        'key-spacing': ['warn', { 'beforeColon': false, 'afterColon': true, 'mode': 'strict' }],   // : after with one space between object keys and values
+        'object-curly-spacing': ['warn', 'always'],                // add space in object
+        'space-before-function-paren': ['error', {                 // 函数括号前面添加空格
+            'anonymous': 'always',                                 // 匿名函数
+            'named': 'never',                                      // 命名函数
+            'asyncArrow': 'always'                                 // 异步箭头函数
+        }],
+        // function
+        'no-return-await': ['warn'],                               // return await fetch() -> return fetch()
+        'max-depth': ['warn', 4],                                  // 限制函数嵌套层级为 4
+        'max-params': ['warn', 4],                                 // 函数参数个数限制为 6
+        'func-style': ['warn', 'expression'],                      // 统一使用函数表达式  function f() {} -> const f = function() {}
+
+        // 缩进
+        'indent': ['warn', 4, {                                    // indent with 4 spaces
+            'MemberExpression': 'off',                             // 忽略链式调用换行时缩进 Promise.then()
+            'SwitchCase': 1,                                       // switch case 缩进 1
+            'offsetTernaryExpressions': true,                      // 三元表达式的 ? 和 : 相对上层多一个缩进
+        }],
         'no-tabs': ['warn'],                                       // disabled tab
         'no-mixed-spaces-and-tabs': ['warn'],                      // disabled mixed
-        'keyword-spacing': ['warn', { 'before': true, 'after': true }],                            // add spacing before and after keywords
-        'object-curly-spacing': ['warn', 'always'],                // add spacing in object
+        // file
         'comma-dangle': ['error', 'always-multiline'],             // use , end in object and array
-        'semi': ['warn', 'never'],                                 // no end of spacing ;
-        'no-trailing-spaces': ['warn', { 'skipBlankLines': false, 'ignoreComments': false }],      // no end of spacing
+        'semi': ['warn', 'never'],                                 // no end of ;
+        'no-trailing-spaces': ['warn', { 'skipBlankLines': false, 'ignoreComments': false }],      // no end of spaces
         'no-multiple-empty-lines': ['warn', { 'max': 2 }],         // max 2 empty lines in file
         'eol-last': ['error', 'always'],                           // file end of empty line
         'max-lines': ['warn', 300],                                // maximum 300 of lines per file
     },
 }
+
 ```
 
