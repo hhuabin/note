@@ -1,40 +1,58 @@
 # 基础
 
-初始化仓库
+1. 初始化仓库
 
-```shell
-git init
-```
+   ```bash
+   git init
+   ```
 
-暂存所有
+2. 暂存所有
 
-```shell
-git add ./
-```
+   ```bash
+   git add ./
+   ```
 
-提交
+3. 提交
 
-```shell
-git commit -m 'commit'
-```
+   ```bash
+   git commit -m 'commit'
+   ```
 
-更改分支名
+4. 更改分支名
 
-```shell
-git branch -M main
-```
+   ```bash
+   git branch -M main
+   ```
 
-创建仓库别名
+5. 创建仓库别名
 
-```shell
-git remote add origin link
-```
+   ```bash
+   git remote add origin link
+   ```
 
-默认推送分支
+   ```bash
+   git remote set-url origin <new_url>  # 重设仓库地址
+   ```
 
-```shell
-git push -u origin main
-```
+   ```bash
+   git remote rm 仓库别名       # 删除仓库别名
+   ```
+
+6. 显示仓库 `url`
+
+   ```bash
+   git remote -v
+   ```
+
+7. 默认推送分支
+
+   ```bash
+   git push -u origin main
+   ```
+
+
+
+## 推送
 
 推送默认分支
 
@@ -52,18 +70,6 @@ git push origin branchName
 
 ```shell
 git pull origin branchName
-```
-
-显示仓库url
-
-```shell
-git remote -v
-```
-
-删除仓库别名
-
-```shell
-git remote rm 仓库别名
 ```
 
 强制推送
