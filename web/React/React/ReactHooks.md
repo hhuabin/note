@@ -5,6 +5,30 @@
 
 
 
+建议引入顺序
+
+```typescript
+import {
+    // 状态
+    useState,
+
+    // 生命周期
+    useEffect,
+
+    // 引用
+    useRef,
+
+    // 性能优化
+    useCallback,
+    useMemo,
+    useContext,
+} from 'react'
+```
+
+
+
+
+
 ## 1. `useState`状态更新
 
 `const [state, setState] = useState(initialState);`
