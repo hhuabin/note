@@ -1,117 +1,3 @@
-# setState
-
-React 状态的更新是**异步**的
-
-1. 一般的 setState，对象式
-
-   ```jsx
-   this.setState({
-       count:count+1
-   })
-   ```
-
-2. setState 函数接收两个参数，第二个参数是一个状态更新后的执行函数
-
-   ```jsx
-   state = {
-       count: 0,
-   }
-   this.setState({count: count + 1},() => {
-       console.log(this.state.count);   // 1
-   })
-   ```
-
-3. 函数式的 setState
-
-   ```jsx
-   this.setState( state => ({
-       count:state.count+1
-   }))
-   // 或者
-   this.setState( state => {
-       return count:state.count+1
-   })
-   ```
-
-
-
-| 接收参数    | 说明   | 类型   |
-| ----------- | ------ | ------ |
-| channelCode | 渠道码 | string |
-
-| 返回参数  | 说明       | 类型    |
-| --------- | ---------- | ------- |
-| jumpUrl   | 跳转路径   | string  |
-| isWebview | 是否跳转H5 | boolean |
-
-
-
-
-
-# lazy、Suspense 
-
-组件懒加载：组件懒加载可以使用 lszy 函数，同时必须使用 Suspense 组件，并且指定fallback，此时 fallback 组件不能使用懒加载，必须使用普通同步引入
-
-```jsx
-import { Component, lazy, Suspense} from 'react'
-
-import Loading from './Loading'
-const Home = lazy(()=> import('./Home') )
-
-render() {
-    return (
-        <Suspense fallback={<Loading/>}>
-            {/* 注册路由 */}
-            <Route path="/about" component={About}/>
-            <Route path="/home" component={Home}/>
-        </Suspense>
-    )
-}
-```
-
-在路由组件中，Suspense 只能加在 Routes 或 Outlet 外；\<Routes>，\<Route> 的直接子组件只能是 \<Route>
-
-```jsx
-<Suspense fallback={<Loading/>}>
-    <Outlet></Outlet>
-</Suspense>
-
-<Suspense fallback={<Loading/>}>
-    <Routes>
-        <Route path="/" element={<Home/>}>
-            <Route path="/home" element={<HomeComponent/>}/>
-        </Route>
-    </Routes>
-</Suspense>
-```
-
-路由子路由组件的Suspense问题
-
-- react比较推崇在本页面解决问题，组件自定义loading会比较好，不用封装在路由那里
-
-```tsx
-<>
-	<div>mainContent</div>
-
-    {/* <Navigate to="/home/id"/> */}
-    {/* <Outlet></Outlet> */}
-    {/* 组件自定义loading会比较好 */}
-    <Suspense fallback={<div><Loading/></div>}>
-        <Outlet></Outlet>
-    </Suspense>
-</>
-```
-
-在 React 中，**异步组件第一次加载执行两次**的情况通常是由于 React 的工作机制所导致的。
-
-当使用异步组件（例如 React.lazy 和 Suspense）时，React 首先会触发组件的加载过程。在加载过程中，React 会渲染出一个占位符（placeholder），以便在异步组件加载完成前展示该占位符。这是第一次渲染。
-
-一旦异步组件加载完成，React 将会触发第二次渲染，此时会替换占位符并渲染出实际的组件内容。
-
-因此，第一次加载异步组件会经历两次渲染。这是 React 的正常行为，并且在大多数情况下不会引起问题。React 之所以采用这种方式，是为了确保组件的加载状态和渲染结果能够正确地反映出异步加载的过程。
-
-
-
 # hooks
 
 - Hook：React16.8.0版本增加的新特性
@@ -1040,47 +926,6 @@ function MyComponent() {
 
 
 
-
-# React.memo(Component, areEqual)
-
-用于缓存组件，当子组件的 props 发生变化的时候再重新渲染，父组件的 state 变化的时候不会触发重新渲染。类似于 `PureComponent` 和 `shouldComponentUpdate` 方法的集合体。
-
-用法：**直接包裹组件**即可 React.memo(Component, areEqual)
-
-- `Component`：要进行记忆化的组件。`memo` 不会修改该组件，而是返回一个新的、记忆化的组件。它接受任何有效的 React 组件，包括函数组件和 [`forwardRef`](https://react.docschina.org/reference/react/forwardRef) 组件。
-- **可选参数** `arePropsEqual`：一个函数，接受两个参数：组件的**前一个 props** 和**新的 props**。如果旧的和新的 props 相等，即组件使用新的 props 渲染的输出和表现与旧的 props 完全相同，则它应该返回 `true`。否则返回 `false`。通常情况下，你不需要指定此函数。默认情况下，React 将使用 `Object.is` 比较每个 prop。
-- **返回值**：`memo` 返回一个新的 React 组件。它的行为与提供给 `memo` 的组件相同，只是当它的父组件重新渲染时 React 不会总是重新渲染它，除非它的 props 发生了变化。
-
-```jsx
-import { memo } from 'react';
-
-const SomeComponent = memo((props) => {
-	return (<div></div>)
-}, (oldProps, newProps) => {
-    return true
-});
-```
-
-使用 `memo` 将组件包装起来，以获得该组件的一个 **记忆化** 版本。通常情况下，只要该组件的 props 没有改变，这个记忆化版本就不会在其父组件重新渲染时重新渲染。但 React 仍可能会重新渲染它：记忆化是一种性能优化，而非保证。
-
-- ==`React.memo` 只会对 props 进行浅比较==。如果 props 是对象或数组，确保传递给组件的引用在每次渲染时都是新的，否则它可能不会正常工作。
-- 只有在确定组件因为渲染开销很大或者 props 变化时会进行渲染时，才应该使用 `React.memo`。对于简单的组件，它可能会增加代码的复杂性而不带来明显的性能提升。
-
-
-
-# Fragment
-
-Fragment：可以不用必须有一个真实的DOM根标签了
-
-```html
-<Fragment></Fragment>
-<></>
-```
-
-区别：Fragment 可以指定 key 值，并且只能指定 key。不能写其他属性
-
-
-
 # Context
 
 context：一种组件间通信方式, 常用于【祖组件】与【后代组件】间通信
@@ -1139,9 +984,9 @@ context：一种组件间通信方式, 常用于【祖组件】与【后代组�
        </MyContext.Consumer>
    )
    ```
-   
+
    函数组件：useContext 钩子函数，只能函数式组件中使用
-   
+
    ```jsx
    import React, {useContext} from 'react'
    // 引入 Context
@@ -1168,6 +1013,146 @@ context：一种组件间通信方式, 常用于【祖组件】与【后代组�
 
 - **Context 会在值发生变化时重新渲染所有使用它的组件**。如果你需要频繁更新的状态，且只需要传递给少数组件，直接使用 props 传值可以减少不必要的重渲染
 - 通过精确传递 props，可以更好地控制哪些组件需要更新，从而**提高性能**。
+
+
+
+# setState(React16+)
+
+React 状态的更新是**异步**的
+
+1. 一般的 setState，对象式
+
+   ```jsx
+   this.setState({
+       count:count+1
+   })
+   ```
+
+2. setState 函数接收两个参数，第二个参数是一个状态更新后的执行函数
+
+   ```jsx
+   state = {
+       count: 0,
+   }
+   this.setState({count: count + 1},() => {
+       console.log(this.state.count);   // 1
+   })
+   ```
+
+3. 函数式的 setState
+
+   ```jsx
+   this.setState( state => ({
+       count:state.count+1
+   }))
+   // 或者
+   this.setState( state => {
+       return count:state.count+1
+   })
+   ```
+
+
+
+# lazy、Suspense 
+
+组件懒加载：组件懒加载可以使用 lszy 函数，同时必须使用 Suspense 组件，并且指定fallback，此时 fallback 组件不能使用懒加载，必须使用普通同步引入
+
+```jsx
+import { Component, lazy, Suspense} from 'react'
+
+import Loading from './Loading'
+const Home = lazy(()=> import('./Home') )
+
+render() {
+    return (
+        <Suspense fallback={<Loading/>}>
+            {/* 注册路由 */}
+            <Route path="/about" component={About}/>
+            <Route path="/home" component={Home}/>
+        </Suspense>
+    )
+}
+```
+
+在路由组件中，Suspense 只能加在 Routes 或 Outlet 外；\<Routes>，\<Route> 的直接子组件只能是 \<Route>
+
+```jsx
+<Suspense fallback={<Loading/>}>
+    <Outlet></Outlet>
+</Suspense>
+
+<Suspense fallback={<Loading/>}>
+    <Routes>
+        <Route path="/" element={<Home/>}>
+            <Route path="/home" element={<HomeComponent/>}/>
+        </Route>
+    </Routes>
+</Suspense>
+```
+
+路由子路由组件的Suspense问题
+
+- react比较推崇在本页面解决问题，组件自定义loading会比较好，不用封装在路由那里
+
+```tsx
+<>
+	<div>mainContent</div>
+
+    {/* <Navigate to="/home/id"/> */}
+    {/* <Outlet></Outlet> */}
+    {/* 组件自定义loading会比较好 */}
+    <Suspense fallback={<div><Loading/></div>}>
+        <Outlet></Outlet>
+    </Suspense>
+</>
+```
+
+在 React 中，**异步组件第一次加载执行两次**的情况通常是由于 React 的工作机制所导致的。
+
+当使用异步组件（例如 React.lazy 和 Suspense）时，React 首先会触发组件的加载过程。在加载过程中，React 会渲染出一个占位符（placeholder），以便在异步组件加载完成前展示该占位符。这是第一次渲染。
+
+一旦异步组件加载完成，React 将会触发第二次渲染，此时会替换占位符并渲染出实际的组件内容。
+
+因此，第一次加载异步组件会经历两次渲染。这是 React 的正常行为，并且在大多数情况下不会引起问题。React 之所以采用这种方式，是为了确保组件的加载状态和渲染结果能够正确地反映出异步加载的过程。
+
+
+# React.memo(Component, areEqual)
+
+用于缓存组件，当子组件的 props 发生变化的时候再重新渲染，父组件的 state 变化的时候不会触发重新渲染。类似于 `PureComponent` 和 `shouldComponentUpdate` 方法的集合体。
+
+用法：**直接包裹组件**即可 React.memo(Component, areEqual)
+
+- `Component`：要进行记忆化的组件。`memo` 不会修改该组件，而是返回一个新的、记忆化的组件。它接受任何有效的 React 组件，包括函数组件和 [`forwardRef`](https://react.docschina.org/reference/react/forwardRef) 组件。
+- **可选参数** `arePropsEqual`：一个函数，接受两个参数：组件的**前一个 props** 和**新的 props**。如果旧的和新的 props 相等，即组件使用新的 props 渲染的输出和表现与旧的 props 完全相同，则它应该返回 `true`。否则返回 `false`。通常情况下，你不需要指定此函数。默认情况下，React 将使用 `Object.is` 比较每个 prop。
+- **返回值**：`memo` 返回一个新的 React 组件。它的行为与提供给 `memo` 的组件相同，只是当它的父组件重新渲染时 React 不会总是重新渲染它，除非它的 props 发生了变化。
+
+```jsx
+import { memo } from 'react';
+
+const SomeComponent = memo((props) => {
+	return (<div></div>)
+}, (oldProps, newProps) => {
+    return true
+});
+```
+
+使用 `memo` 将组件包装起来，以获得该组件的一个 **记忆化** 版本。通常情况下，只要该组件的 props 没有改变，这个记忆化版本就不会在其父组件重新渲染时重新渲染。但 React 仍可能会重新渲染它：记忆化是一种性能优化，而非保证。
+
+- ==`React.memo` 只会对 props 进行浅比较==。如果 props 是对象或数组，确保传递给组件的引用在每次渲染时都是新的，否则它可能不会正常工作。
+- 只有在确定组件因为渲染开销很大或者 props 变化时会进行渲染时，才应该使用 `React.memo`。对于简单的组件，它可能会增加代码的复杂性而不带来明显的性能提升。
+
+
+
+# Fragment
+
+Fragment：可以不用必须有一个真实的DOM根标签了
+
+```html
+<Fragment></Fragment>
+<></>
+```
+
+区别：Fragment 可以指定 key 值，并且只能指定 key。不能写其他属性
 
 
 
@@ -1237,104 +1222,100 @@ context：一种组件间通信方式, 常用于【祖组件】与【后代组�
 
 用处：可**封装高阶通用型组件**，如日志记录等。
 
-Vue中:  使用**slot 插槽技术**, 也就是通过组件标签体传入结构  \<AA>\<BB/>\</AA>
+Vue中：使用**slot 插槽技术**, 也就是通过组件标签体传入结构  \<AA>\<BB/>\</AA>
 
-React中:
+React中：组件A接收一个返回 `JSX.Element` 的函数
 
-​    使用children props: 通过组件标签体传入结构
+1. 父组件
 
-​    使用render props: 通过组件标签属性传入结构, 一般用render函数属性
+   ```jsx
+   import React from 'react';
+   import A from './A.tsx';
+   
+   function App() {
+       return (
+           <div className="parent">
+               <h3>我是Parent组件</h3>
+               <A render={ (name) => <B name={name}/> }>
+                   {(name, age) => (
+                       <h3>{name}</h3>
+                       <h3>{age}</h3>
+                   )}
+               </A>
+           </div>
+       );
+   }
+   
+   export default App;
+   ```
 
-重点代码在 class A 中
+2. 子组件A
 
-```jsx
-import { Component } from 'react'
-
-export default class Parent extends Component {
-	render() {
-		return (
-			<div className="parent">
-				<h3>我是Parent组件</h3>
-				<A render={ (name) => <B name={name}/> }/>
-			</div>
-		)
-	}
-}
-
-class A extends Component {
-	state = {name:'tom'}
-	render() {
-		console.log(this.props);
-		const {name} = this.state
-		return (
-			<div className="a">
-				<h3>我是A组件</h3>
-				{this.props.render(name)}
-			</div>
-		)
-	}
-}
-
-class B extends Component {
-	render() {
-		console.log('B--render');
-		return (
-			<div className="b">
-				<h3>我是B组件,{this.props.name}</h3>
-			</div>
-		)
-	}
-}
-// 优化：使用 children 代替 render
-```
-
-函数式组件中使用
-
-```tsx
-import React from 'react';
-import A from './A.tsx';
-
-function App() {
-    return (
-        <div className="parent">
-            <h3>我是Parent组件</h3>
-            <A render={ (name) => <B name={name}/> }>
-                {(name, age) => (
-                    <h3>{name}</h3>
-                    <h3>{age}</h3>
-                )}
-            </A>
-        </div>
-    );
-}
-
-export default App;
-```
-
-```tsx
-import React, { useState } from 'react';
-
-function A({ children }) {
-    const [name, setName] = useState("tom")
-    const [age, setAge] = useState(18)
-
-    return (
-        <div>
-        	{ children(name, age) }
-        </div>
-    );
-}
-
-export default MouseTracker;
-```
+   ```jsx
+   import React, { useState } from 'react';
+   
+   function A({ children }) {
+       const [name, setName] = useState("tom")
+       const [age, setAge] = useState(18)
+   
+       return (
+           <div>
+           	{ children(name, age) }
+           </div>
+       );
+   }
+   
+   export default MouseTracker;
+   ```
 
 
 
+**类式组件中使用**
+
+- ```typescript
+  import { Component } from 'react'
+  
+  export default class Parent extends Component {
+  	render() {
+  		return (
+  			<div className="parent">
+  				<h3>我是Parent组件</h3>
+  				<A render={ (name) => <B name={name}/> }/>
+  			</div>
+  		)
+  	}
+  }
+  
+  class A extends Component {
+  	state = {name:'tom'}
+  	render() {
+  		console.log(this.props);
+  		const {name} = this.state
+  		return (
+  			<div className="a">
+  				<h3>我是A组件</h3>
+  				{this.props.render(name)}
+  			</div>
+  		)
+  	}
+  }
+  
+  class B extends Component {
+  	render() {
+  		console.log('B--render');
+  		return (
+  			<div className="b">
+  				<h3>我是B组件,{this.props.name}</h3>
+  			</div>
+  		)
+  	}
+  }
+  // 优化：使用 children 代替 render
+  ```
 
 
 
-
-# 错误边界
+# 错误边界(React16+)
 
 - 错误边界：用来捕获后代组件错误，渲染出备用页面
 
