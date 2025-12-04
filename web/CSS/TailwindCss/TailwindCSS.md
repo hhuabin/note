@@ -367,18 +367,18 @@ background:
 
 ### background-image
 
-| Class                             | Properties                                                   |
-| --------------------------------- | ------------------------------------------------------------ |
-| bg-[url('/img/hero-pattern.svg')] | background-image: url('/img/hero-pattern.svg');              |
-| bg-none                           | background-image: none;                                      |
-| bg-gradient-to-t                  | background-image: linear-gradient(to top, var(--tw-gradient-stops));    /* 0deg */ |
-| bg-gradient-to-tr                 | background-image: linear-gradient(to top right, var(--tw-gradient-stops)); |
-| bg-gradient-to-r                  | background-image: linear-gradient(to right, var(--tw-gradient-stops));    /* 90deg */ |
-| bg-gradient-to-br                 | background-image: linear-gradient(to bottom right, var(--tw-gradient-stops)); |
-| bg-gradient-to-b                  | background-image: linear-gradient(to bottom, var(--tw-gradient-stops));    /* 180deg */ |
-| bg-gradient-to-bl                 | background-image: linear-gradient(to bottom left, var(--tw-gradient-stops)); |
-| bg-gradient-to-l                  | background-image: linear-gradient(to left, var(--tw-gradient-stops));           /* 270deg */ |
-| bg-gradient-to-tl                 | background-image: linear-gradient(to top left, var(--tw-gradient-stops)); |
+| Class                                | Properties                                                   |
+| ------------------------------------ | ------------------------------------------------------------ |
+| bg-[url('@/image/hero-pattern.svg')] | background-image: url('@/image/hero-pattern.svg');           |
+| bg-none                              | background-image: none;                                      |
+| bg-gradient-to-t                     | background-image: linear-gradient(to top, var(--tw-gradient-stops));    /* 0deg */ |
+| bg-gradient-to-tr                    | background-image: linear-gradient(to top right, var(--tw-gradient-stops)); |
+| bg-gradient-to-r                     | background-image: linear-gradient(to right, var(--tw-gradient-stops));    /* 90deg */ |
+| bg-gradient-to-br                    | background-image: linear-gradient(to bottom right, var(--tw-gradient-stops)); |
+| bg-gradient-to-b                     | background-image: linear-gradient(to bottom, var(--tw-gradient-stops));    /* 180deg */ |
+| bg-gradient-to-bl                    | background-image: linear-gradient(to bottom left, var(--tw-gradient-stops)); |
+| bg-gradient-to-l                     | background-image: linear-gradient(to left, var(--tw-gradient-stops));           /* 270deg */ |
+| bg-gradient-to-tl                    | background-image: linear-gradient(to top left, var(--tw-gradient-stops)); |
 
 1. 起始末尾颜色
 

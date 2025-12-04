@@ -31,11 +31,11 @@
    ```
 
    ```bash
-   git remote set-url origin <new_url>  # 重设仓库地址
+   git remote set-url origin <new_url>     # 重设仓库地址
    ```
 
    ```bash
-   git remote rm 仓库别名       # 删除仓库别名
+   git remote rm 仓库别名                   # 删除仓库别名
    ```
 
 6. 显示仓库 `url`
@@ -107,7 +107,7 @@ git log --oneline
 设置用户信息
 
 ```shell
-git config --global user.name "name"
+git config --global user.name name
 git config --global user.email email
 ```
 

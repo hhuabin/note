@@ -14,6 +14,41 @@ const handleChangeIdNum = (event: React.ChangeEvent<HTMLInputElement>) => {
 
 
 
+# 防止`XSS`诸如攻击
+
+- 使用`escapeHTML`对输入字符串进行过滤
+
+  ```typescript
+  // 需要被转义的字符组成的对象 &<>"'`=/
+  const escapeChar: Record<string, string> = {
+      // 支持 HTML 文本节点
+      '&': '&amp;',            // 防止 &lt; 还原成 <
+      '<': '&lt;',             // 阻止标签注入
+      '>': '&gt;',             // 结束标签
+      '"': '&quot;',           // 阻止属性注入
+      '\'': '&#039;',          // 阻止属性注入
+  
+      // 支持 HTML 属性、URL、JS 字符串、CSS 字符串
+      '`': '&#x60;',           // 防止模板字符串注入
+      '=': '&#x3D;',           // 防止属性注入和结束标签
+      '/': '&#x2F;',           // 防止属性注入和结束标签
+  }
+  
+  /**
+   * @description HTML 字符串过滤
+   * @param { string } str 待过滤的字符串
+   * @returns { string } 过滤后的字符串
+   */
+  export const escapeHTML = (str: string): string => str.replace(/[&<>"'`=/]/g, char => (escapeChar[char] || char))
+  
+  ```
+
+  
+
+
+
+
+
 # 中文输入法事件
 
 - `onCompositionStart`：用户开始使用输入法
