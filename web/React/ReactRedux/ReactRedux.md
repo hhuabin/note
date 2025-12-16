@@ -20,7 +20,7 @@ npm install @reduxjs/toolkit react-redux
 
 1. 在启动文件传 store
 
-   ```typescript
+   ```tsx
    // index.tsx
    import { Provider } from 'react-redux';
    
@@ -118,17 +118,18 @@ npm install @reduxjs/toolkit react-redux
 
 5. 在组件中调用
 
-   ```typescript
+   ```tsx
    import { useAppDispatch, useAppSelector } from '@/hooks/store'
    import { useSelector, useDispatch } from 'react-redux'
    import { decrement, increment } from '@/store/slice/counterSlice'
-   import { RootState } from '@/store/store'
+   import type { RootState, AppDispatch } from '@/store/store'
    
    export default function Redux() {
    
    	// const count = useAppSelector(state => state.counter.countNumber)
+       // const { counter } = useAppSelector(state => state)    // 不推荐使用该写法，订阅粒度不同。该写法订阅的是整个 state
    	const count = useSelector((state: RootState) => state.counter.countNumber)
-    	const dispatch = useAppDispatch()
+    	const dispatch = useDispatch<AppDispatch>()
    
    	return (
    		<div>

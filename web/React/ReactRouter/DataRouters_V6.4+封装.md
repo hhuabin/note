@@ -50,7 +50,7 @@ export const routes: RouteConfig[] = [
 
 
 
-## 2.`index.tsx`制作App路由组件
+## 2.`index.tsx`制作 App 路由组件
 
 把`AppRouter`组件暴露给`App.tsx`使用
 

@@ -7,22 +7,34 @@
 React通用请求拦截类
 
 ```typescript
-import axios from 'axios'
-import type { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
+/* eslint-disable max-lines */
+/**
+ * @Author: bin
+ * @Date: 2025-06-04 10:59:21
+ * @LastEditors: bin
+ * @LastEditTime: 2025-12-16 17:31:31
+ */
+import axios, {
+    type AxiosInstance,
+    type InternalAxiosRequestConfig,
+    type AxiosResponse,
+    type AxiosError,
+} from 'axios'
 import { Toast } from 'antd-mobile'
 
 import { version as packageVersion } from '@/../package.json'
 
 // import { navigate } from '@/hooks/useRouter'
-import store from '@/store/store'
-import { saveUserInfo, removeUserInfo } from '@/store/slice/userSlice'
+import authStore from '@/store/slice/auth.store'
+import { saveUserInfo, removeUserInfo } from '@/store/slice/userInfoSlice'
 import { getDateStrByTimeAndCurrentOffset } from '@/utils/stringUtils/dateUtils'
 import HTTP_STATUS_CODES from './httpStatusCodes'
 
 /**
  * @description AxiosRequest
+ * 只适合单例 Toast 的移动端请求，多例的 message 请使用 AxiosRequest
  * 1. cancelLastRequest：取消上次请求，适合用在请求数据接口，不适合在提交数据接口使用，以避免重复提交
- * 2. showLoading：可使用showLoading开启请求loading
+ * 2. showLoading：可使用 showLoading 开启请求 loading
  * 3. refreshToken：配置token过期的result_code，配置新token请求的url
  * 4. requestRetry 存在间隔 loading 问题，建议修复为只有一个loading
  */
@@ -38,7 +50,7 @@ type PublicParams = {
 }
 
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
-    requestRetryNumber?: number;
+    requestRetryNumber?: number;               // 请求失败重试次数
 }
 
 export default class MobileAxiosRequest {
@@ -106,7 +118,7 @@ export default class MobileAxiosRequest {
             const timestamp: string = getDateStrByTimeAndCurrentOffset()
             publicParams.timestamp = timestamp
 
-            publicParams.token = store.getState().user.userInfo.token
+            publicParams.token = authStore.getAuthState().userInfo.token
             config.data = { ...publicParams, ...data }
             // 默认使用POST方法
             config.method = config.method || 'POST'
@@ -127,7 +139,7 @@ export default class MobileAxiosRequest {
                     // 重新发送请求，如果此时接口还是报token过期，则会继续请求
                     return this.requestRetry(
                         response.config,
-                        { token: store.getState().user.userInfo.token },
+                        { token: authStore.getAuthState().userInfo.token },
                         response,
                     )
                 } catch (error) {
@@ -154,8 +166,8 @@ export default class MobileAxiosRequest {
     private clearTimerId = () => {
         if (this.timerId) {
             /**
-             * 这里会产生一个问题，在多个请求同时携带loading参数时
-             * 第一个请求成功，则会进入此函数。清空timerId，关闭loadingToast，尽管后续请求失败也会造成关闭
+             * 这里会产生一个问题，在多个请求同时携带 showLoading 参数时
+             * 第一个请求成功，则会进入此函数。清空timerId，关闭 loadingToast，尽管后续请求失败也会造成关闭
              * 故而如非特殊需要，请不要在多个请求中（如Promise.all中）同时携带loading参数
              * 请自行在请求中处理
              */
@@ -200,20 +212,21 @@ export default class MobileAxiosRequest {
         retryDelay = 0,
     ): Promise<AxiosResponse<unknown>> => {
         return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                const requestRetryNumber = (config.requestRetryNumber || 0)
-                if (+requestRetryNumber > maxRetries) {
-                    console.error('请求重发次数过多', config)
-                    reject(response)
-                    return
-                }
-                // 每个data都需要解压
-                config.data = {
-                    ...JSON.parse(response.config.data),
-                    ...data,
-                }
-                config.requestRetryNumber = requestRetryNumber + 1
+            maxRetries = Math.min(Math.max(maxRetries, 0), 10)
+            const requestRetryNumber = (config.requestRetryNumber || 0)
+            if (+requestRetryNumber >= maxRetries) {
+                console.error('请求重发次数过多', config)
+                reject(response)
+                return
+            }
+            // 每个data都需要解压
+            config.data = {
+                ...JSON.parse(response.config.data),
+                ...data,
+            }
+            config.requestRetryNumber = requestRetryNumber + 1
 
+            setTimeout(() => {
                 resolve(this.instance(config))
             }, retryDelay)
         })
@@ -229,7 +242,7 @@ export default class MobileAxiosRequest {
         if (this.refreshTokenPromise) return this.refreshTokenPromise
 
         console.log('refresh-token')
-        store.dispatch(removeUserInfo())
+        authStore.logout()
         // 开发者自行修改
         const refreshToken = 'refreshToken'
 
@@ -246,9 +259,7 @@ export default class MobileAxiosRequest {
                 const newToken = res.data.token
                 if (newToken) {
                     // 存储新的 token 到 store 中
-                    store.dispatch(saveUserInfo({
-                        token: newToken,
-                    }))
+                    authStore.login({ token: newToken })
                     resolve()
                 }
                 return Promise.reject(res)
@@ -368,24 +379,36 @@ const cancelRequest = () => {
 3. **无感刷新token**：配置token过期的result_code，配置新token请求的url
 
 ```typescript
-import axios from 'axios'
-import type { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
-import { message } from 'antd'
+/* eslint-disable max-lines */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/**
+ * @Author: bin
+ * @Date: 2025-02-26 21:05:44
+ * @LastEditors: bin
+ * @LastEditTime: 2025-12-10 14:26:02
+ */
+import axios, {
+    type AxiosInstance,
+    type InternalAxiosRequestConfig,
+    type AxiosResponse,
+    type AxiosError,
+} from 'axios'
+import { message } from '@/components/Message'
 
 import { version as packageVersion } from '@/../package.json'
 
 // import { navigate } from '@/hooks/useRouter'
-import store from '@/store/store'
-import { saveUserInfo, removeUserInfo } from '@/store/slice/userSlice'
+import authStore from '@/store/slice/auth.store'
 import { getDateStrByTimeAndCurrentOffset } from '@/utils/stringUtils/dateUtils'
 import HTTP_STATUS_CODES from './httpStatusCodes'
 
 /**
  * @description AxiosRequest
- * 1. cancelLastRequest：取消上次请求，适合用在请求数据接口，不适合在提交数据接口使用，以避免重复提交
+ * 1. cancelLastRequest：取消上一个携带 cancelLastRequest 的请求，适合用在请求数据接口，不适合在提交数据接口使用，以避免重复提交
  * 2. showLoading：可使用showLoading开启请求loading
- * 3. refreshToken：配置token过期的result_code，配置新token请求的url
- * 4. requestRetry 存在间隔 loading 问题，建议修复为只有一个loading
+ * 3. refreshToken：配置 token 过期的 result_code，配置新 token 请求的 url
+ * 4. requestRetry 存在第一次请求结束便会清除 loading 的问题。（该问题已在 requestRetry 中解决）
+ * 5. 一个请求对应一个 loading ，两个请求就有两个 loading，若不需要，不设置 showLoading 参数即可
  */
 
 type PublicParams = {
@@ -399,9 +422,10 @@ type PublicParams = {
 }
 
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
-    loadingSymbol?: symbol;           // loading的取消函数标识
-    timerId?: NodeJS.Timeout;         // loading的定时器
-    requestRetryNumber?: number;      // 请求失败重试次数
+    loadingSymbol?: symbol;                    // loading 的取消函数标识
+    timerId?: ReturnType<typeof setTimeout>;   // loading 的定时器Id
+    maxRequestRetryNumber?: number;            // 最大请求失败重试次数
+    requestRetryNumber?: number;               // 请求失败重试次数
 }
 
 export default class AxiosRequest {
@@ -413,9 +437,11 @@ export default class AxiosRequest {
             'Authorization': 'Bearer <token>',
         },
     })
-    private controller: AbortController | null = null
-    private loadingMessage = new Map<symbol, () => void>()
-    private refreshTokenPromise: Promise<void> | null = null
+
+    private controller: AbortController | null = null              // 存储一个取消请求的 controller
+    private loadingMessage = new Map<symbol, () => void>()         // 使用 Map 存储多个关闭消息函数 message.destroy(id)
+    private refreshTokenPromise: Promise<void> | null = null       // 存储刷新 token 的 promise 对象，防止刷新 token 接口重复请求
+
     private publicParams: PublicParams = {
         version: packageVersion,
         charset: 'UTF-8',
@@ -433,7 +459,7 @@ export default class AxiosRequest {
             const { data = {} } = config
 
             /**
-             * 是否取消上次请求，适合用在请求数据接口，不适合在提交数据接口使用，以避免重复提交
+             * 是否取消上一个携带 cancelLastRequest 的请求，适合用在请求数据接口，不适合在提交数据接口使用，以避免重复提交
              * 只有携带了 cancelLastRequest 参数的请求才允许被取消，避免取消必要的请求
              * attention：禁止多个并行请求（如Promise.all中）同时携带 cancelLastRequest 参数，会造成只有最后一个请求生效
              */
@@ -444,6 +470,7 @@ export default class AxiosRequest {
                 config.signal ??= (this.controller as AbortController).signal
             }
 
+            // 默认 loading
             if (data.showLoading) {
                 delete data.showLoading
                 const loadingSymbol = Symbol('loading')
@@ -452,8 +479,15 @@ export default class AxiosRequest {
                     loadingHandler = message.loading('loading...', 0)
                     this.loadingMessage.set(loadingSymbol, loadingHandler)
                 }, 1000)
+                // 存储至请求中，用于取消 loading
                 config.loadingSymbol = loadingSymbol
                 config.timerId = timerId
+            }
+
+            // 记录请求重试次数，当请求失败才会发起 请求重试
+            if (data.maxRequestRetryNumber) {
+                config.maxRequestRetryNumber = data.maxRequestRetryNumber
+                delete data.maxRequestRetryNumber
             }
 
             // 深拷贝数据，令对象不被改变
@@ -468,7 +502,7 @@ export default class AxiosRequest {
             const timestamp: string = getDateStrByTimeAndCurrentOffset()
             publicParams.timestamp = timestamp
 
-            publicParams.token = store.getState().user.userInfo.token
+            publicParams.token = authStore.getAuthState().userInfo.token
             config.data = { ...publicParams, ...data }
             // 默认使用POST方法
             config.method = config.method || 'POST'
@@ -477,32 +511,45 @@ export default class AxiosRequest {
 
         this.instance.interceptors.response.use(async (response: AxiosResponse) => {
             const config: CustomAxiosRequestConfig = response.config
-            this.clearTimeoutTimer(config)
+            const maxRequestRetryNumber = Number(config.maxRequestRetryNumber) || 0
 
             // response.status === 200
             if (response.data.result_code === '0') {
+                // 成功返回，清除定时器并且关闭 loading（有返回就关闭请求 loading，没有返回可以一直沿用本 loading）
+                this.clearTimeoutTimer(config)
                 return response
             } else if (response.data.result_code === '-1' && response.config.url !== '/user/refreshtoken') {
                 // 无感刷新 token ，进入此逻辑的请求链接不能是无感刷新的 url ，避免逻辑死循环
                 console.error(response)
                 try {
-                    await this.refreshToken()
-                    // 重新发送请求，如果此时接口还是报token过期，则会继续请求
+                    await this.refreshToken() // 刷新 token，继续使用 config 的 loading
+                    // 重新发送原来的请求，如果此时接口还是报token过期，则会继续请求
                     return this.requestRetry(
                         config,
-                        { token: store.getState().user.userInfo.token },
+                        { token: authStore.getAuthState().userInfo.token },
                         response,
                     )
                 } catch (error) {
+                    this.clearTimeoutTimer(config)       // 失败返回，清除定时器并且关闭 loading
                     // 刷新 token 接口失败
                     console.error('refresh-token-error', error)
                     // 需返回原来接口的报错
                     return Promise.reject(response)
                 }
+            } else if (maxRequestRetryNumber) {
+                // 进入请求重试，可以不关闭原来的 loading，继续使用，只有给接口返回值才需要清除 loading
+                return this.requestRetry(
+                    config,
+                    {},
+                    response,
+                    maxRequestRetryNumber,
+                )
             } else {
                 console.error(response)
+                this.clearTimeoutTimer(config)       // 失败返回，清除定时器并且关闭 loading
                 return Promise.reject(response)
             }
+            // 诸如没网络，500等报错，应该不用进行请求重试，有时候网络超时可能也需要重试，参考上面的做法也可以实现
         }, this.handleRequestError)
     }
 
@@ -543,35 +590,41 @@ export default class AxiosRequest {
     /**
      * 请求重发
      * 基于 response.cnofig === request 的 config
-     * @param config InternalAxiosRequestConfig 无需解压 config.data
-     * @param response AxiosResponse 错误响应
-     * @param maxRetries 最大重试次数， 默认值为 2
-     * @param retryDelay  重试延迟时间， 默认值为 0
+     * @param { CustomAxiosRequestConfig } config InternalAxiosRequestConfig 无需解压 config.data，可以从 response 直接解构
+     * @param { Record<any, any> } mergeData 需要增加到 config.data 的新参数
+     * @param { AxiosResponse } response AxiosResponse 错误响应
+     * @param { number } maxRetries 最大重试次数， 默认值为 3
+     * @param { number } retryDelay  重试延迟时间， 默认值为 0
      * @returns Promise<AxiosResponse<any, any>>
      */
     private requestRetry = (
         config: CustomAxiosRequestConfig,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        data: Record<any, any>,
+        mergeData: Record<any, any>,
         response: AxiosResponse,
         maxRetries = 3,
         retryDelay = 0,
     ): Promise<AxiosResponse<unknown>> => {
         return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                const requestRetryNumber = (config.requestRetryNumber || 0)
-                if (+requestRetryNumber > maxRetries) {
-                    console.error('请求重发次数过多', config)
-                    reject(response)
-                    return
-                }
-                // 每个data都需要解压
-                config.data = {
-                    ...JSON.parse(response.config.data),
-                    ...data,
-                }
-                config.requestRetryNumber = requestRetryNumber + 1
+            // 确保最大重试次数在 0 到 10 之间，避免傻逼开发者赋值到 10000 甚至更多
+            maxRetries = Math.min(Math.max(maxRetries, 0), 10)
+            const requestRetryNumber = (config.requestRetryNumber || 0)
+            if (+requestRetryNumber >= maxRetries) {
+                // 请求重发次数达到限制次数，返回失败结果，删除 loading
+                this.clearTimeoutTimer(config)
+                console.error(`请求重发次数达到限制次数${maxRetries}`, response)
+                reject(response)
+                return
+            }
+            // 每个data都需要解压
+            config.data = {
+                ...JSON.parse(response.config.data),
+                ...mergeData,
+            }
+            // 给 config 添加 requestRetryNumber 记录
+            config.requestRetryNumber = requestRetryNumber + 1
 
+            setTimeout(() => {
+                // 间隔 retryDelay 重新请求
                 resolve(this.instance(config))
             }, retryDelay)
         })
@@ -586,8 +639,8 @@ export default class AxiosRequest {
         // 当多个并发请求同时触发时 refreshToken时，只会发起一次请求
         if (this.refreshTokenPromise) return this.refreshTokenPromise
 
-        console.log('refresh-token')
-        store.dispatch(removeUserInfo())
+        console.log('start-refresh-token')
+        authStore.logout()
         // 开发者自行修改
         const refreshToken = 'refreshToken'
 
@@ -604,9 +657,7 @@ export default class AxiosRequest {
                 const newToken = res.data.token
                 if (newToken) {
                     // 存储新的 token 到 store 中
-                    store.dispatch(saveUserInfo({
-                        token: newToken,
-                    }))
+                    authStore.login({ token: newToken })
                     resolve()
                 }
                 return Promise.reject(res)

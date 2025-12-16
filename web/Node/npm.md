@@ -18,7 +18,7 @@ npm -v
 1. 查看当前镜像
 
    ```bash
-   npm config get registry
+   npm config get registry  https://registry.npmmirror.com/
    ```
 
 2. 打开终端或命令行，运行以下命令来配置 npm 使用淘宝镜像：

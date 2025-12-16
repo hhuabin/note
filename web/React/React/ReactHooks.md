@@ -954,6 +954,16 @@ function MyComponent() {
 
 context：一种组件间通信方式, 常用于【祖组件】与【后代组件】间通信
 
+```typescript
+export interface ConfigConsumerProps {
+    theme: ThemeConfig
+}
+
+const { Provider, Consumer } = createContext<ConfigConsumerProps>()
+```
+
+
+
 1. 建Context容器对象并且暴露出去：
 
    ```jsx
@@ -981,14 +991,38 @@ context：一种组件间通信方式, 常用于【祖组件】与【后代组�
        }
        return (
            
-           <Provider value={data}>
+           <MyContext.Provider value={data}>
                <子组件/>
-           </Provider>
+           </MyContext.Provider>
        )
    }
    ```
 
 3. 后代组件读取数据（收值）
+
+   函数组件：useContext 钩子函数，只能函数式组件中使用
+
+   ```jsx
+   import React, {useContext} from 'react'
+   // 引入 Context
+   import MyContext from "url"
+   
+   export default function Component() {
+       // 获取方式1
+       const ctx = useContext(MyContext)
+       console.log(ctx.name)
+   
+       return (
+           <MyContext.Consumer>
+               {
+                   value => ( // value 就是 context 中的 value 数据
+                       return (<div>{value.name}</div>)
+                   )
+               }
+           </MyContext.Consumer>
+       )
+   }
+   ```
 
    类组件：
 
@@ -1009,27 +1043,6 @@ context：一种组件间通信方式, 常用于【祖组件】与【后代组�
    )
    ```
 
-   函数组件：useContext 钩子函数，只能函数式组件中使用
-
-   ```jsx
-   import React, {useContext} from 'react'
-   // 引入 Context
-   import MyContext from "url"
-   
-   export default function Component() {
-       const ctx = useContext(MyContext)
-       console.log(ctx.name)
-       return (
-           <MyContext.Consumer>
-               {
-                   value => ( // value就是context中的value数据
-                       return (<div>{value.name}</div>)
-                   )
-               }
-           </MyContext.Consumer>
-       )
-   }
-   ```
 
 在应用开发中一般不用context, 一般都它的封装react插件；在**全局状态管理**、**跨层级组件通信**、**减少重复代码**中使用较多。
 

@@ -60,3 +60,26 @@ git branch -d branchName
 git branch -D branchName
 ```
 
+
+
+
+
+# 切换分支
+
+1. 切换到对应的 `commit`
+
+   ```bash
+   git checkout a1b2c3d
+   ```
+
+2. 切换到标签
+
+   ```bash
+   切换到标签# 临时切换到标签（分离头指针状态）
+   git checkout v1.2.0
+   
+   # 或使用完整格式
+   git checkout tags/v1.2.0
+   ```
+
+   
