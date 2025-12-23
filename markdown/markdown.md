@@ -334,7 +334,9 @@ markdown使用LaTeX语法来编写数学公式。下面是一些常用的数学�
 >
 > :bangbang:、:red_circle:、:small_red_triangle:、:alarm_clock:、:question:
 >
-> :lock:、:accept:、:pencil:、:pencil2:、:hearts:、:closed_book:、:file_folder:、:dog:、:thumbsup:、:pray:、:fire:、:fu:、:neutral_face:、:expressionless:、:sob:
+> :lock:、 :accept:、:pencil: 、:pencil2:、:hearts:、:closed_book:、:file_folder:、:dog:、:thumbsup:、:pray:、:fire:、:neutral_face:、:expressionless:、:sob:
+>
+>  :point_right: 、 :point_left: 、 :point_down: 、 :point_up: 、 :point_up_2: 、 :fu: 、 :+1: 、 :-1: 
 
 [表情符号简码列表](https://gist.github.com/rxaviers/7360908)
 
