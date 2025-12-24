@@ -36,10 +36,11 @@
   }>
   ```
   
-  数组单个类型获取
+  **数组单个类型获取**
   
   ```typescript
   type AnswerItem = Answer[number]
+  
   const answerItem = {
       name: 'bin';
   	age: 18;

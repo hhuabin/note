@@ -85,14 +85,16 @@ rollupOptions: {
 ```typescript
 rollupOptions: {
     output: {
-        entryFileNames: 'js/[name].js',
+        entryFileNames: 'js/[name]-[hash].js',       // 入口 JS（被 HTML 直接引用的模块）输出规则
         chunkFileNames: (chunkInfo) => {
+            // 非入口 JS chunk（懒加载、manualChunks 拆分的 JS）输出规则
             if (chunkInfo.name === 'react-vendor') {
                 return 'js/[name].js'
             }
             return 'js/[name]-[hash].js'
         },
-        assetFileNames(chunkInfo) {
+        assetFileNames: (chunkInfo) => {
+            // 非 JS 资源（CSS、图片、字体、worker 等）输出规则
             const imgExts = ['.jpg', '.png', '.jpeg', '.webp', '.svg', '.gif', '.ico']
             if (chunkInfo.name?.endsWith('.css')) {
                 return 'css/[name]-[hash].css'
