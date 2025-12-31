@@ -1,3 +1,40 @@
+# 内嵌 H5 的浏览器缓存问题
+
+1. :star: 使用 `nginx` 配置浏览器缓存。（唯一正统解法，最保险）:point_right: [nginx配置浏览器缓存](../../Server/Nginx/缓存.md)
+
+   在**不使用 `nginx`** 的情况下，其他一切办法都只是补救，**不可能做到 100% 可控更新**
+
+2. ==**绕过缓存**==：动态 `URL` 。例如给 `URL` 加上版本号/时间戳；在没有 `nginx` 的情况下，搭配 3 使用
+
+   如果使用 `hash` 路由，则需要在 `#` 前增加参数
+
+   ```typescript
+   let url = http://localhost:3000/?v=1.0.0
+   ```
+
+   ```typescript
+   let url = http://localhost:3000/?v=1.0.0#/?aaa=111
+   ```
+
+   弊端：**必须携带一个识别参数**影响链接观感，一个版本号一个缓存；如果使用时间戳，则每次进入都会造成一个前端浏览器缓存（**无限制造缓存**）
+
+3. `JS` **检查版本号**，然后使用 `window.location.reload()` 更新；
+
+   该方法不一定有效，特别是 `ios` 端，`window.location.reload()`仍可能取强缓存的值。
+
+   在没有 `nginx` 的情况下，适当搭配 2 使用 :point_right: [检查项目更新](../React/React实用hooks/检查项目更新hooks.md)
+
+   ```typescript
+   window.location.reload()   // -> F5
+   
+   // 绕过缓存
+   const url = new URL(location.href)
+   url.searchParams.set('v', version)
+   location.replace(url.toString())
+   ```
+
+
+
 # 内嵌 H5 的滚动问题
 
 问题：**在 `iOS` 的微信小程序 `WebView` 页面。上下滑动总是捕获页面，从而拖动整个页面，而不是滑动页面里的滚动块**

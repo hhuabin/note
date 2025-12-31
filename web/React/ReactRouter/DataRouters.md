@@ -18,9 +18,9 @@
 
 
 
-### `loader`数据预加载
+## 1.`loader` 数据预加载
 
-在组件加载之前请求数据，一般为`get`方法
+在**组件加载之前请求数据**，一般为`get`方法
 
 1. 重定向及向组件发送数据
 
@@ -69,9 +69,9 @@
 
    ```tsx
    loader: async ({ request, params, context }) => {
-       const url = new URL(request.url);
-       const searchTerm = url.searchParams.get("q");
-       const userId = params.id;
+       const url = new URL(request.url)
+       const searchTerm = url.searchParams.get('tetn')
+       const userId = params.id
        return searchUsers(searchTerm, userId);
    }
    ```
@@ -122,12 +122,209 @@
    }
    ```
    
-   
+
+
+
+## `loader` 的职责
+
+`loader`的职责是：`loader`是等待接口加载完成
+
+- **页面进入前准备数据**
+- 控制页面是否可渲染
+
+**不可使用 `loader` 当成骨架屏**显示，造成误用滥用；`loader`也不是全局 `loading` 控制器，`Suspense` 才是等组件加载完成。**大量滥用 `loader` 会让用户觉得加载困难、非常卡、体验极差**
+
+`loader` 的“正确使用边界”（核心）吗，可以用下面这条 **判断标准** 来决定“要不要用 loader”：
+
+> **没有这些数据，这个页面“压根没法渲染”？**
+>  👉 是 → 用 `loader`
+>  👉 否 → 不用 `loader`
+
+---
+
+#### 1.1 :heavy_check_mark: 适合放进 loader 的数据
+
+- **详情页**的主数据（订单详情、用户信息）-> 没有订单信息根本无从展示
+- 页面首屏**必须展示的数据**
+- 权限 / **鉴权结果**（是否能进这个路由）
+- 路由级配置（tab、权限点）
+
+```typescript
+// 典型正确用法，锚定网页链接
+export const orderDetailLoader = async ({ params }) => {
+    return fetchOrderDetail(params.id)
+}
+```
+
+
+
+#### 1.2 :x: 不适合放进 loader 的东西
+
+- 表单提交
+- 次要模块数据
+- 用户点击触发的数据
+- loading 状态
+- 轮询 / 长连接
+- 埋点 / 日志
+
+```typescript
+// ❌ 这是典型误用
+export const loader = async () => {
+	setGlobalLoading(true) // 不该出现在 loader
+}
+```
+
+```typescript
+// ❌ 这更是典型滥用
+export const routes: RouteConfig[] = [
+    {
+        // 包裹全局，当成了全局 loading -> 滥用
+        lazy: async () => {
+            const { default: GlobalLoadingLayout } = await import('@/pages/GlobalLoadingLayout')
+            return { Component: GlobalLoadingLayout }
+        },
+        children: [
+            {
+                path: '/',
+                lazy: async () => {
+                    const { default: Home } = await import('@/pages/Home/Home')
+                    return {
+                        Component: Home,
+                        // loader: homeLoader,
+                    }
+                },
+                meta: { title: '学生卡服务' },
+            },
+		],
+    },
+]
+```
+
+```typescript
+/**
+ * @Author: bin
+ * @Date: 2025-04-16 18:21:04
+ * @LastEditors: bin
+ * @LastEditTime: 2025-12-26 14:11:36
+ */
+import { Outlet, useNavigation } from 'react-router-dom'
+
+import Loading from '@/components/Loading/Loading'
+
+// TODO 该层移动至最外层
+const GlobalLoadingLayout: React.FC = () => {
+
+    const navigation = useNavigation()
+
+    if (navigation.state === 'loading') {
+        return <Loading />
+    } else {
+        return <Outlet />
+    }
+}
+
+export default GlobalLoadingLayout
+
+```
+
+
+
+#### 1.3 `loader` 注意事项
+
+##### 1.3.1 页面滞留问题
+
+使用 `loader` 之后，若 `navigation.state === 'loading'` ，`loader` 迟迟没有返回（比如网络慢），**页面将会一直停留在跳转之前的页面**，一定要做好点击限制。如重复提交订单等
+
+```typescript
+/**
+ * @Author: bin
+ * @Date: 2025-04-16 18:37:07
+ * @LastEditors: bin
+ * @LastEditTime: 2025-12-30 16:18:05
+ */
+import { Outlet, useNavigation } from 'react-router-dom'
+
+import Skeleton from '@/components/Skeleton/Skeleton'
+
+/**
+ * 该功能尚处于 测试阶段
+ * @description 全局默认骨架屏，可以结合 loader 使用。
+ * GlobalSkeletonLayout + loader 可以在 router 路由中包裹着订单详情等组件
+ */
+const GlobalSkeletonLayout: React.FC = () => {
+
+    const navigation = useNavigation()
+
+    if (navigation.state === 'loading') {
+        return <Skeleton />
+    } else {
+        return <Outlet />
+    }
+}
+
+export default GlobalSkeletonLayout
+
+```
+
+##### 1.3.2 页面滞留导致的多次连续点击的问题
+
+1. 用户多次点击 ”订单详情“，到底会发生什么？
+
+   ```typescript
+   navigate(`/order/${id}`)
+   ```
+
+   在极短时间内点击 3 次。React Router 内部行为是：
+
+   1. 第一次点击
+      - 开始执行该路由的 `loader`
+      - 发起请求 A
+   2. 第二次、第三次点击
+      - 路由地址**没有变化**
+      - **不会再次触发 loader**
+      - 不会重复请求
+
+   👉 **默认就是防抖的**
+
+2. ⚠️ 情况 2：`navigate` 时强制 `revalidate`
+
+   ```typescript
+   navigate('/order/1', { replace: true })
+   ```
+
+   主动触发 loader 重新执行
+
+   修复方式
+
+   1. 禁止点击
+
+      ```tsx
+      const navigation = useNavigation()
+      
+      <Button
+          loading={navigation.state === 'loading'}
+          disabled={navigation.state === 'loading'}
+          onClick={() => navigate(`/order/${id}`)}
+      >
+        查看详情
+      </Button>
+      ```
+
+   2. 新导航发生时，上一个请求自动取消
+
+      ```typescript
+      export const loader = async ({ params, request }) => {
+          const signal = request.signal
+      
+          const res = await fetch(`/api/order/${params.id}`, { signal })
+          return res.json()
+      }
+      ```
 
 
 
 
-### `action`表单提交
+## 2.`action` 表单提交
 
 在 React Router v6.4+ 的 Data Mode 中，`action` 函数始终与当前路由关联。当用户通过 `<Form>` 组件或 `useSubmit` 钩子提交数据时，React Router 会根据当前匹配的路由路径调用该路由配置中的 `action` 函数
 
@@ -148,7 +345,7 @@ const router = createBrowserRouter([
 
 
 
-### `lazy`懒加载和嵌套路由
+## 3.`lazy` 懒加载和嵌套路由
 
 `lazy` 可以返回`loader`和`errorElement`等
 
@@ -170,7 +367,7 @@ lazy: async () => {
 
 所以如果你定义了 `lazy`，它会**接管所有配置**，会**覆盖**掉`element`、`loader`等，若返回了`loader`，原来的`loader`也不再被调用
 
-#### 重定向
+#### 3.1重定向
 
 ```tsx
 {
@@ -199,7 +396,7 @@ lazy: async () => {
 
 
 
-### `index`默认匹配
+## 4.`index` 默认匹配
 
 1. 默认匹配子路由，使用 `children` + `index: true` + `Navigate`
 
@@ -228,7 +425,7 @@ lazy: async () => {
 
 
 
-### `errorElement`错误边界
+## 5.`errorElement` 错误边界
 
 ```tsx
 errorElement: <ErrorPage />, // 错误处理
