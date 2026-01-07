@@ -571,7 +571,13 @@ export default MemoizedComponent
 
 **useCallback用法**：特别注意==**当依赖项是函数时，一般需要使用 `useCallback` 记住函数**==，因为每次状态更新都会触发函数的重新创建
 
-除此之外，没事别用它，意义不大
+`useCallback` 带来的开销：
+
+1. **内存**开销（**闭包** + 函数缓存）
+2. 依赖项**比较成本**和**维护成本**
+3. 如果回调函数很轻量，**useCallback ≈ 负优化**
+
+`useCallback` 的使用场景：
 
 1. **跳过组件的重新渲染**
 
@@ -1261,6 +1267,15 @@ Fragment：可以不用必须有一个真实的DOM根标签了
    - 原因：即便当前组件的 `props` 和 `state` 没有变化，只要它的父组件重渲染了(如父组件因自身的 `state` 或`props` 变化而重新渲染)，那么这个子组件也会重新染。这个情况经常会导致一些不必要的重复渲染，为此，我们可以使用一些优化手段，如`React.memo`、`PureComponent` 或`shouldComponentUpdate`
    
    - 解决：只有当组件的 `state`或 `props` 数据发生改变时才重新 `render()`
+
+
+
+## 全局组件
+
+React **没有**真正的**全局组件**注册，如果非要做，以下给几个方法
+
+1. 在 `components` 做一个集中导出
+2. 。使用 `Context` 。正常人是不会这么做的
 
 
 
