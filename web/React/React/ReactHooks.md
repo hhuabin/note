@@ -3,9 +3,19 @@
 - Hook：React16.8.0版本增加的新特性
 - 可以**在函数式组件中使用 state** 以及其他的 React 新特性
 
+## 为什么要使用 `Hooks`
+
+`Hooks` 解决的是：`Class` 组件中 逻辑复用困难、逻辑分散、心智模型复杂 的问题
+
+❌ Hooks 不是为了解决性能问题
+
+1. 没有 `this`，代码更直观；解决`this` 指向复杂、心智负担高问题
+2. 解决生命周期导致逻辑分散问题
+3. 更符合 React 当前和未来的发展方向
 
 
-建议引入顺序
+
+`React Hooks` 建议引入顺序
 
 ```typescript
 import {
@@ -64,26 +74,26 @@ import {
 
 ### 避免重复创建初始状态
 
-```typescript
-const [todos, setTodos] = useState(createInitialTodos())
-```
+1. 错误例子
 
-尽管 `createInitialTodos()` 的结果仅用于初始渲染，但仍然会在每次渲染时调用此函数
+   ```typescript
+   const [todos, setTodos] = useState(createInitialTodos())   // 不可使用该写法
+   ```
 
-```typescript
-const [todos, setTodos] = useState(createInitialTodos)   // React 在并且仅在初始化期间会调用该函数
-```
+   尽管 `createInitialTodos()` 的结果仅用于初始渲染，但仍然会在每次渲染时调用此函数
 
-传递的是 `createInitialTodos` **函数本身**，而不是 `createInitialTodos()` 调用该函数的结果。如果将函数传递给 `useState`，**React 仅在初始化期间调用它**
+2. **正确使用**
 
-如：
+   ```typescript
+   const [todos, setTodos] = useState(createInitialTodos)     // React 在并且仅在初始化期间会调用该函数
+   ```
 
-```typescript
-// 以深拷贝函数的返回值作为初始值
-const [title, setTitle] = useState(() => DeepCopy.deepCopy(renewalTitle))
-```
+   传递的是 `createInitialTodos` **函数本身**，而不是 `createInitialTodos()` 调用该函数的结果。如果将函数传递给 `useState`，**React 仅在初始化期间调用它**。如：
 
-
+   ```typescript
+   // 以深拷贝函数的返回值作为初始值
+   const [title, setTitle] = useState(() => DeepCopy.deepCopy(renewalTitle))
+   ```
 
 
 
@@ -306,7 +316,7 @@ useEffect(() => {
 - **清理函数执行时机**：
   1. 组件挂载时执行一次
   2. 组件卸载时执行一次
-  3. 当依赖项 `dependencies` 不为空（如`[state1, state2]`）。**每次依赖项变化时执行，在下次 Effect 执行前执行**
+  3. 当依赖项 `dependencies` 不为空（如`[state1, state2]`）。**每次依赖项变化时，在下次 Effect ==执行前==执行**
 
 
 
@@ -606,9 +616,9 @@ export default MemoizedComponent
 
    **将 `handleSubmit` 传递给 `useCallback` 就可以确保它在多次重新渲染之间是相同的函数**，直到依赖发生改变。注意，除**非出于某种特定原因，否则不必将一个函数包裹在 `useCallback` 中**。在本例中，你将它传递到了包裹在 `memo` 中的组件，这允许它跳过重新渲染。
 
-2. 从记忆化回调中更新 state
+2. **防止频繁触发 Effect**
 
-3. **防止频繁触发 Effect**
+3. 从记忆化回调中更新 state
 
 4. 优化自定义 Hook
 
@@ -753,7 +763,7 @@ useImperativeHandle(ref, () => {
   useLayoutEffect(setup, dependencies?)
   ```
 
-  React 保证了 `useLayoutEffect` 中的代码以及其中任何计划的状态更新都会在浏览器重新绘制屏幕之前得到处理。然后在用户没有注意到第一个额外渲染的情况下**再次重新渲染**。换句话说，`useLayoutEffect` 阻塞了浏览器的绘制
+  React 保证了 `useLayoutEffect` 中的代码以及其中任何计划的状态更新都会在**浏览器重新绘制屏幕之前**得到处理。然后在用户没有注意到第一个额外渲染的情况下**再次重新渲染**。换句话说，`useLayoutEffect` 阻塞了浏览器的绘制
 
 ```mermaid
 graph TD
@@ -771,6 +781,47 @@ graph TD
     B3 --> C3[DOM 改变]
     C3 --> D3[useLayoutEffect]
     D3 --> F3[绘制屏幕]
+```
+
+`useLayoutEffect`和`useEffect`对比
+
+| 对比点       | useLayoutEffect                             | useEffect           |
+| ------------ | ------------------------------------------- | ------------------- |
+| 执行时机     | DOM 更新后、**绘制之前**（可以获取到真DOM） | 浏览器 **绘制之后** |
+| 是否阻塞渲染 | ✅ 会阻塞                                    | ❌ 不阻塞            |
+| 是否同步     | ✅ 同步                                      | ❌ 异步              |
+| 是否可能闪动 | ❌ 不会                                      | ✅ 可能              |
+| 推荐用途     | DOM 测量、同步布局                          | 请求、订阅、日志    |
+
+- `useLayoutEffect` = **DOM 已就绪**，但还没画
+- `useEffect` = 用户已经**看到页面**了
+
+
+
+### `useLayoutEffect`：
+
+- 此时 **DOM 已经真实挂载**
+- 样式已计算
+- 但 **浏览器还没画到屏幕上**
+
+为什么不用 `useEffect` 量 DOM？问题：可能出现「闪动」
+
+```tsx
+// 改布局，应该使用 useLayoutEffect
+useEffect(() => {
+    const width = ref.current!.offsetWidth
+    setState(width)
+})
+```
+
+选用建议：
+
+```text
+❓要不要读 DOM / 改布局？
+    ├─ 否 → useEffect
+    └─ 是
+        ├─ 会影响首屏视觉 → useLayoutEffect
+        └─ 不影响 → useEffect
 ```
 
 
@@ -950,82 +1001,87 @@ function MyComponent() {
 
 
 
-# Context
+# 15.Context
 
-context：一种组件间通信方式, 常用于【祖组件】与【后代组件】间通信
+`context`：一种组件间通信方式, 常用于【祖组件】与【后代组件】间通信
 
-```typescript
-export interface ConfigConsumerProps {
-    theme: ThemeConfig
-}
+1. `createContext`：创建 `Context` 容器对象并且暴露出去
 
-const { Provider, Consumer } = createContext<ConfigConsumerProps>()
-```
-
-
-
-1. 建Context容器对象并且暴露出去：
-
-   ```jsx
-   import React from 'react'
-   // {} 默认对象数据
-   export default const MyContext = React.createContext({
-       name: "",
-       age: 0,
-   })
+   ```ts
+   import { createContext } from 'react'
+   
+   export interface ConfigConsumerProps {
+       theme: 'light' | 'dark'
+   }
+   
+   export const defaultConfig: ConfigConsumerProps = {
+       theme: 'light',
+   }
+   
+   // 1.这里把 Context 暴露出去即可
+   export const ConfigContext = createContext<ConfigConsumerProps>(defaultConfig)
    ```
 
-2. 主组件使用（传值），渲染子组时，外面包裹Provider，通过value属性给后代组件传递数据：
+2. `Provider`：父组件使用（传值），包裹 `Provider`，通过 `value` 属性给后代组件传递数据：
 
    ```jsx
-   // 引入 Context
-   import MyContext from "url"
-   const {Provider} = MyContext
+   import { useContext } from 'react'
+   import { ConfigContext } from './context'
+   // 1.获取 Provider
+   const { Provider, Consumer } = ConfigContext
    
-   // 主组件使用
-   export default function Component() {
-       // 数据 覆盖默认的 createContext对象
+   const ConfigProvider: React.FC = () => {
+   
+       // 2.获取context默认值
+       const context = useContext(ConfigContext)
+       // 3.使用自定义值，覆盖默认值
        const data = {
-           name: "bin",
-          	age: 18,
+           ...context,
+           theme: 'dark',
        }
+   
        return (
-           
-           <MyContext.Provider value={data}>
-               <子组件/>
-           </MyContext.Provider>
+           // 4.将自定义值传给子组件
+           <Provider value={data}>
+               <children />
+           </Provider>
        )
    }
+   
+   export default ConfigProvider
+   
    ```
 
-3. 后代组件读取数据（收值）
+3. `Consumer`：`children`组件读取数据
 
    函数组件：useContext 钩子函数，只能函数式组件中使用
 
    ```jsx
-   import React, {useContext} from 'react'
-   // 引入 Context
-   import MyContext from "url"
+   import { useContext } from 'react'
+   import { ConfigContext } from './context'
    
-   export default function Component() {
+   const ConfigProvider = () => {
        // 获取方式1
-       const ctx = useContext(MyContext)
-       console.log(ctx.name)
+       const context = useContext(ConfigContext)
+       console.log(context.theme)
    
        return (
-           <MyContext.Consumer>
+        	// 获取方式2
+           <ConfigContext.Consumer>
                {
                    value => ( // value 就是 context 中的 value 数据
                        return (<div>{value.name}</div>)
                    )
                }
-           </MyContext.Consumer>
+           </ConfigContext.Consumer>
        )
    }
+   
+   export default ConfigProvider
    ```
 
-   类组件：
-
+   类组件（不用看）：
+   
    ```jsx
    // html 外使用
    static contextType = xxxContext  // 声明接收context(MyContext)
@@ -1044,12 +1100,12 @@ const { Provider, Consumer } = createContext<ConfigConsumerProps>()
    ```
 
 
-在应用开发中一般不用context, 一般都它的封装react插件；在**全局状态管理**、**跨层级组件通信**、**减少重复代码**中使用较多。
+在应用开发中一般不用 `context`, 一般都它的封装 `React` 插件；在**全局状态管理**、**跨层级组件通信**、**减少重复代码**中使用较多。
 
-大多数情况下建议直接使用props传值最为简单快捷：
+大多数情况下建议直接使用 `props` 传值最为简单快捷：
 
-- **Context 会在值发生变化时重新渲染所有使用它的组件**。如果你需要频繁更新的状态，且只需要传递给少数组件，直接使用 props 传值可以减少不必要的重渲染
-- 通过精确传递 props，可以更好地控制哪些组件需要更新，从而**提高性能**。
+- **`Context` 会在值发生变化时重新渲染所有使用它的组件**。如果你需要频繁更新的状态，且只需要传递给少数组件，直接使用 props 传值可以减少不必要的重渲染
+- 通过精确传递 `props`，可以更好地控制哪些组件需要更新，从而**提高性能**。
 
 
 
@@ -1057,7 +1113,7 @@ const { Provider, Consumer } = createContext<ConfigConsumerProps>()
 
 React 状态的更新是**异步**的
 
-1. 一般的 setState，对象式
+1. 一般的 `setState`，对象式
 
    ```jsx
    this.setState({
@@ -1065,7 +1121,7 @@ React 状态的更新是**异步**的
    })
    ```
 
-2. setState 函数接收两个参数，第二个参数是一个状态更新后的执行函数
+2. `setState` 函数接收两个参数，第二个参数是一个状态更新后的执行函数
 
    ```jsx
    state = {
@@ -1076,7 +1132,7 @@ React 状态的更新是**异步**的
    })
    ```
 
-3. 函数式的 setState
+3. 函数式的 `setState`
 
    ```jsx
    this.setState( state => ({
@@ -1153,6 +1209,7 @@ render() {
 因此，第一次加载异步组件会经历两次渲染。这是 React 的正常行为，并且在大多数情况下不会引起问题。React 之所以采用这种方式，是为了确保组件的加载状态和渲染结果能够正确地反映出异步加载的过程。
 
 
+
 # React.memo(Component, areEqual)
 
 用于缓存组件，当子组件的 props 发生变化的时候再重新渲染，父组件的 state 变化的时候不会触发重新渲染。类似于 `PureComponent` 和 `shouldComponentUpdate` 方法的集合体。
@@ -1197,11 +1254,13 @@ Fragment：可以不用必须有一个真实的DOM根标签了
 
 ## render函数触发条件
 
-1. state变化
-2. Props变化
-3. 父组件重新渲染（可优化）
-   - 即便当前组件的 props 和 state 没有变化，只要它的父组件重渲染了(如父组件因自身的 state 或props 变化而重新渲染)，那么这个子组件也会重新染
-   - 这个情况经常会导致一些不必要的重复渲染，为此，我们可以使用一些优化手段，如`React.memo`、`PureComponent` 或`shouldComponentUpdate`
+1. 自身`state` 变化
+2. 自身`Props` 变化
+3. **父组件**重新渲染（可优化）
+   
+   - 原因：即便当前组件的 `props` 和 `state` 没有变化，只要它的父组件重渲染了(如父组件因自身的 `state` 或`props` 变化而重新渲染)，那么这个子组件也会重新染。这个情况经常会导致一些不必要的重复渲染，为此，我们可以使用一些优化手段，如`React.memo`、`PureComponent` 或`shouldComponentUpdate`
+   
+   - 解决：只有当组件的 `state`或 `props` 数据发生改变时才重新 `render()`
 
 
 
@@ -1214,13 +1273,7 @@ Fragment：可以不用必须有一个真实的DOM根标签了
 
 
 
-## 效率高的做法
-
-只有当组件的state或props数据发生改变时才重新render()
-
-
-
-## 解决办法 PureComponent
+## 解决办法 PureComponent（Class组件）
 
 1. 重写shouldComponentUpdate()方法
 
@@ -1388,36 +1441,21 @@ render() {
 
 
 
-# 组件通信方式总结
+# **组件**通信方式总结
 
-1. props：**函数式组件本身只接收一个参数**，即 `props` 对象
+1. `props` 组件传参
+2. `redux` 集中状态管理
+3. `Context` 数据共享
+4. `route` 路由传参（页面？）
 
-   - children props
-   - render props
 
-   ```tsx
-   import PropTypes from 'prop-types';
-   
-   function MyComponent(props) {
-     // 组件逻辑
-   }
-   
-   MyComponent.propTypes = {
-     // 定义传入参数的类型
-     name: PropTypes.string.isRequired, // 字符串类型，且为必传
-     age: PropTypes.number, // 数字类型，可选
-     isActive: PropTypes.bool.isRequired // 布尔类型，且为必传
-   };
-   
-   MyComponent.defaultProps = {
-       name:'bin',
-       age:18,
-   }
-   
-   export default MyComponent;
-   ```
 
-   函数式组件直接使用ts
+
+
+1. `props`：**函数式组件本身只接收一个参数**，即 `props` 对象
+
+   - `children props`
+   - `render props`
 
    ```tsx
    type Props = {
@@ -1430,7 +1468,29 @@ render() {
      // 组件逻辑
    }
    ```
-
+   
+   ```typescript
+   import PropTypes from 'prop-types';
+   
+   function MyComponent(props) {
+     // 组件逻辑
+   }
+   
+   MyComponent.propTypes = {
+     // 定义传入参数的类型
+    name: PropTypes.string.isRequired, // 字符串类型，且为必传
+     age: PropTypes.number, // 数字类型，可选
+    isActive: PropTypes.bool.isRequired // 布尔类型，且为必传
+   };
+   
+   MyComponent.defaultProps = {
+       name:'bin',
+       age:18,
+   }
+   
+   export default MyComponent;
+   ```
+   
    
 
 2. 消息订阅-发布：

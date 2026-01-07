@@ -1,6 +1,19 @@
 # Fiber
 
-React Fiber 是 React 16 引入的新架构，是对 React 核心算法的重新实现。它的设计目的是解决 React 在处理大型应用时的性能问题，并为实现新的功能和特性提供基础。Fiber 通过引入分片、优先级调度和异步渲染等机制，使得 React 能够更高效地更新和渲染 UI。
+React Fiber 是 React 16 引入的新架构，是对 React 核心算法的重新实现。
+
+它的设计目的是解决 React 在处理大型应用时的性能问题，并为实现新的功能和特性提供基础。
+
+Fiber 通过引入**分片、优先级调度和异步渲染等机制**，使得 React 能够更高效地更新和渲染 UI。
+
+
+
+# React是怎么渲染的
+
+1. `state`变化：React 渲染流程是由状态变化触发
+2. `render() and diff`：在 `render` 阶段生成新的虚拟 DOM 并和旧的虚拟DOM进行 `diff`，找出最小更新
+3. `commit`：找出最小变更后，在 commit 阶段一次性更新真实 DOM
+4.  Fiber 架构让 `render` 阶段可中断，是 React 18 **并发能力**的基础；`commit` 阶段仍然是同步、不可中断的
 
 
 

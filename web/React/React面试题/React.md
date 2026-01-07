@@ -215,6 +215,39 @@ function Counter() {
 
 
 
+# React的 `Class` 组件和 `Function` 组件什么区别
+
+1. `Function` 组件**没有 `this`**，逻辑更直观
+2. **Hooks** 只能在 `Function` 组件上使用
+3. **解决生命周期导致逻辑分散问题**：Hooks 让状态与**副作用更清晰**（`useState`、`useEffect`等），避免了`Class`组件的诸多逻辑分散在生命周期中
+4. `Function` 组件的**逻辑复用能力**更好，不需要使用 `HOC / Render Props`
+5. 错误边界（Error Boundary）目前只有 Class 支持
+
+`Function` 组件是 React 当前和未来的主流。`Class` 组件主要用于**历史兼容和错误边界场景**
+
+
+
+# 为什么要使用 `Hooks`
+
+`Hooks` 解决的是：`Class` 组件中 逻辑复用困难、逻辑分散、心智模型复杂 的问题
+
+❌ Hooks 不是为了解决性能问题
+
+1. 没有 `this`，代码更直观；解决`this` 指向复杂、心智负担高问题
+
+2. 解决生命周期导致逻辑分散问题
+
+3. 更符合 React 当前和未来的发展方向
+
+4. 封装**自定义 Hooks** 的目的，
+
+   1. 逻辑复用：**复用**“有状态的业务逻辑”，**提高代码内聚度**、可维护性和一致性，而不是为了复用 UI。
+
+   2. 降低组件复杂度
+   3. 更利于测试 & 重构
+
+
+
 # React事件机制和普通HTML事件
 
 React 事件和普通 HTML 事件的主要区别在于，React 事件由 React 自己实现的**合成事件机制(SyntheticEvent)管理**，而不是原生的浏览器事件对象。这个合成事件是一种跨浏览器的包装器，能够为每一个事件提供一致的接口行为。React通过**事件委托和池化**(event delegation and pooling)技术,优化了事件处理的性能
