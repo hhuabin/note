@@ -1,4 +1,8 @@
-# 数据路由
+# 数据路由(`Route`)
+
+[reactrouter](https://reactrouter.com/home "reactrouter")、[Route ](https://reactrouter.com/api/components/Route "Route ")
+
+
 
 ## Api介绍
 
@@ -13,6 +17,7 @@
     lazy?: LazyRouteFunction<RouteObject>;
     errorElement?: React.ReactNode | null;
     children?: undefined;
+    shouldRevalidate?: (args: ShouldRevalidateFunctionArgs): boolean;
 }
 ```
 
@@ -122,6 +127,7 @@
    }
    ```
    
+3. 永远要结束（`return` / `throw redirect`），**不允许 `pending`**
 
 
 
@@ -137,8 +143,9 @@
 `loader` 的“正确使用边界”（核心）吗，可以用下面这条 **判断标准** 来决定“要不要用 loader”：
 
 > **没有这些数据，这个页面“压根没法渲染”？**
->  👉 是 → 用 `loader`
->  👉 否 → 不用 `loader`
+> 👉 是 → 用 `loader`
+> 👉 否 → 不用 `loader`
+> 👉 只有跳转逻辑的按钮 → 可用 `loader`，还有其他逻辑的按钮不建议使用`loader`，极易多次点击造成函数重复执行。
 
 ---
 
@@ -151,8 +158,16 @@
 
 ```typescript
 // 典型正确用法，锚定网页链接
-export const orderDetailLoader = async ({ params }) => {
-    return fetchOrderDetail(params.id)
+export const orderDetailLoader = ({ params }) => {
+    return new Promise((resolve, reject) => {
+        fetchOrderDetail(params.id)
+        .then(() => {
+            resolve({ data: {} })
+        })
+        .catch(() => {
+            resolve({})
+        })
+    })
 }
 ```
 
@@ -323,6 +338,30 @@ export default GlobalSkeletonLayout
 
 
 
+##### 1.3.3 loader的返回问题
+
+```typescript
+export const orderDetailLoader = ({ params }) => {
+    return new Promise((resolve, reject) => {
+        fetchOrderDetail(params.id)
+        .then(() => {
+            resolve({ data: {} })
+        })
+        .catch(() => {
+            resolve({})
+        })
+    })
+}
+```
+
+对于该 `loader`，`resolve`就会正常进入下一个页面，`reject` 或 `throw` 则会进入 `errorElement`。
+
+一般我们建议，不管接口成功还是失败，都进入下一页。哪怕请求失败，也应该返回 **空列表 + 提示**
+
+不建议返回 `new Promise(() => {})`；`loader` 永远 `pending`，路由被“卡死”，后续导航异常。
+
+
+
 
 ## 2.`action` 表单提交
 
@@ -431,3 +470,33 @@ lazy: async () => {
 errorElement: <ErrorPage />, // 错误处理
 ```
 
+
+
+## 6.`shouldRevalidate` 
+
+当路由发生变化时，要不要重新执行 `loader`，默认值：`true`
+
+由于默认会执行两次 `loader`，故而在 `loader` 的请求中，不建议使用 `message.loading()` 提示
+
+```typescript
+{
+    path: '/home';
+    element: <Home/>;
+    shouldRevalidate: () => true;
+}
+```
+
+
+
+### 触发 `Revalidate` 的场景统计（`loader` 要不要执行两次）
+
+1. 同路由（URL 看起来没变）仍然会触发 Revalidate 的情况
+   1. 父路由发生 `revalidate`。`navigate('/home')` 但是 `/home` 直接重定向到子路由 `/home/about` 这种情况下，`/home/about` 的 `loader` 会执行两次
+   2. 重复点击路由跳转按钮。多次触发 `navigate('/home')`， `loader` 会执行多次，但是路由只会跳转一次（`DataRoute`保护机制）
+   3. `HashRouter` 的 `hash` 变化（即使 path 相同）。`#/card/cardlist → #/card/cardlist`
+2. 不同路由（URL 发生变化）一定触发 Revalidate 的情况
+   1. `pathname` 变化。`/card/cardlist → /card/detail`
+   2. `params` 变化。`/detail/1 → /detail/2`
+   3. `search` 变化。`/list?page=1 → /list?page=2`
+
+除常见场景外，还有其他的一些场景，不一一列举。想要阻止就`shouldRevalidate: () => false;`。但是，不建议吧

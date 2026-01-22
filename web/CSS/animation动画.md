@@ -126,7 +126,9 @@ animation: fade 2s 1s infinite;
 
 ### 注意
 
-1. `css`无法实现从固定高度到auto的动画。故而`height: auto;`无法设置动画
+1. `display` 不可作为动画，如`display: none;`
+
+2. `css`无法实现从固定高度到auto的动画。故而`height: auto;`无法设置动画
 
    可以使用`grid-template-rows`解决
 
@@ -145,8 +147,7 @@ animation: fade 2s 1s infinite;
        grid-template-rows: 10px 1fr;
    }
    ```
-   
-   
+
 
 # transform
 

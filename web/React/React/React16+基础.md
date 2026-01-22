@@ -50,9 +50,36 @@ ReactDOM.render(VDOM,document.getElemewntById('test'))
 
 **jsx 是 js 的语法糖**
 
-- `React.ReactNode`用于表示任何可以作为React节点的类型。
+- `JSX.Element`用于表示 **一个** React元素，通常由JSX语法创建。
+
+  ```typescript
+  interface Element extends React.ReactElement<any, any> {}
+  ```
+  
+- `React.ReactNode`用于表示任何可以作为React节点的类型。可以支持 ==**多个元素**==
+
+  ```typescript
+  type ReactNode =
+          | ReactElement
+          | string
+          | number
+          | Iterable<ReactNode>
+          | ReactPortal
+          | boolean
+          | null
+          | undefined
+          | DO_NOT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_REACT_NODES[
+              keyof DO_NOT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_REACT_NODES
+          ];
+  ```
+
 - `React.FC`用于定义React函数组件，带有泛型参数指定props类型。
-- `JSX.Element`用于表示React元素，通常由JSX语法创建。
+
+  ```typescript
+  type FC<P = {}> = FunctionComponent<P>;
+  ```
+
+  
 
 
 
