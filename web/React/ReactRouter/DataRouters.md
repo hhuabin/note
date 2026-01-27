@@ -343,6 +343,7 @@ export default GlobalSkeletonLayout
 ```typescript
 export const orderDetailLoader = ({ params }) => {
     return new Promise((resolve, reject) => {
+        // Promise中一定要执行resolve或reject，不然loader也会一直处于 pending 状态
         fetchOrderDetail(params.id)
         .then(() => {
             resolve({ data: {} })
