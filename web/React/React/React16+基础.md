@@ -28,25 +28,25 @@ Node 全局变量 process
 
 - 使用 jsx 创建虚拟 dom
 
-```jsx
-//1.创建虚拟DOM
-const VDOM = (  /* 此处一定不要写引号，因为不是字符串 */
-    <h1 id="title">
-    	<span>Hello,React</span>
-    </h1>
-)
-//2.渲染虚拟DOM到页面
-ReactDOM.render(VDOM,document.getElementById('test'))
-```
+  ```typescript
+  //1.创建虚拟DOM
+  const VDOM = (  /* 此处一定不要写引号，因为不是字符串 */
+      <h1 id="title">
+      	<span>Hello,React</span>
+      </h1>
+  )
+  //2.渲染虚拟DOM到页面
+  ReactDOM.render(VDOM,document.getElementById('test'))
+  ```
 
 - 使用 js 创建虚拟 dom
 
-```javascript
-//1.创建虚拟DOM
-const VDOM = React.createElement('h1',{id:'title'},React.createElement('span',{},'Hello,React'))
-//2.渲染虚拟DOM到页面
-ReactDOM.render(VDOM,document.getElemewntById('test'))
-```
+  ```tsx
+  //1.创建虚拟DOM
+  const VDOM = React.createElement('h1',{id:'title'},React.createElement('span',{},'Hello,React'))
+  //2.渲染虚拟DOM到页面
+  ReactDOM.render(VDOM,document.getElemewntById('test'))
+  ```
 
 **jsx 是 js 的语法糖**
 

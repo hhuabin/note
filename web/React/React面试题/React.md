@@ -1,24 +1,20 @@
 # React比Vue好在哪里
 
+（背加粗字）
+
 1. **组件化和灵活性**
 
    **JSX 语法**：React 使用 JSX 语法，将 HTML 和 JavaScript 结合在一起，这种方式允许开发者更紧密地控制组件的结构和逻辑。JSX 提供了更强的灵活性和表达力
 
    **灵活的组件设计**：React 允许开发者以多种方式创建和管理组件，包括类组件和函数组件（以及 Hooks），这种灵活性适合各种开发风格和需求
 
-2. **虚拟 DOM 和性能优化**
-
-   **虚拟 DOM**：React 使用虚拟 DOM 来高效地更新界面，通过最小化对真实 DOM 的操作来提高性能。虽然 Vue 也使用虚拟 DOM，但 React 在这个方面的性能优化和成熟度得到了广泛认可
-
-   细粒度控制：React 的更新策略和细粒度控制使得开发者可以更精确地优化组件渲染和性能
-
-3. **Hooks 和功能增强**
+2. **Hooks 和功能增强**
 
    **Hooks API**：React 的 Hooks API 提供了一种更简洁的方式来管理**组件状态和副作用**，使得函数组件变得更加强大和灵活。Hooks 让组件逻辑更加可重用和易于测试
 
    **Context API**：React 的 Context API 提供了一种更简便的全局状态管理方式，避免了复杂的状态管理库
 
-4. **函数式组件**（优点）
+3. **函数是组件更简洁、生命周期函数更简单**（优点）
 
    **简洁性**：函数式组件通常比类组件更简洁，代码更易于阅读和维护。它们仅由一个函数组成，没有复杂的类结构和生命周期方法
 
@@ -27,6 +23,10 @@
    **生命周期简化**：函数式组件中的 `useEffect` Hook 可以代替类组件中的多个生命周期方法，如 `componentDidMount`、`componentDidUpdate` 和 `componentWillUnmount`。这使得处理副作用和生命周期更为简洁
 
    **类型支持**：在 TypeScript 中，函数式组件的类型定义通常比类组件更简单，类型推断更加直观
+
+4. **对大型复杂应用更友好**
+
+   状态变化时，**React 组件**整体重渲染，可控性更强，避免了Vue局部更新的隐士依赖问题（更新机制不通，Vue更精细，但是也会有隐士依赖问题）
 
 
 
@@ -90,7 +90,9 @@ React 框架的核心思想主要包括以下几个方面:
 
 # React 18 的响应式
 
-在 Vue 3 中，响应式系统是通过 JavaScript 的 `Proxy` 实现的。而在 React 18 中，响应式的实现则依赖于其==自身的状态管理和调度机制==，并没有使用 `Proxy`。React 的核心响应式原理主要依靠以下几个关键概念：
+在 Vue 3 中，响应式系统是通过 JavaScript 的 `Proxy` 实现的。响应式更精细，但是对大型项目不友好，隐式依赖问题明显
+
+而在 React 18 中，响应式的实现则依赖于其==自身的状态管理和调度机制==，并没有使用 `Proxy`。React 的核心响应式原理主要依靠以下几个关键概念：
 
 1. **状态管理 (`useState` 和 `useReducer`)**
 
@@ -142,33 +144,6 @@ React 框架的核心思想主要包括以下几个方面:
 6. **Context 和 Custom Hooks**
 
    React 提供了 `Context` 用于跨组件传递数据，而不需要通过层层传递 `props`。自定义 Hooks 可以复用状态逻辑。
-
-**示例**
-
-一个简单的 React 18 组件使用 `useState` 和 `useEffect` 的例子：
-
-```jsx
-import React, { useState, useEffect } from 'react';
-
-function Counter() {
-    const [count, setCount] = useState(0);
-
-    useEffect(() => {
-    	document.title = `Count: ${count}`;
-    }, [count]);
-
-    return (
-        <div>
-            <p>Count: {count}</p>
-            <button onClick={() => setCount(count + 1)}>Increment</button>
-        </div>
-    );
-}
-
-export default Counter;
-```
-
-在这个例子中，`useState` 用于管理组件的本地状态，`useEffect` 用于处理副作用，比如更新文档标题。
 
 **总结**
 
