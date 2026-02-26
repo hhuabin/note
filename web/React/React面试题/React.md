@@ -249,4 +249,4 @@ function Counter() {
 
 # React事件机制和普通HTML事件
 
-React 事件和普通 HTML 事件的主要区别在于，React 事件由 React 自己实现的**合成事件机制(SyntheticEvent)管理**，而不是原生的浏览器事件对象。这个合成事件是一种跨浏览器的包装器，能够为每一个事件提供一致的接口行为。React通过**事件委托和池化**(event delegation and pooling)技术,优化了事件处理的性能
+React 事件和普通 HTML 事件的主要区别在于，React 事件由 React 自己实现的**合成事件机制(SyntheticEvent)管理**，而不是原生的浏览器事件对象。这个合成事件是一种跨浏览器的包装器，能够为每一个事件提供一致的接口行为。React通过**事件委托和池化**(event delegation and pooling)技术，优化了事件处理的性能
