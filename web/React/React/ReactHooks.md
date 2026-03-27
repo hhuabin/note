@@ -524,7 +524,7 @@ type Props = {
 }
 
 // ✅推荐使用。使用默认推导类型 React.NamedExoticComponent<Props>
-const MemoizedComponent = memo((props: Props) => {
+const MemoizedComponent = memo(function MemoizedComponent(props: Props) {
     return <div>{data}</div>;
 }, (prevProps, nextProps) => {
     // 返回 true 表示 props 相等，不重新渲染
@@ -661,11 +661,11 @@ useImperativeHandle(ref, createHandle, dependencies?)
 
 在 react 中无法直接通过 `ref ` 获取**子组件实例**（在 vue 中可以）。**当父组件需要调用子组件的方法时**，可以使用 `forwardRef` +  `useImperativeHandle`
 
-`forwardRef` 是 React 提供的一个函数，用于向函数组件转发 `ref`。它允许你在函数组件中接收 `ref` 并将其转发给内部的子组件。
+`forwardRef` 是 React 提供的一个函数，用于向函数组件转发 `ref`。它允许你在函数组件中接收 `ref` 并将其转发给内部的子组件。这个 `ref` 是父组件的变量
 
-`useImperativeHandle` 接受三个参数：
+`useImperativeHandle` 则是给父组件传入的 `ref` 赋值；它接收三个参数：
 
-1. ref 对象，即父组件的`useRef<ChildComponentRef>(null)`
+1. `ref` 对象，即父组件传入的`useRef<ChildComponentRef>(null)`。来自父组件
 
 2. **工厂函数**：返回你想要暴露的 `ref` 的句柄，即给父组件的 `ref` 变量赋值
 
