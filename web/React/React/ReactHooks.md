@@ -422,7 +422,9 @@ const submitOrder = (
 
 ## 4. useReducer
 
-作用：`useReducer` 是 `useState` 的**替代方案**
+作用：`useReducer` 是 `useState` 的**替代方案**。更重要的是可以作为 `React16` 的 `getDerivedStateFromProps` 钩子的替代方案
+
+缺点：`reducer`定义在组件函数之外。不能调用组件中的其他函数
 
 `useReducer(reducer, initialArg, init?)`
 

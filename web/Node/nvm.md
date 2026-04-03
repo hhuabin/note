@@ -19,6 +19,11 @@ nvm alias 						 # 给不同的版本号添加别名
 nvm unalias					 	 # 删除已定义的别名
 nvm reinstall-packages <version> # 在当前版本node环境下，重新全局安装指定版本号的npm包
 nvm current 				     # 显示当前的node版本
+
+nvm node_mirror <url>            # 换源，默认是 https://nodejs.org/dist/
+nvm node_mirror                  # 置空，使用默认值 https://nodejs.org/dist/
+nvm node_mirror: https://npmmirror.com/mirrors/node/   # 国内源
+nvm npm_mirror: https://npmmirror.com/mirrors/npm/
 ```
 
 ```bash
