@@ -1,4 +1,10 @@
+# hooks 动态导入
+
+
+
 # ESM的import引入
+
+本质上是**把一个普通 JS 文件伪装成 ESM 模块来用**
 
 1. 下载`https://res.wx.qq.com/open/js/jweixin-1.6.0.js`到`assets`下：`/assets/js/`中
 

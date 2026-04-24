@@ -8,7 +8,7 @@
 
 **`unshift()`** 方法将指定元素添加到数组的开头，并**返回数组的新长度**
 
-# reduce
+# `reduce`
 
 将其结果汇总为单个返回值
 
@@ -28,7 +28,7 @@ arr.reduce(function(preview,current,index,arr){
 
 
 
-## 手写reduce
+## 手写 `reduce`
 
 ```javascript
 Array.prototype.myReduce = function(callback, initValue) {
@@ -58,7 +58,7 @@ arr.myReduce((prev, current, index) => {
 
 
 
-# forEach
+# `forEach`
 
 - 返回值：`undefined`
 
@@ -68,7 +68,7 @@ arr.myReduce((prev, current, index) => {
 
 
 
-# slice
+# `slice`
 
 `slice()` **不会修改原数组**，而是返回一个新数组
 
@@ -86,7 +86,7 @@ arr.myReduce((prev, current, index) => {
 
 
 
-# join
+# `join`
 
 **Array -> String**
 
@@ -98,13 +98,13 @@ arr.myReduce((prev, current, index) => {
 
 
 
-# filter
+# `filter`
 
 返回一个数组，里面包含符合条件的元素
 
 
 
-# map
+# `map`
 
 一个新数组，每个元素都是回调函数的返回值
 
@@ -135,7 +135,7 @@ map(callbackFn, thisArg)
 
 
 
-# find
+# `find`
 
 用于查找满足指定测试函数的第一个元素。如果找到了，它返回数组中**第一个**满足测试函数的元素的值；否则，返回 `undefined`
 
@@ -161,7 +161,7 @@ console.log(even); // 输出: 2，因为它是数组中第一个偶数
 
 
 
-# match
+# `match`
 
 `match()`方法检索字符串与[正则表达式](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_expressions)进行匹配的结果
 
@@ -183,7 +183,7 @@ console.log(found);
 
 
 
-# splice
+# `splice`
 
 用于**修改数组**，可以实现删除、插入和替换数组中的元素，**返回一个包含被删除元素的数组**（如果有）。**原始数组将会被修改**。
 
@@ -199,7 +199,7 @@ console.log(found);
 
 
 
-# sort
+# `sort`
 
 `Array.prototype.sort()`
 
@@ -221,7 +221,7 @@ console.log(found);
 
 
 
-# indexOf
+# `indexOf`
 
 ```javascript
 indexOf(searchElement)
@@ -235,6 +235,20 @@ indexOf(searchElement, [fromIndex])
   - 如果 `fromIndex >= array.length`，数组不会继续搜索并返回 `-1`
   - 元素的位置返回值不会因为`fromIndex`改变而改变
 - **返回值**：首个被找到的元素在数组中的索引位置；若没有找到则返回 **-1**
+
+
+
+# `every`
+
+**`every()`** 方法测试一个数组内的所有元素是否都能通过指定函数的测试。它返回一个布尔值
+
+```javascript
+const isBelowThreshold = (currentValue) => currentValue < 40
+
+const array1 = [1, 30, 39, 29, 10, 13]
+
+console.log(array1.every(isBelowThreshold))     // t'g'r
+```
 
 
 
