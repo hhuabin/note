@@ -15,3 +15,6 @@ image {
 > 相对路径不行就换绝对路径
 >
 > PS：`uniapp`的热更新很烂，看不见`svg`就重启，实在不行就删`unpackage`文件夹
+>
+> 超过`40k`的图片只能使用`image`引入。微信小程序的`image`比`background-image`性能更好
+
