@@ -2,6 +2,8 @@
 
 [Maven官网](https://maven.apache.org "Maven")
 
+[历史版本下载](https://archive.apache.org/dist/maven/maven-3/ "历史版本Maven") 下载 `apache-maven-3.6.3-bin.zip`
+
 [Maven仓库](https://mvnrepository.com "mvnrepository")
 
 
@@ -46,7 +48,7 @@
    </profile>
    ```
 
-3. 改变`idea`的Maven配置，配置方式与步骤2一样
+3. 改变`idea`的 `Maven` 配置，配置方式与步骤2一样
 
    `D:\Software\JetBrains\IntelliJ IDEA 2021.1.3\plugins\maven\lib\maven3\conf\settings.xml`
 
