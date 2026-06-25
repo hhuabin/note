@@ -4,6 +4,14 @@
 
 
 
+# Xshell
+
+[Xshell个人版下载](https://www.xshell.com/zh/free-for-home-school/ "Xshell个人版" )
+
+[Xshell下载](https://www.xshell.com/zh/all-downloads/ "Xshell下载")
+
+
+
 # CentOS
 
 [CentOS官网下载](https://www.centos.org/download/ "CentOS下载")

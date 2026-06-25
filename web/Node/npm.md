@@ -133,6 +133,14 @@ npm version major --no-git-tag-version
 
 
 
+# 增加内存启动
+
+```bash
+set NODE_OPTIONS=--max_old_space_size=4096 && npm run dev
+```
+
+
+
 # Vue
 
 **生产环境打包命令**
