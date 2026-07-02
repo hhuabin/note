@@ -36,7 +36,7 @@ server {
 
 # 访问 `/projectname` 得到前端项目
 
-1. 直接重定向至项目的端口号
+1. 直接重定向至项目的端口号（访问`/`）
 
    ```nginx
    server {
@@ -49,7 +49,7 @@ server {
    }
    ```
 
-2. 对于多个项目部署在同一个端口号上的情况（例如默认的80端口）
+2. 对于**多个项目部署在同一个端口号**上的情况（例如默认的80端口）
 
    nginx的配置
 
@@ -58,33 +58,39 @@ server {
        listen       80;
        server_name  localhost;
    
-       location /projectname {
-           root /opt;       # 项目在linux中的位置(/opt/projectname/index.html)
+       location /projectname1 {
+           root /opt;       # 项目在linux中的位置(/opt/projectname1/index.html)
+           try_files $uri $uri/ /index.html;
+   		index index.html;
+       }
+   
+       location /projectname2 {
+           root /opt;       # 项目在linux中的位置(/opt/projectname2/index.html)
            try_files $uri $uri/ /index.html;
    		index index.html;
        }
    }
    ```
-
+   
    此时前端同样需要做出一定的调整（此处示例为vue3 + vite）
-
+   
    1. `vite.config.ts`
-
+   
       ```ts
       export default defineConfig({
-          base: "/projectname/",     // 此处的 projectname 需要和上面保持一致
+          base: "/projectname1/",     // 此处的 projectname1 需要和上面保持一致
           build: {
-              outDir: 'dist/projectname',   // 此处可以不配置，但是为了方便本地运行，建议加上
+              outDir: 'dist/projectname1',   // 此处可以不配置，但是为了方便本地运行，建议加上
           }
       })
       ```
-
+   
    2. `router.js`
 
       ```ts
       const router = createRouter({
-          history: createWebHistory(import.meta.env.BASE_URL),  // import.meta.env.BASE_URL = /projectname/
+          history: createWebHistory(import.meta.env.BASE_URL),  // import.meta.env.BASE_URL = /projectname1/
       })
       ```
-
+   
       

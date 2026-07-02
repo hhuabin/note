@@ -179,7 +179,7 @@ location {
    ```nginx
    server {
    	location / {
-           proxy_pass bilibili.com;
+           proxy_pass bilibili.com;        # 不是 bilibili.com/
            # proxy_pass 192.168.0.1:80;
            # root   /bin2;
            # index  index.html index.htm;
