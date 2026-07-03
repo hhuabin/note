@@ -38,6 +38,8 @@ npm -v
 
 
 
+# 命令
+
 
 **初始化项目**
 
@@ -128,14 +130,37 @@ npm version major --no-git-tag-version
 | `--no-git-tag-version` | 禁止自动创建 Git commit 和 tag                   |
 
 ```typescript
-"major": "npm version major --no-git-tag-version",
+# package.json 快捷设置
+"major": "yarn version --major --no-git-tag-version",
+"minor": "yarn version --minor --no-git-tag-version",
+"patch": "yarn version --patch --no-git-tag-version"
 ```
 
 
 
 # 增加内存启动
 
+### 永久写法
+
 ```bash
+# 在命令行配置一次即可
+setx NODE_OPTIONS "--max_old_space_size=4096"           # 设置运行内存为 4G
+```
+
+```bash
+# 修改项目启动脚本，写进 package.json 的写法
+set NODE_OPTIONS=--max_old_space_size=4096 && vite      # 设置运行内存为 4G
+```
+
+
+
+### 一次性写法
+
+```shell
+# PowerShell 写法 （VScode使用PowerShell）
+$env:NODE_OPTIONS="--max_old_space_size=4096"; npm run dev
+
+# cmd 命令行写法
 set NODE_OPTIONS=--max_old_space_size=4096 && npm run dev
 ```
 
