@@ -143,8 +143,14 @@ npm version major --no-git-tag-version
 ### 永久写法
 
 ```bash
-# 在命令行配置一次即可
-setx NODE_OPTIONS "--max_old_space_size=4096"           # 设置运行内存为 4G
+# 在命令行配置一次即可(cmd)
+setx NODE_OPTIONS --max_old_space_size=4096             # 设置运行内存为 4G
+setx NODE_OPTIONS "--max-old-space-size=4096"           # PowerShell
+
+# 查看当前内存（cmd）
+echo %NODE_OPTIONS%           # 输出 --max-old-space-size=4096
+# PowerShell
+$env:NODE_OPTIONS             # 输出 --max-old-space-size=4096
 ```
 
 ```bash
