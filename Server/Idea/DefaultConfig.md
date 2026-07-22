@@ -1,3 +1,7 @@
+[Idea下载](https://www.jetbrains.com.cn/idea/download/other/ "Idea旧版下载")
+
+
+
 # 内存分配
 
 安装目录下的`\bin\idea64.exe.vmoptions`
@@ -11,6 +15,10 @@
 # 代码缓存区
 -XX:ReservedCodeCacheSize=1024m
 ```
+
+如果项目还是跑不起来，需要增加构建内存
+
+`File | Settings | Build, Execution, Deployment | Compiler`，把 `Shared heap size` 配成 **4096**（根据需要来就行）
 
 
 
