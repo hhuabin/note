@@ -176,15 +176,15 @@ defineOptions({
 
    ```javascript
    defineOptions({
-   	name: 'MyComponent'
-   });
+       name: 'MyComponent',
+   })
    ```
 
 2. **`inheritAttrs`**: 决定组件是否会自动继承父组件传递的 `attrs`（非 `props` 属性）。
 
    ```javascript
    defineOptions({
-   	inheritAttrs: false
+   	inheritAttrs: false,
    });
    ```
 
@@ -192,7 +192,7 @@ defineOptions({
 
    ```javascript
    defineOptions({
-   	emits: ['update', 'submit']
+       emits: ['update', 'submit'],
    });
    ```
 
@@ -201,22 +201,22 @@ defineOptions({
    ```javascript
    defineOptions({
        components: { MyButton },
-       directives: { myDirective }
-   });
+       directives: { myDirective },
+   })
    ```
 
 ### 完整示例
 
 ```vue
 <script setup>
-import MyButton from './MyButton.vue';
+import MyButton from './MyButton.vue'
 
 defineOptions({
-  name: 'FormComponent',
-  inheritAttrs: false, // 不自动继承父组件的attrs
-  components: { MyButton },
-  emits: ['submit', 'reset']
-});
+    name: 'FormComponent',
+    inheritAttrs: false, // 不自动继承父组件的attrs
+    components: { MyButton },
+    emits: ['submit', 'reset'],
+})
 </script>
 
 <template>

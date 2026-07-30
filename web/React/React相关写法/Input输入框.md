@@ -159,3 +159,83 @@ return (
     ></input>
 )
 ```
+
+
+
+# 搜索通用 `input`
+
+```tsx
+import { useRef, useState,
+    type ChangeEvent, type CompositionEvent, type FormEvent,
+} from 'react'
+
+import { useDebounce } from '@/hooks/utils/useDebounceThrottle'
+
+const Test: React.FC = () => {
+    const [keyword, setKeyword] = useState('')
+    // 中文输入法控制
+    const isComposingRef = useRef(false)
+
+    // 搜索函数
+    const handleSearch = (value: string) => {
+        const normalizedKeyword = value.trim()
+        // 有需要更改为api接口即可
+        setTimeout(() => {
+            console.log('搜索：', normalizedKeyword)
+        })
+    }
+
+    const [debouncedSearch, cancelDebouncedSearch] = useDebounce(handleSearch, 200)
+
+    // 输入防抖触发搜索事件
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value
+
+        setKeyword(value)
+        if (!isComposingRef.current) debouncedSearch(value)
+    }
+
+    // 处理中文输入法
+    const handleCompositionStart = () => {
+        isComposingRef.current = true
+        cancelDebouncedSearch()
+    }
+
+    const handleCompositionEnd = (event: CompositionEvent<HTMLInputElement>) => {
+        isComposingRef.current = false
+        debouncedSearch(event.currentTarget.value)
+    }
+
+    // enter 触发直接搜索
+    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        if (isComposingRef.current) return
+
+        // 取消输入防抖的搜索，直接搜索
+        cancelDebouncedSearch()
+        handleSearch(keyword)
+    }
+
+    return (
+        // form 会处理手机和PC端的 Enter 事件触发 onSubmit 事件，不需要再特殊定义
+        <form className="search-form" role="search" onSubmit={handleSubmit}>
+            <input
+                id="search-input"
+                type="search"
+                value={keyword}
+                placeholder="请输入关键词"
+                autoComplete="off"
+                enterKeyHint="search"
+                onChange={handleChange}
+                onCompositionStart={handleCompositionStart}
+                onCompositionEnd={handleCompositionEnd}
+            />
+            {/* <button type="submit">搜索</button> */}
+        </form>
+    )
+}
+
+export default Test
+
+```
+
