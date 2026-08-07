@@ -1,6 +1,6 @@
 # 配置文件
 
-SpringBoot配置文件的加载顺序
+`SpringBoot` 配置文件的加载顺序
 
 1.  application.properfiles
 2.  application.yml
@@ -10,7 +10,7 @@ SpringBoot配置文件的加载顺序
 
 # 依赖
 
-- poml 文件的父依赖的父依赖中管理了官方依赖的仲裁版本机制。
+- `poml` 文件的父依赖的父依赖中管理了官方依赖的仲裁版本机制。
 
 - 如果官方没有版本仲裁，需要自己指定依赖版本。
 
@@ -91,7 +91,7 @@ logging.file.name=spring.log
 
 # 配置文件的优先级
 
-SpringBoot 应用启动时会自动寻找application.properties和application.yaml位置，进行加载。顺序如下：（**后面覆盖前面**）
+`SpringBoot` 应用启动时会自动寻找 `application.properties` 和 `application.yaml` 位置，进行加载。顺序如下：（**后面覆盖前面**）
 
 1. 类路径: 内部
    1. 类根路径
