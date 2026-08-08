@@ -1,4 +1,6 @@
-[Idea下载](https://www.jetbrains.com.cn/idea/download/other/ "Idea旧版下载")
+[IntelliJ IDEA](https://www.jetbrains.com/idea/ "IntelliJ IDEA官网") 下载 `.exe` 文件
+
+[IntelliJ IDEA历史版本下载链接](https://www.jetbrains.com/idea/download/other "历史版本")
 
 
 
@@ -30,8 +32,6 @@
 
    <img src="./Images/encode.jpg" alt="picture" style="zoom: 50%;" />
 
-2. 
-
 
 
 # 注释
@@ -52,7 +52,3 @@
     * @date ${YEAR}-${MONTH}-${DAY} ${TIME}
     */
    ```
-
-   
-
-3. 
