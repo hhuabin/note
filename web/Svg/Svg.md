@@ -38,6 +38,22 @@ SVG（Scalable Vector Graphics）可缩放矢量图形
 
 
 
+### `currentColor`
+
+`currentColor` 需要直接把svg写入 `html` 才会生效；通过`<img>`、`background-image`的方式引入是不生效的
+
+```html
+<div style="color: red">
+    <svg viewBox="0 0 24 24">
+        <path fill="currentColor" d="..." />
+    </svg>
+</div>
+```
+
+
+
+
+
 ## rect 矩形
 
 ```xml
