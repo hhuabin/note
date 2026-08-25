@@ -1,16 +1,16 @@
 # 原理
 
-**参考即可，不全是 popstate 的功劳**
+**参考即可，不全是 `popstate` 的功劳**
 
-window.history 的方法：
+`window.history` 的方法：
 
-- **back**
+- `back`
 
-- **forward**
+- `forward`
 
-- **go**
+- `go`
 
-- **pushState**：**`history.pushState()`** 方法向浏览器的会话历史栈增加了一个条目
+- `pushState`：**`history.pushState()`** 方法向浏览器的会话历史栈增加了一个条目
 
   ```javascript
   pushState(state, unused, url)

@@ -1,0 +1,81 @@
+| 命令                    | 用途             |
+| ----------------------- | ---------------- |
+| `npx jest`              | 运行全部测试     |
+| `npx jest xxx.test.js`  | 运行指定测试文件 |
+| `npx jest --watch`      | 监听模式         |
+| `npx jest -t "xxx"`     | 运行指定测试     |
+| `npx jest --coverage`   | 查看覆盖率       |
+| `npx jest --verbose`    | 显示详细测试结果 |
+| `npx jest --clearCache` | 清理 Jest 缓存   |
+| `npx jest --version`    | 查看版本         |
+
+
+
+# `jest`
+
+1. 运行所有测试
+
+    ```bash
+    npx jest
+    ```
+
+2. 指定测试文件
+
+    ```bash
+    npx jest 文件（可以不用带目录，以项目为当前目录）
+    
+    npx jest removeUrlParams.test.ts
+    ```
+
+3. 监听模式
+
+    ```bash
+    npx jest --watch
+    ```
+
+4. 监听模式
+
+    ```bash
+    # 开发时非常常用
+    npx jest --watch
+    
+    npx jest --watchAll
+    
+    # 开发中更多
+    npm test -- --watch
+    ```
+
+5. 查看测试覆盖率
+
+    ```bash
+    npx jest --coverage
+    ```
+
+6. 只运行某个测试文件 + 覆盖率
+
+    ```bash
+    npx jest user.test.js --coverage
+    ```
+
+7. 显示详细测试结果
+
+    ```bash
+    npx jest --verbose
+    ```
+
+8. 清除 Jest Cache
+
+    ```bash
+    npx jest --clearCache
+    ```
+
+9. 查看 Jest 版本
+
+    ```bash
+    npx jest --version
+    
+    npm list jest
+    ```
+
+    
+
