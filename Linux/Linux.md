@@ -2,6 +2,11 @@
 
 [Vmware官网下载](https://www.vmware.com/products/desktop-hypervisor/workstation-and-fusion "Vmware下载")
 
+1. 搜索 **VMware Workstation**
+2. 选择最新版本的 **VMware Workstation Pro for Windows**
+3. 同意 Terms and Conditions
+4. 填写基本信息后下载
+
 
 
 # Xshell
@@ -14,7 +19,7 @@
 
 # CentOS
 
-[CentOS官网下载](https://www.centos.org/download/ "CentOS下载")
+[CentOS官网下载](https://www.centos.org/download/ "CentOS下载") 下载 `x86_64` `iso` 镜像
 
 
 
