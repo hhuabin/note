@@ -12,41 +12,177 @@
 
 ## 1.`router.tsx`自定义路由
 
-```tsx
-import { redirect, Navigate, type RouteObject } from 'react-router-dom'
+1. `React18`终极版本：使用 `<RootRouteLayout />` 做路由守卫，并且使用 `<AuthGuard />` 组件做登录鉴权
 
-export const routes: RouteObject[] = [
-    {
-        path: '/',
-        lazy: async () => {
-            const Home = (await import('@/pages/Home/Home')).default
-            // const RedirectCom = () => (<><Home/><Navigate to="/home" replace /></>)   // 重定向
-            return { Component: Home }
+    ```tsx
+    /**
+     * @Author: bin
+     * @Date: 2025-04-16 14:12:24
+     * @LastEditors: bin
+     * @LastEditTime: 2026-05-13 11:15:35
+     */
+    import { redirect, Navigate } from 'react-router-dom'
+    import type { RouteConfig } from './types'
+    
+    // 根组件，无需懒加载
+    import RootRouteLayout from '@/layout/RootRouteLayout'
+    // 错误组件，无需懒加载
+    import ErrorElement from '@/components/ErrorElement/ErrorElement'
+    
+    import { mobileRoute } from './mobileRoute'
+    
+    export const routes: RouteConfig[] = [
+        {
+            path: '/',
+            Component: RootRouteLayout,
+            errorElement: <ErrorElement />,        // 统一错误处理
+            children: [
+                {
+                    // index: true,         // index 不能嵌套，children 中有 index 即可
+                    lazy: async () => {
+                        const { default: Home } = await import('@/pages/Home/Home')
+                        // const RedirectCom = () => (<><Home/><Navigate to='/login' replace /></>)   // 重定向(不可重定向至子路由，子路由使用 index)
+                        return { Component: Home }
+                    },
+                    children: [
+                        {
+                            index: true,
+                            element: <Navigate to='introduce' replace />,
+                        },
+                        {
+                            path: 'introduce',
+                            lazy: async () => {
+                                const { default: Introduce } = await import('@/pages/Introduce/Introduce')
+                                return { Component: Introduce }
+                            },
+                            handle: {},
+                        },
+                    ],
+                },
+                {
+                    // 切记该路由绝对不能放进 鉴权路由下
+                    path: 'login',
+                    lazy: async () => {
+                        const { default: Login } = await import('@/pages/Login/Login')
+                        return { Component: Login }
+                    },
+                    handle: {
+                        title: 'login',
+                    },
+                },
+                {
+                    // 需要登录的路由放进鉴权路由下
+                    lazy: async () => {
+                        const { default: AuthGuard } = await import('@/router/guard/AuthGuard')
+                        return { Component: AuthGuard }
+                    },
+                    children: [
+                        {
+                            path: 'cssmotion',
+                            lazy: async () => {
+                                const { default: CSSMotion } = await import('@/pages/CSSMotion/CSSMotion')
+                                return { Component: CSSMotion }
+                            },
+                            handle: {
+                                title: 'cssmotion',
+                            },
+                        },
+                    ],
+                },
+            ],
         },
-        handle: {
-            auth: false,
+        {
+            path: '*',
+            lazy: async () => {
+                const { default: NotFound } = await import('@/pages/NotFound/NotFound')
+                return { Component: NotFound }
+            },
         },
-    },
-    {
-        path: '*',
-        lazy: async () => {
-            const NotFound = (await import('@/pages/NotFound/NotFound')).default
-            return { Component: NotFound }
-        },
-        handle: {
-            title: 'notfound',
-            auth: false,
-        },
-    },
-]
+    ]
+    
+    ```
 
-```
+2. `loader`版本，过期了
+
+    ```tsx
+    import { redirect, Navigate, type RouteObject } from 'react-router-dom'
+    
+    export const routes: RouteObject[] = [
+        {
+            path: '/',
+            errorElement: <ErrorElement />,        // 统一错误处理
+            lazy: async () => {
+                const Home = (await import('@/pages/Home/Home')).default
+                // const RedirectCom = () => (<><Home/><Navigate to="/home" replace /></>)   // 重定向
+                return { Component: Home }
+            },
+            handle: {
+                auth: false,
+            },
+        },
+        {
+            path: '*',
+            lazy: async () => {
+                const NotFound = (await import('@/pages/NotFound/NotFound')).default
+                return { Component: NotFound }
+            },
+            handle: {
+                title: 'notfound',
+                auth: false,
+            },
+        },
+    ]
+    
+    ```
 
 
 
 ## 2.`index.tsx`制作 App 路由组件
 
 把`AppRouter`组件暴露给`App.tsx`使用
+
+### 使用 `<RootRouteLayout />` 做路由守卫
+
+使用 `<AuthGuard />` 组件做登录鉴权
+
+```tsx
+/**
+ * @Author: bin
+ * @Date: 2025-04-16 14:12:24
+ * @LastEditors: bin
+ * @LastEditTime: 2026-04-15 17:54:33
+ */
+import { createHashRouter, RouterProvider } from 'react-router-dom'
+
+import { routes } from './mainRoutes'
+
+import Loading from '@/components/Loading/Loading'
+
+// 一定要这个赋值步骤，避免重复创建 Router 实例
+// eslint-disable-next-line react-refresh/only-export-components
+export const router = createHashRouter(
+    routes,
+    {
+        basename: '/',
+    },
+)
+
+/**
+ * 禁止使用<RouterProvider router={createHashRouter(routes)}></RouterProvider>写法
+ * AppRouter渲染时都会调用 createHashRouter(routes)，创建一个新的 Router 实例
+ * 导致 React Router 的内部状态（如导航历史、加载状态等）被重置，进而引发页面闪烁、导航失败等问题
+ */
+const AppRouter: React.FC = () => (
+    <RouterProvider router={router} fallbackElement={<Loading />}></RouterProvider>
+)
+
+export default AppRouter
+
+```
+
+
+
+### 使用公共 `loader` 做路由守卫
 
 ```tsx
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -217,7 +353,7 @@ export default App
 
 
 
-## 4.main.tsx根文件
+## 4.`main.tsx` 根文件
 
 ```tsx
 import React from 'react'
