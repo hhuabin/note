@@ -9,14 +9,6 @@
 
 
 
-# Xshell
-
-[Xshell个人版下载](https://www.xshell.com/zh/free-for-home-school/ "Xshell个人版" )
-
-[Xshell下载](https://www.xshell.com/zh/all-downloads/ "Xshell下载")
-
-
-
 # CentOS
 
 [CentOS官网下载](https://www.centos.org/download/ "CentOS下载") 下载 `x86_64` `iso` 镜像
@@ -73,6 +65,37 @@ ip route
 
 
 
+# Xshell
+
+[Xshell、Xftp个人版下载](https://www.xshell.com/zh/free-for-home-school/ "Xshell个人版" )
+
+[Xshell、Xftp下载](https://www.xshell.com/zh/all-downloads/ "Xshell下载")
+
+1. 查看虚拟机 `IP` 地址
+
+    ```shell
+    ip addr
+    ```
+
+2. 看 SSH 服务有没有启动
+
+    ```shell
+    systemctl status sshd          # Active: active (running) 是运行
+    ```
+
+3. 没有启动 `SSH`，可以启动
+
+    ```shell
+    systemctl start sshd
+    
+    # 设置开机自启动
+    systemctl enable sshd
+    ```
+
+4. 使用 ip 地址，默认端口号：22 连接
+
+
+
 # Linux `/` 目录结构
 
 ```mermaid
@@ -112,3 +135,54 @@ graph TB
 
 ```
 
+
+
+# 克隆 `Linux`
+
+克隆虚拟机操作（`CentOS 10`）
+
+1. mac 地址
+
+    在 设置(Settings) -> 网络适配器(Network Adapter) -> 高级 中修改
+
+2. 主机名
+
+    ```shell
+    sudo vim /etc/hostname
+    ```
+
+3. ip 地址
+
+    动态 ip 可以不管。
+
+    ```shell
+    # 查看 ip
+    ip addr
+    
+    sudo nmcli connection modify ens33 ipv4.addresses 192.168.11.129/24    # 128 + 1 = 129 修改后面的数字即可
+    
+    # 重新启用网络连接
+    sudo nmcli connection down ens33
+    sudo nmcli connection up ens33
+    
+    # 再次查看ip
+    ip addr
+    ```
+
+4. UUID
+
+    ```shell
+    # 查看 UUID
+    sudo nmcli connection show            # 记录下 UUID ；如 ba6946fb-bfd1-3c9b-b1a4-7b87a37b5448
+    
+    # 删除连接
+    sudo nmcli connection delete ens33
+    
+    # 重新创建
+    sudo nmcli connection add type ethernet ifname ens33 con-name ens33
+    
+    # 再查看，就能看到新的 UUID 了
+    sudo nmcli connection show 
+    ```
+
+    
