@@ -28,11 +28,57 @@ npm install pinia
    app.mount('#app')
    ```
 
-2. pinia 定义
+2. `pinia` 定义
 
-   - defineStore(string, object)
-     - string：Store 的唯一 ID
+   - `defineStore(string, object)`
+     - `string`：`Store` 的唯一 `ID`
      - `defineStore()` 返回值：最好使用 store 的名字，同时以 `use` 开头且以 `Store` 结尾
+     - `setup` 写法利用 Composition API 的功能，提供了更大的灵活性和模块化能力
+
+   ```typescript
+   export const useMainStore = defineStore('main', () => {
+       const count = ref(0);
+       const user = ref(null);
+       
+       const isLogin = computed(() => !!user)
+   
+       function increment() {
+           count.value++;
+       }
+   
+       function setUser(userData) {
+           user.value = userData;
+       }
+   
+       return { count, user, increment, setUser };
+   });
+   ```
+
+3. 在组件中使用 `pinia`
+
+   为了从 store` 中提取属性时保持其响应性，你需要使用 `storeToRefs()`。
+
+   ```typescript
+   import { useMainStore } from '@/store/index'
+   import { storeToRefs } from 'pinia'
+   
+   const store = useMainStore()
+   
+   // 下面的代码同样会提取那些来自插件的属性的响应式引用
+   // 但是会跳过所有的 action 或者非响应式（非 ref 或者 非 reactive）的属性
+   const { count, isLogin } = storeToRefs(store)
+   // 名为 increment 的 action 可以被解构
+   const { increment } = store
+   
+   // ❌ 下面这部分代码不会生效，因为它的响应式被破坏了
+   // const { name, isLogin } = store
+   ```
+
+
+
+# State
+
+1. `state` 写法
 
    ```typescript
    import { defineStore } from "pinia";
@@ -61,28 +107,7 @@ npm install pinia
    
    ```
 
-3. 在组件中使用 pinia
-
-   ```typescript
-   import { useMainStore } from '@/store/index'
-   
-   export default defineComponent({
-   	setup() {
-           const store = useMainStore()
-           
-           const phone = store.phone
-           const isLogin = store.isLogin
-           store.saveLoginInfo("18402079799")
-           store.removeLoginInfo()
-       }
-   })
-   ```
-
-
-
-# State
-
-1. **重置 state**
+2. **重置 state**
 
    ```typescript
    const store = useStore()
@@ -106,7 +131,7 @@ npm install pinia
    })
    ```
 
-2. **订阅 state**
+3. **订阅 state**
 
    1. 默认情况下，*state subscription* 会被绑定到添加它们的组件上 (如果 store 在组件的 `setup()` 里面)。这意味着，当该组件被卸载时，它们将被自动删除。如果你想在组件卸载后依旧保留它们，请将 `{ detached: true }` 作为第二个参数，以将 *state subscription* 从当前组件中*分离*：
 
@@ -240,31 +265,4 @@ router.beforeEach((to) => {
 })
 ```
 
-
-
-# Pinia 的类似于 `setup` 的写法
-
-**复杂项目**：对于有复杂状态逻辑和需要灵活组合的项目，`setup` 写法利用 Composition API 的功能，提供了更大的灵活性和模块化能力
-
-更好地支持 TypeScript 的类型推导
-
-```typescript
-import { defineStore } from 'pinia';
-import { ref } from 'vue';
-
-export const useStore = defineStore('main', () => {
-    const count = ref(0);
-    const user = ref(null);
-
-    function increment() {
-        count.value++;
-    }
-
-    function setUser(userData) {
-        user.value = userData;
-    }
-
-    return { count, user, increment, setUser };
-});
-```
 
