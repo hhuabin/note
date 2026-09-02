@@ -2,9 +2,9 @@
 
 `SpringBoot` 配置文件的加载顺序
 
-1.  application.properfiles
-2.  application.yml
-3.  application.yaml
+1.  `application.properfiles`
+2.  `application.yml`
+3.  `application.yaml`
 
 
 
@@ -23,11 +23,11 @@
 默认输出格式：
 
 - 时间和日期：毫秒级精度
-- 日志级别：ERROR, WARN, INFO, DEBUG, or TRACE.
+- 日志级别：`ERROR`, `WARN`, `INFO`, `DEBUG`, `or TRACE`
 - 进程 ID
 - ---： 消息分割符
 - 线程名： 使用[]包含
-- Logger 名： 通常是产生日志的**类名**
+- `Logger` 名： 通常是产生日志的**类名**
 - 消息： 日志记录的内容
 
 

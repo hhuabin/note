@@ -18,9 +18,9 @@
    </dependency>
    ```
 
-2. Mapper增强
+2. `Mapper` 增强
 
-   继承`BaseMapper<>`接口，就拥有了 CURD 能力
+   继承`BaseMapper<>`接口，就拥有了 `CURD` 能力
 
    ```java
    @Mapper
@@ -93,7 +93,7 @@ list.forEach(System.out::println);
 
 
 
-# UpdateWrapper
+# `UpdateWrapper`
 
 ```java
 UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
@@ -101,7 +101,7 @@ UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
 
 
 
-# LambdaQueryWrapper, LambdaUpdateWrapper
+# `LambdaQueryWrapper`、`LambdaUpdateWrapper`
 
 ```java
 // 等价示例：
@@ -119,13 +119,9 @@ lambdaUpdate().eq(Entity::getId, value).remove();
 
 
 
-## @TableName
+## 表名 `@TableName`
 
-指定数据库表名
-
----
-
-默认是是实体类名去掉大写，如 User -> user
+指定数据库表名：默认是是实体类名去掉大写，如 User -> user
 
 也可以使用指定名字
 
@@ -145,7 +141,7 @@ mybatis-plus:
 
 
 
-## @TableId
+## 主键 `@TableId`
 
 标识实体类中的主键字段
 
@@ -157,26 +153,24 @@ public @interface TableId {
 }
 ```
 
-- **value**：指定数据库表中与 Java 实体类中的字段对应的列名
+- **`value`**：指定数据库表中与 Java 实体类中的字段对应的列名
 
   ```java
   @TableId(value = "user_id")
   private Long id;
   ```
 
-  指定数据库表中主键列的名称为 "user_id"
+  指定数据库表中主键列的名称为 `user_id`
 
-- **type**：指定主键生成策略的类型
+- `type`：指定主键生成策略的类型
 
-  | 值                     | 描述                           |
-  | ---------------------- | ------------------------------ |
-  | **IdType.AUTO**        | 数据库 ID 自增                 |
-  | **IdType.NONE**        | 无状态，该类型为未设置主键类型 |
-  | **IdType.INPUT**       | insert 前自行 set 主键值       |
-  | **IdType.ASSIGN_ID**   | 分配 ID(主键类型为 Number      |
-  | **IdType.ASSIGN_UUID** | 分配 UUID,主键类型为 String    |
-
----
+  | 值                   | 描述                            |
+  | -------------------- | ------------------------------- |
+  | `IdType.AUTO`        | 数据库 `ID` 自增                |
+  | `IdType.NONE`        | 无状态，该类型为未设置主键类型  |
+  | `IdType.INPUT`       | `insert` 前自行 `set` 主键值    |
+  | `IdType.ASSIGN_ID`   | 分配 `ID` 主键类型为 `Number`   |
+  | `IdType.ASSIGN_UUID` | 分配 `UUID` 主键类型为 `String` |
 
 也可以在全局配置文件中设置主键值
 
@@ -189,16 +183,16 @@ mybatis-plus:
 
 
 
-## @TableField
+## 字段名 `@TableField`
 
 字段注解（非主键）
 
-| 属性   | 描述                 |
-| ------ | -------------------- |
-| value  | 数据库字段名         |
-| exist  | 是否为数据库表字段   |
-| fill   | 字段自动填充策略     |
-| select | 是否进行 select 查询 |
+| 属性     | 描述                 |
+| -------- | -------------------- |
+| `value`  | 数据库字段名         |
+| `exist`  | 是否为数据库表字段   |
+| `fill`   | 字段自动填充策略     |
+| `select` | 是否进行 select 查询 |
 
 ```java
 // 插入和更新时填充字段
@@ -208,11 +202,11 @@ private LocalDateTime updateTime;
 
 
 
-## @TableLogic
+## 逻辑删除 `@TableLogic`
 
 删除分为：逻辑删除、逻辑删除
 
-@TableLogic注明为逻辑删除
+`@TableLogic` 注明为逻辑删除
 
 ```java
 // 当前列默认0未删除，1已删除
@@ -223,7 +217,7 @@ private Integer deleted
 
 
 
-## @Version乐观锁
+## 乐观锁 `@Version`
 
 乐观锁字段添加`@Version`注解
 
