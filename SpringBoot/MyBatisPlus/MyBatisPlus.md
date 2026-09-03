@@ -1,4 +1,4 @@
-# MyBatisPlus
+# `MyBatisPlus`
 
 [Mybatis官网](https://mybatis.org/mybatis-3/zh_CN/index.html "Mybatis")
 
@@ -76,7 +76,7 @@ return records;
 
 
 
-# 条件构造器 QueryWrapper
+# 条件构造器 `QueryWrapper`
 
 [QueryWrapper](https://baomidou.com/pages/10c804/)
 

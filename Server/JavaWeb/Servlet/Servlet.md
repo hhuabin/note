@@ -172,91 +172,93 @@ public class userServlet extends HttpServlet {
 
 1. 获取请求行信息相关方式请求的url,协议及版本)
 
-  | API                       | 功能解释                       |
-  | ------------------------- | ------------------------------ |
-  | **`getRequestURL`**       | 获取客户端请求的url            |
-  | `String getRequestURI();` | 获取客户端请求项目中的具体资源 |
-  | `int getServerPort();`    | 获取客户端发送请求时的端口     |
-  | `int getLocalPort();`     | 获取本应用在所在容器的端口     |
-  | `int getRemotePort();`    | 获取客户端程序的端口           |
-  | `String getScheme();`     | 获取请求协议                   |
-  | `String getProtocol();`   | 获取请求协议及版本号           |
-  | `String getMethod();`     | 获取请求方式                   |
+    | API                       | 功能解释                       |
+    | ------------------------- | ------------------------------ |
+    | **`getRequestURL`**       | 获取客户端请求的 `url`         |
+    | `String getRequestURI();` | 获取客户端请求项目中的具体资源 |
+    | `int getServerPort();`    | 获取客户端发送请求时的端口     |
+    | `int getLocalPort();`     | 获取本应用在所在容器的端口     |
+    | `int getRemotePort();`    | 获取客户端程序的端口           |
+    | `String getScheme();`     | 获取请求协议                   |
+    | `String getProtocol();`   | 获取请求协议及版本号           |
+    | `String getMethod();`     | 获取请求方式                   |
 
 2. 获得请求头信息相关
 
-  | API                                     | 功能解释                   |
-  | --------------------------------------- | -------------------------- |
-  | `String getHeader(String var1);`        | 根据头名称获取请求头       |
-  | `Enumeration<String> getHeaderNames();` | 获取所有的请求头名字       |
-  | `String getContentType();`              | 获取 `content-type` 请求头 |
+    | API                                     | 功能解释                   |
+    | --------------------------------------- | -------------------------- |
+    | `String getHeader(String var1);`        | 根据头名称获取请求头       |
+    | `Enumeration<String> getHeaderNames();` | 获取所有的请求头名字       |
+    | `String getContentType();`              | 获取 `content-type` 请求头 |
 
-  ```java
-  // 获取请求头相关的
-  System.out.println("------------------getHeaderNames--------------------");
-  Enumeration<String> headerNames = req.getHeaderNames();
-  while (headerNames.hasMoreElements()) {
-      String hname = headerNames.nextElement();
-      System.out.println(hname + ": " + req.getHeader(hname));
-      // host: localhost:5000
-  	// connection: keep-alive
-  }
-  ```
+    ```java
+    // 获取请求头相关的
+    System.out.println("------------------getHeaderNames--------------------");
+    Enumeration<String> headerNames = req.getHeaderNames();
+    while (headerNames.hasMoreElements()) {
+        String hname = headerNames.nextElement();
+        System.out.println(hname + ": " + req.getHeader(hname));
+        // host: localhost:5000
+    	// connection: keep-alive
+    }
+    ```
 
 3. 获得请求参数相关
 
-  | API                                                       | 功能解释                             |
-  | --------------------------------------------------------- | ------------------------------------ |
-  | **`String getParameter(String var1);`**                   | 根据请求参数名获取请求单个参数值     |
-  | `String[] getParameterValues(String var1);`               | 根据请求参数名获取请求多个参数值数组 |
-  | **`Enumeration<String> getParameterNames();`**            | 获取所有请求参数名                   |
-  | **`Map<String, String[]> getParameterMap();`**            | 获取所有请求参数的键值对集合         |
-  | `BufferedReader getReader() throws IOException;`          | 获取读取请求体的字符输入流           |
-  | `ServletInputStream getInputStream() throws IOException;` | 获取读取请求体的字节输入流           |
-  | `int getContentLength();`                                 | 获得请求体长度的字节数               |
+    | API                                                       | 功能解释                             |
+    | --------------------------------------------------------- | ------------------------------------ |
+    | **`String getParameter(String var1);`**                   | 根据请求参数名获取请求单个参数值     |
+    | `String[] getParameterValues(String var1);`               | 根据请求参数名获取请求多个参数值数组 |
+    | **`Enumeration<String> getParameterNames();`**            | 获取所有请求参数名                   |
+    | **`Map<String, String[]> getParameterMap();`**            | 获取所有请求参数的键值对集合         |
+    | `BufferedReader getReader() throws IOException;`          | 获取读取请求体的字符输入流           |
+    | `ServletInputStream getInputStream() throws IOException;` | 获取读取请求体的字节输入流           |
+    | `int getContentLength();`                                 | 获得请求体长度的字节数               |
 
-  ```java
-  @WebServlet("/httpservlet")
-  public class httpServlet extends HttpServlet {
-  
-      // http://localhost:5000/demo/httpservlet?username=bin&age=18
-      @Override
-      protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-          // 用于获取key=value形式的参数
-          String username = req.getParameter("username");
-          String age = req.getParameter("age");
-          System.out.println("username: " + username + ", age: " + age);  // username: bin, age: 18
-  
-          Map<String, String[]> parameterMap = req.getParameterMap();
-          Set<Map.Entry<String, String[]>> entries = parameterMap.entrySet();
-          for (Map.Entry<String, String[]> entry : entries) {
-              String key = entry.getKey();
-              String[] value = entry.getValue();
-              if(value.length > 1) {
-                  System.out.println(key + "=" + value.toString());
-              } else {
-                  System.out.println(key + "=" + value[0]);
-              }
-          }
-      }
-  }
-  ```
+      ```java
+    @WebServlet("/httpservlet")
+    public class httpServlet extends HttpServlet {
+    
+        // http://localhost:5000/demo/httpservlet?username=bin&age=18
+        @Override
+        protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+            // 用于获取key=value形式的参数
+            String username = req.getParameter("username");
+            String age = req.getParameter("age");
+            System.out.println("username: " + username + ", age: " + age);  // username: bin, age: 18
+    
+            Map<String, String[]> parameterMap = req.getParameterMap();
+            Set<Map.Entry<String, String[]>> entries = parameterMap.entrySet();
+            for (Map.Entry<String, String[]> entry : entries) {
+                String key = entry.getKey();
+                String[] value = entry.getValue();
+                if(value.length > 1) {
+                    System.out.println(key + "=" + value.toString());
+                } else {
+                    System.out.println(key + "=" + value[0]);
+                }
+            }
+        }
+    }
+      ```
 
-4. 其他API
 
-  | API                                                          | 功能解释                        |
-  | ------------------------------------------------------------ | ------------------------------- |
-  | `String getServletPath();`                                   | 获取请求的 `Servlet` 的映射路径 |
-  | `ServletContext getServletContext();`                        | 获取 `ServletContext` 对象      |
-  | `Cookie[] getCookies();`                                     | 获取请求中的所有 `cookie`       |
-  | `HttpSession getSession();`                                  | 获取 `Session` 对象             |
-  | `void setCharacterEncoding(String var1) throws UnsupportedEncodingException;` | 设置请求体字符集                |
+4. 其他 `API`
 
-  
+    | API                                                          | 功能解释                        |
+    | ------------------------------------------------------------ | ------------------------------- |
+    | `String getServletPath();`                                   | 获取请求的 `Servlet` 的映射路径 |
+    | `ServletContext getServletContext();`                        | 获取 `ServletContext` 对象      |
+    | `Cookie[] getCookies();`                                     | 获取请求中的所有 `cookie`       |
+    | `HttpSession getSession();`                                  | 获取 `Session` 对象             |
+    | `void setCharacterEncoding(String var1) throws UnsupportedEncodingException;` | 设置请求体字符集                |
+
+
+
 
 ## 请求转发
 
-在Servlet中，使用`RequestDispatcher`对象来进行请求转发。以下是一个简单的请求转发
+在 `Servlet` 中，使用`RequestDispatcher`对象来进行请求转发。以下是一个简单的请求转发
 
 ```java
 // 获取RequestDispatcher对象，参数是转发的目标路径
@@ -279,20 +281,20 @@ dispatcher.forward(request, response);
 
 # 5.`HttpServletResponse`
 
-- 设置响应行相关
+1. 设置响应行相关
 
   | API                             | 功能解释       |
   | ------------------------------- | -------------- |
   | **`void setStatus(int var1);`** | 设置响应状态码 |
 
-- 设置响应头相关
+2. 设置响应头相关
 
   | API                                             | 功能解释                                             |
   | ----------------------------------------------- | ---------------------------------------------------- |
   | **`void setHeader(String var1, String var2);`** | 设置/修改响应头键值对                                |
   | **`void setContentType(String var1);`**         | 设置 `content-type` 响应头及响应字符集(设置MIME类型) |
 
-- 设置响应体相关
+3. 设置响应体相关
 
   | API                                                         | 功能解释                                                   |
   | ----------------------------------------------------------- | ---------------------------------------------------------- |
@@ -318,41 +320,46 @@ dispatcher.forward(request, response);
   }
   ```
 
-  
-
-- 其他API
+4. 其他API
 
   | API                                                         | 功能解释                                            |
   | ----------------------------------------------------------- | --------------------------------------------------- |
   | `void sendError(int var1, String var2) throws IOException;` | 向客户端响应错误信息的方法,需要指定响应码和响应信息 |
-  | `void addCookie(Cookie var1);`                              | 向响应体中增加cookie                                |
+  | `void addCookie(Cookie var1);`                              | 向响应体中增加 `cookie`                             |
   | `void setCharacterEncoding(String var1);`                   | 设置响应体字符集                                    |
 
   
 
 ## 响应重定向
 
-- 响应重定向通过HttpServletResponse对象的sendRedirect方法实现
+- 响应重定向通过 `HttpServletResponse` 对象的 `sendRedirect` 方法实现
+
 - 响应重定向是服务端通过302响应码和路径告诉客户端自己去找其他资源,是在服务端提示下的,客户端的行为
+
 - 客户端至少发送了两次请求客户端地址栏是要变化的
+
 - 服务端产生了多对请求和响应对象且请求和响应对象不会传递给下一个资源
-- 因为全程产生了多个HttpservletRequset对象,所以请求参数不可以传递请求域中的数据也不可以传递
-- 重定向可以是其他Servlet动态资源也可以是一些静态资源以实现页面跳转
-- 重定向不可以到给WEB-INF下受保护的资源
+
+- 因为全程产生了多个 `HttpservletRequset` 对象,所以请求参数不可以传递请求域中的数据也不可以传递
+
+- 重定向可以是其他 `Servlet` 动态资源也可以是一些静态资源以实现页面跳转
+
+- 重定向不可以到给 `WEB-INF` 下受保护的资源
+
 - 重定向可以到本项目以外的外部资源
 
-```java
-@Override
-protected void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    ServletContext servletContext = request.getServletContext();
-    String contextPath = servletContext.getContextPath();
-    System.out.println("contextPath: " + contextPath);    // /demo
-    
-    resp.setStatus(302);
-    resp.setHeader("location", contextPath + "/hello");
-    // or
-    resp.sendRedirect(contextPath + "/hello")
-}
-```
+    ```java
+    @Override
+    protected void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        ServletContext servletContext = request.getServletContext();
+        String contextPath = servletContext.getContextPath();
+        System.out.println("contextPath: " + contextPath);    // /demo
+        
+        resp.setStatus(302);
+        resp.setHeader("location", contextPath + "/hello");
+        // or
+        resp.sendRedirect(contextPath + "/hello")
+    }
+    ```
 
 - 重定向要注意路径问题
