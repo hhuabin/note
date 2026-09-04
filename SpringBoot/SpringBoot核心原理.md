@@ -59,8 +59,8 @@ Listener先要从 META-INF/spring.factories 读到
 # 自定义 starter
 
 1. 建包
-2. 删除Applicition.class主类
-3. META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports 文件中编写好我们自动配置类的全类名即可
+2. 删除 `Applicition.class` 主类
+3. `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports` 文件中编写好我们自动配置类的全类名即可
 4. 主包引入当前包
 
 
