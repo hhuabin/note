@@ -1,6 +1,6 @@
 # 使用
 
-1. Controller
+1. `Controller`
 
    ```java
    @Controller
@@ -43,7 +43,7 @@
    }
    ```
 
-3. Tomcat引入配置文件使用(**Tomcat10以上**)
+3. `Tomcat` 引入配置文件使用(**`Tomcat10` 以上**)
 
    ```java
    //TODO: SpringMVC提供的接口,是替代web.xml的方案,更方便实现完全注解方式ssm处理!
@@ -79,21 +79,7 @@
 
 # SpringMvc接收数据
 
-**@RequestMapping**
-
-**@GetMapping**
-
-**@PostMapping**
-
-**@RequestParam**
-
-**@PathVariable**
-
-**@RequestBody**
-
-
-
-## @RequestMapping
+## `@RequestMapping`
 
 该注解可以加类上或者方法上，路径可以进行**精准匹配**也可以进行**模糊匹配**
 
@@ -101,7 +87,7 @@
 @RequestMapping(value = {"/user"} , method = RequestMethod.POST)
 ```
 
-method：属性的默认值是一个空数组 `{}`。这表示不指定任何HTTP方法时，请求将匹配到所有支持的HTTP方法
+`method`：属性的默认值是一个空数组 `{}`。这表示不指定任何HTTP方法时，请求将匹配到所有支持的HTTP方法
 
 
 
@@ -132,15 +118,15 @@ method：属性的默认值是一个空数组 `{}`。这表示不指定任何HTT
 
 HTTP 方法特定快捷方式变体，进阶注解只能添加到handler方法上，无法添加到类上！
 
-- **@GetMapping**
-- **@PostMapping**
-- @PutMapping
-- @DeleteMapping
-- @DeleteMappin
+1. **`@GetMapping`**
+2. **`@PostMapping`**
+3. `@PutMapping`
+4. `@DeleteMapping`
+5. `@DeleteMappin`
 
 
 
-## 1.Param参数接收
+## 1.`Param` 参数接收
 
 1. 直接传值
 
@@ -155,7 +141,7 @@ HTTP 方法特定快捷方式变体，进阶注解只能添加到handler方法�
    }
    ```
 
-2. **@RequestParam** 注解
+2. **`@RequestParam`** 注解
 
    - value | name：参数名
    - required：是否必须传值
@@ -203,7 +189,7 @@ HTTP 方法特定快捷方式变体，进阶注解只能添加到handler方法�
    }
    ```
 
-5. 动态路径参数，@PathVariable
+5. 动态路径参数，`@PathVariable`
 
    ```java
    @ResponseBody
@@ -216,9 +202,9 @@ HTTP 方法特定快捷方式变体，进阶注解只能添加到handler方法�
 
 
 
-## 2.json数据接收
+## 2.`json` 数据接收
 
-1. 加入jackson依赖，json类型处理的工具
+1. 加入 `jackson`依赖，`json` 类型处理的工具
 
    ```xml
    <dependency>
@@ -228,7 +214,7 @@ HTTP 方法特定快捷方式变体，进阶注解只能添加到handler方法�
    </dependency>
    ```
 
-2. 配置使用@EnableWebMvc注解，此注解可代替`MvcConfig`下的`handlerMapping`和`handlerAdapter`方法
+2. 配置使用 `@EnableWebMvc` 注解，此注解可代替`MvcConfig`下的`handlerMapping`和`handlerAdapter`方法
 
    ```java
    @EnableWebMvc  //json数据处理,必须使用此注解,因为他会加入json处理器
@@ -238,7 +224,7 @@ HTTP 方法特定快捷方式变体，进阶注解只能添加到handler方法�
    }
    ```
 
-1. 接收json实体
+1. 接收 `json` 实体
 
    ```java
    // 加入setter方法
@@ -264,9 +250,9 @@ HTTP 方法特定快捷方式变体，进阶注解只能添加到handler方法�
 
 
 
-## 3.接收Cookie
+## 3.接收 `Cookie`
 
-**@CookieValue**
+**`@CookieValue`**
 
 ```java
 @Controller
@@ -295,7 +281,7 @@ public class CookieController {
 
 ## 4.接收请求头数据
 
-**@RequestHeader**
+**`@RequestHeader`**
 
 ```java
 @GetMapping("header")
@@ -325,11 +311,11 @@ public void api(HttpServletRequest request,
 
 ## 6.共享域对象
 
-请求**转发**或者**重定向**，使用JavaWeb的共享域
+请求**转发**或者**重定向**，使用 `JavaWeb` 的共享域
 
-1. **HttpServletRequest**
-2. **HttpSession**
-3. **ServletContext**
+1. **`HttpServletRequest`**
+2. **`HttpSession`**
+3. **`ServletContext`**
 
 ```java
 @Controller
@@ -347,9 +333,9 @@ public class ShareController {
 }
 ```
 
-**SpringMvc提供的方式**：
+**`SpringMvc` 提供的方式**：
 
-1. **ModelAndView**
+1. **`ModelAndView`**
 
    `ModelAndView` 是一个包含模型（Model）和视图（View）的对象。通过在控制器方法中返回 `ModelAndView`，你可以设置模型数据并指定视图名称。该对象将在请求处理过程中被传递给视图解析器，以渲染相应的视图
 
@@ -366,7 +352,7 @@ public class ShareController {
    }
    ```
 
-2. **Model**
+2. **`Model`**
 
    ```java
    @Controller

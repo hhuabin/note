@@ -72,7 +72,7 @@ try {
    }
    ```
 
-2. service层，加`@Transactional`注解开启事务
+2. `service` 层，加`@Transactional`注解开启事务
 
    ```java
    @Service
@@ -158,11 +158,9 @@ try {
 
 
 
-# @Transactional
+# `@Transactional`
 
-@Transactional可以放在**类**或者**方法**上，方法上的会覆盖类上的
-
-
+`@Transactional` 可以放在**类**或者**方法**上，方法上的会覆盖类上的
 
 **事务的属性：**
 

@@ -38,13 +38,11 @@
 
 1. 默认注释
 
-   idea的注释不从第一行开始
+   `idea` 的注释不从第一行开始
 
    <img src="./Images/comment.jpg" alt="picture" style="zoom:80%;" />
 
 2. 创建新文件的头部注释
-
-   <img src="./Images/newComment.jpg" alt="picture" style="zoom:80%;" />
 
    ```java
    /**
@@ -52,3 +50,10 @@
     * @date ${YEAR}-${MONTH}-${DAY} ${TIME}
     */
    ```
+
+   <img src="./Images/newComment.jpg" alt="picture" style="zoom:80%;" />
+
+
+
+# 快捷键
+

@@ -1,6 +1,6 @@
 # 模板视图
 
-1. 导入jsp页面和依赖
+1. 导入 `jsp` 页面和依赖
 
    ```xml
    <!-- jsp需要依赖! jstl-->
@@ -45,7 +45,7 @@
 
 # 转发和重定向
 
-- 转发：forward:***
+1. 转发：`forward:***`
 
   ```java
   @RequestMapping("/forward")
@@ -55,7 +55,7 @@
   }
   ```
 
-- 重定向：redirect:***
+2. 重定向：`redirect:***`
 
   ```java
   @RequestMapping("/redirect")
@@ -74,9 +74,9 @@
 
 
 
-# 返回json数据
+# 返回 `json` 数据
 
-1. 加入jackson依赖，json类型处理的工具
+1. 加入 `jackson` 依赖，`json` 类型处理的工具
 
    ```xml
    <dependency>
@@ -86,7 +86,7 @@
    </dependency>
    ```
 
-2. 直接返回该对象即可==（User实体的getter和setter方法一定要写）==
+2. 直接返回该对象即可==（`User` 实体的 `getter` 和 `setter` 方法一定要写）==
 
    ```java
    @Data
