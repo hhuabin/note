@@ -17,7 +17,7 @@
    System.out.println(number); // 输出：1
    ```
 
-3. **1 -> '1'**
+3. **1 -> '1'**`
 
    ```java
    int number = 1;

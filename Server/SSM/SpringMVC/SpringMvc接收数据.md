@@ -130,7 +130,7 @@ HTTP 方法特定快捷方式变体，进阶注解只能添加到handler方法�
 
 1. 直接传值
 
-   缺点：name和age都可以不传，不会报错
+   缺点：`name` 和 `age` 都可以不传，不会报错
 
    ```java
    @GetMapping("data")
@@ -143,9 +143,9 @@ HTTP 方法特定快捷方式变体，进阶注解只能添加到handler方法�
 
 2. **`@RequestParam`** 注解
 
-   - value | name：参数名
-   - required：是否必须传值
-   - defaultValue：参数默认值
+   - `value` | `name`：参数名
+   - `required`：是否必须传值
+   - `defaultValue`：参数默认值
 
    ```java
    @GetMapping("requestParam")

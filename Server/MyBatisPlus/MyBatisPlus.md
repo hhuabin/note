@@ -1,8 +1,8 @@
 # `MyBatisPlus`
 
-[Mybatis官网](https://mybatis.org/mybatis-3/zh_CN/index.html "Mybatis")
+[Mybatis官网](https://mybatis.org/mybatis-3/zh_CN/ "Mybatis")
 
-[MyBatisPlus官网](https://baomidou.com/pages/24112f "MyBatisPlus")
+[MyBatisPlus官网](https://baomidou.com/introduce/ "MyBatisPlus")
 
 
 
@@ -28,9 +28,9 @@
    }
    ```
 
-3. Service增强
+3. `Service` 增强
 
-   继承`IService<>`接口，继承`ServiceImpl`类
+   继承`IService<>`接口，继承 `ServiceImpl` 类
 
    ```java
    // 继承 IService，IUserService拥有了基本的增删改方法
@@ -41,6 +41,53 @@
    public class UserServiceImpl2 extends ServiceImpl<UserPlusDao, User> implements IUserService {
    }
    ```
+
+
+
+# 条件构造器 `Wrapper`
+
+[Wrapper](https://baomidou.com/guides/wrapper/)
+
+## `QueryWrapper` 查询条件构造器
+
+```java
+QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+
+queryWrapper.like("username", "a")
+            .between("age", 20, 30)
+            .isNotNull("email");
+
+List<User> list = userMapper.selectList(queryWrapper);
+list.forEach(System.out::println);
+```
+
+
+
+### 基于 `Lambda` 表达式的 `LambdaQueryWrapper` 查询条件构造器
+
+```java
+// 等价示例：
+query().eq("id", value).one();
+lambdaQuery().eq(Entity::getId, value).one();
+```
+
+
+
+## `UpdateWrapper` 更新条件构造器
+
+```java
+UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
+```
+
+
+
+### 基于 `Lambda` 表达式的 `LambdaUpdateWrapper` 更新条件构造器
+
+```java
+// 等价示例：
+update().eq("id", value).remove();
+lambdaUpdate().eq(Entity::getId, value).remove();
+```
 
 
 
@@ -76,46 +123,7 @@ return records;
 
 
 
-# 条件构造器 `QueryWrapper`
-
-[QueryWrapper](https://baomidou.com/pages/10c804/)
-
-```java
-QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-
-queryWrapper.like("username", "a")
-            .between("age", 20, 30)
-            .isNotNull("email");
-
-List<User> list = userMapper.selectList(queryWrapper);
-list.forEach(System.out::println);
-```
-
-
-
-# `UpdateWrapper`
-
-```java
-UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
-```
-
-
-
-# `LambdaQueryWrapper`、`LambdaUpdateWrapper`
-
-```java
-// 等价示例：
-query().eq("id", value).one();
-lambdaQuery().eq(Entity::getId, value).one();
-
-// 等价示例：
-update().eq("id", value).remove();
-lambdaUpdate().eq(Entity::getId, value).remove();
-```
-
-
-
-# 注解
+# `MyBatisPlus` 提供的注解
 
 
 
