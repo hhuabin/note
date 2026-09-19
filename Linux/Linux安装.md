@@ -1,17 +1,17 @@
-# Vmware
+# `Vmware`
 
-[Vmware官网下载](https://www.vmware.com/products/desktop-hypervisor/workstation-and-fusion "Vmware下载")
+[Vmware 官网下载](https://www.vmware.com/products/desktop-hypervisor/workstation-and-fusion "Vmware下载")
 
-1. 搜索 **VMware Workstation**
-2. 选择最新版本的 **VMware Workstation Pro for Windows**
-3. 同意 Terms and Conditions
+1. 搜索 `VMware Workstation`
+2. 选择最新版本的 `VMware Workstation Pro for Windows`
+3. 同意 `Terms and Conditions`
 4. 填写基本信息后下载
 
 
 
-# CentOS
+# `CentOS`
 
-[CentOS官网下载](https://www.centos.org/download/ "CentOS下载") 下载 `x86_64` `iso` 镜像
+[CentOS 官网下载](https://www.centos.org/download/ "CentOS下载") 下载 `x86_64` `iso` 镜像
 
 
 
@@ -141,9 +141,9 @@ graph TB
 
 克隆虚拟机操作（`CentOS 10`）
 
-1. mac 地址
+1. `mac` 地址
 
-    在 设置(Settings) -> 网络适配器(Network Adapter) -> 高级 中修改
+    在 设置(`Settings`) -> 网络适配器(`Network Adapter`) -> 高级 中修改
 
 2. 主机名
 
@@ -151,7 +151,7 @@ graph TB
     sudo vim /etc/hostname
     ```
 
-3. ip 地址
+3. `ip` 地址
 
     动态 ip 可以不管。
 
@@ -169,7 +169,7 @@ graph TB
     ip addr
     ```
 
-4. UUID
+4. `UUID`
 
     ```shell
     # 查看 UUID
