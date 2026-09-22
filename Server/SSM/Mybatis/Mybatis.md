@@ -1,6 +1,6 @@
-# 1. 引入Mybatis
+# 1. 引入 `Mybatis`
 
-配置文件： mybatis-config.xml
+配置文件：`mybatis-config.xml`
 
 ```xml
 <dependency>
@@ -93,7 +93,7 @@
 
 
 
-# 4. 动态 sql
+# 4. 动态 `sql`
 
 ```xml
 <!--
@@ -147,7 +147,7 @@
 
 
 
-# 5. Mybatis 缓存
+# 5. `Mybatis` 缓存
 
 ```java
 /**

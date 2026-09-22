@@ -34,10 +34,12 @@ window.location.href = url
 
 ## 加密 `URL Scheme`
 
+加密 `URL Scheme` 与 不加密的功能是一样的，就是多了加密的功能而已
+
 通过[服务端接口](https://developers.weixin.qq.com/minigame/dev/api-backend/url-scheme/api_generatescheme)可以获取打开小程序任意页面的加密 `URL Scheme`，生成的 `URL Scheme` 如下所示：
 
 ```typescript
-weixin://dl/business/?t= *TICKET*
+weixin://dl/business/?t= *TICKET*   # TICKET会由后端一起返回
 ```
 
 ```typescript
@@ -45,11 +47,11 @@ weixin://dl/business/?t= *TICKET*
 location.href = 'weixin://dl/business/?t= *TICKET*'
 ```
 
-如果需要拼接自定义参数
+如果需要拼接自定义参数 `cq`
 
 ```typescript
 weixin://dl/business/?t= *TICKET*&cq=*CUSTOM PARAMETER*
 ```
 
-`CUSTOM PARAMETE`是一种特殊的`query`，最大256个字符，只支持数字，大小写英文以及部分特殊字符，需要 `url_encode`
+`CUSTOM PARAMETE`是一种特殊的`query`，最大256个字符，只只支持数字，大小写英文以及部分特殊字符：`!#$&'()*+,/:;=?@-._~%`，需要进行 `url_encode`
 
