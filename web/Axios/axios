@@ -1,10 +1,10 @@
-# Axios
+# `Axios`
 
 [Axios官网](https://axios-http.com/zh/docs/intro "Axios官网")
 
 
 
-## header
+## `header`
 
 ```javascript
 headers: {
@@ -70,7 +70,7 @@ const instance = axios.create({
 
 
 
-# POST
+# `POST`
 
 post的请求数据是data
 
@@ -86,7 +86,7 @@ return service({
 
 
 
-# GET
+# `GET`
 
 get 的请求参数是 params
 
@@ -102,9 +102,9 @@ return service({
 
 
 
-# Axios
+# `Axios`
 
-axios拥有的元素
+`axios` 拥有的元素
 
 ```typescript
 export class Axios {
@@ -164,7 +164,7 @@ AxiosStatic extends AxiosInstance {
 
 
 
-# axios请求参数\<AxiosRequest>
+# `axios` 请求参数 `<AxiosRequest>`
 
 ```typescript
 export interface AxiosRequestConfig<D = any> {
@@ -212,7 +212,7 @@ export interface AxiosRequestConfig<D = any> {
 
 
 
-# axios响应参数\<AxiosResponse>
+# `axios` 响应参数 `<AxiosResponse>`
 
 ```typescript
 AxiosResponse<T = any, D = any> {

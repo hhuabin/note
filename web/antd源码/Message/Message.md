@@ -1,6 +1,6 @@
 # 渲染
 
-## Message单例容器
+## `Message`单例容器
 
 ```typescript
 interface GlobalMessage {
