@@ -2,7 +2,7 @@
 
 [Maven官网](https://maven.apache.org "Maven")
 
-[历史版本下载](https://archive.apache.org/dist/maven/maven-3/ "历史版本Maven") 下载 `apache-maven-3.6.3-bin.zip`
+[历史版本下载](https://archive.apache.org/dist/maven/maven-3/ "历史版本Maven") 下载 `apache-maven-3.8.6-bin.zip`
 
 [Maven仓库](https://mvnrepository.com "mvnrepository")
 
@@ -17,40 +17,62 @@
    55行左右，添加以下内容
 
    ```xml
-   <localRepository>D:\Software\Maven\apache-maven-3.8.4\repository</localRepository>
+   <localRepository>D:\Software\Maven\apache-maven-3.8.6\repository</localRepository>
    ```
 
    `<mirrors></mirrors>` 标签下，注释原来的 `mirror`，添加下面部分
 
    ```xml
    <mirror>
-       <id>nexus-aliyun</id>
-       <mirrorOf>central</mirrorOf>
-       <name>Nexus aliyun</name>
-       <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+     <id>nexus-aliyun</id>
+     <mirrorOf>central</mirrorOf>
+     <name>Nexus aliyun</name>
+     <url>http://maven.aliyun.com/nexus/content/groups/public</url>
    </mirror>
    ```
 
    `<profiles></profiles>` 下
 
    ```xml
+   <!-- jdk 8 -->
    <profile>
-       <id>jdk-1.8</id>
-       <activation>
-           <activeByDefault>true</activeByDefault>
-           <jdk>1.8</jdk>
-       </activation>
-       <properties>
-           <maven.compiler.source>1.8</maven.compiler.source>
-           <maven.compiler.target>1.8</maven.compiler.target>
-           <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
-       </properties>
+     <id>jdk-1.8</id>
+     <activation>
+       <activeByDefault>true</activeByDefault>
+       <jdk>1.8</jdk>
+     </activation>
+     <properties>
+       <maven.compiler.source>1.8</maven.compiler.source>
+       <maven.compiler.target>1.8</maven.compiler.target>
+       <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
+     </properties>
    </profile>
    ```
 
-3. 改变`idea`的 `Maven` 配置，配置方式与步骤2一样
+   ```xml
+   <!-- jdk 17 -->
+   <profile>
+     <id>jdk-17</id>
+     <activation>
+       <activeByDefault>true</activeByDefault>
+       <jdk>17</jdk>
+     </activation>
+     <properties>
+       <java.version>17</java.version>
+       <maven.compiler.release>17</maven.compiler.release>
+     </properties>
+   </profile>
+   ```
+
+3. 改变 `idea` 的 `Maven` 配置，配置方式与步骤2一样
 
    `D:\Software\JetBrains\IntelliJ IDEA 2021.1.3\plugins\maven\lib\maven3\conf\settings.xml`
+
+4. 改动一下 `idea` 的默认 `maven` 设置
+
+   `File` -> `New Projects Setup` -> `Settings for New Projects...`
+
+   `Settings` 也顺带改一下：`Settings` -> `Build, Execution, Deployment` -> `Build Tools` -> `Maven`
 
 
 
@@ -62,7 +84,7 @@
 -  `ArtifactID`：表示项目的唯一标识符，格式：通常是项目的名称；**产品线名-模块名**
 - `Version`：表示项目的当前版本号；格式：**主版本号.次版本号.修订号**
 - `Packaging`：表示项目的打包方式，即输出的文件类型
-  - **`jar`**：`Java`项目的标准打包方式，包含Java类和资源文件。
+  - **`jar`**：`Java` 项目的标准打包方式，包含Java类和资源文件。
   - `war`：用于Web应用程序的打包方式，包含了Web应用所需的所有文件。
   - `pom`：用于打包Maven项目本身的信息，包含了项目的依赖、插件等信息。
   - `ear`：用于企业级Java应用程序的打包方式，包含了多个模块的JAR、WAR等文件。
@@ -162,7 +184,7 @@
 
 
 
-# Maven工程的继承
+# `Maven` 工程的继承
 
 父工程的 `packaging` 设置成 `pom`，不打包也不写代码
 
