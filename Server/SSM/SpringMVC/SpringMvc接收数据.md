@@ -77,7 +77,7 @@
 
 
 
-# SpringMvc接收数据
+# `Spring MVC` 接收数据
 
 ## `@RequestMapping`
 

@@ -1,27 +1,27 @@
-# `Spring MVC` (Spring Model View Controller)
+# `Spring MVC` (`Spring Model View Controller`)
 
 
 
-# 注解说明
+## `1`. `Spring MVC` 注解
 
-| 注解                  | 作用                                                         |
-| --------------------- | ------------------------------------------------------------ |
-| `@RequestMapping`     | 映射请求路径，可以用于**类或方法**，也可以指定请求方式       |
-| `@GetMapping`         | 映射 **GET** 请求                                            |
-| `@PostMapping`        | 映射 **POST** 请求                                           |
-| `@DeleteMapping`      | 映射 **DELETE** 请求                                         |
-| `@PutMapping`         | 映射 **PUT** 请求                                            |
-| **`@PathVariable`**   | 将 **URL 路径中的变量** 与控制器方法的形参绑定               |
-| `@RequestHeader`      | 将 **请求头信息** 与控制器方法的形参绑定                     |
-| `@CookieValue`        | 将 **Cookie 数据** 与控制器方法的形参绑定                    |
-| **`@RequestParam`**   | 将 **请求参数** 与控制器方法的形参绑定                       |
-| **`@RequestBody`**    | 将 **请求体中的 JSON 数据** 转换为 Java 对象                 |
-| **`@ResponseBody`**   | 将控制器方法的**返回值作为响应体**返回给客户端               |
-| **`@RestController`** | `@Controller` + `@ResponseBody`，表示该控制器方法的返回值默认作为响应体返回 |
+| 注解              | 作用                                                         |
+| ----------------- | ------------------------------------------------------------ |
+| `@RequestMapping` | 映射请求路径，可以用于类或方法，也可以指定请求方式           |
+| `@GetMapping`     | 映射 `GET` 请求                                              |
+| `@PostMapping`    | 映射 `POST` 请求                                             |
+| `@DeleteMapping`  | 映射 `DELETE` 请求                                           |
+| `@PutMapping`     | 映射 `PUT` 请求                                              |
+| `@PathVariable`   | 将 `URL` 路径中的变量 与控制器方法的形参绑定                 |
+| `@RequestHeader`  | 将 请求头信息 与控制器方法的形参绑定                         |
+| `@CookieValue`    | 将 `Cookie` 数据 与控制器方法的形参绑定                      |
+| `@RequestParam`   | 将 请求参数 与控制器方法的形参绑定                           |
+| `@RequestBody`    | 将 请求体中的 `JSON` 数据 转换为 `Java` 对象                 |
+| `@ResponseBody`   | 将控制器方法的返回值作为响应体返回给客户端                   |
+| `@RestController` | `@Controller` + `@ResponseBody`，表示该控制器方法的返回值默认作为响应体返回 |
 
 
 
-# 请求 `RequestMapping`
+## `2`. 请求 `RequestMapping`
 
 ```java
 /**
@@ -48,7 +48,7 @@
 
 
 
-# 请求参数 `RequestParam`
+## `3`. 请求参数 `RequestParam`
 
 ```java
 /**
@@ -69,7 +69,7 @@
 
 
 
-# 请求参数 `RequestBody`
+## `4`. 请求参数 `RequestBody`
 
 ```java
 /**
@@ -81,7 +81,7 @@
 
 
 
-# 响应体 `ResponseBody`
+## `5`. 响应体 `ResponseBody`
 
 ```java
 /**
@@ -93,7 +93,7 @@
 
 
 
-# 文件上传
+## 文件上传
 
 ```java
 @PostMapping("/upload")
@@ -133,7 +133,7 @@ public R<String> upload(MultipartFile file) {
 
 
 
-# 文件下载
+## 文件下载
 
 ```java
 @GetMapping("/download")

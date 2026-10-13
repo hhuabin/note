@@ -1,10 +1,8 @@
-# 下载
+# 一、下载
 
-[Tomcat官网](https://tomcat.apache.org "Tomcat")
+[Tomcat 官网](https://tomcat.apache.org "Tomcat") 下载 `Core` 的 `64-bit Windows zip` 包
 
-![](./Images/tomcatdownload.png)
-
-# 启动
+# 二、启动
 
 1. 解压包 `Tomcat` 包
 
@@ -12,7 +10,7 @@
 
 3. 运行 `bin` 目录下的 `startup.bat` 即可启动 Tomcat 服务
 
-4. 默认端口号(8080)可以在 `conf/server.xml` 里面修改
+4. 默认端口号(`8080`)可以在 `conf/server.xml` 里面修改
 
     ```xml
     <Connector port="8080" protocol="HTTP/1.1"
@@ -32,7 +30,7 @@
 
 
 
-# 部署
+# 三、部署项目
 
 1. 在 `webapps` 目录下新建 `项目名/WEB_INF`
 2. 把 服务资源 放到与 `WEB_INF` 同级的目录下，即可完成项目的 Tomcat 部署
@@ -41,7 +39,7 @@
 
 
 
-# `idea` 关联 `Tomcat`
+# 四、`Idea` 关联 `Tomcat`
 
 在 idea 的`File | Settings | Build, Execution, Deployment | Application Servers`下面增加Tomcat即可
 
