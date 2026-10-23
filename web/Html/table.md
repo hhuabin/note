@@ -13,6 +13,12 @@
 </table>
 ```
 
+| 表头1 | 表头2 |
+| ----- | ----- |
+| 数据1 | 数据2 |
+
+
+
 ## 主要元素
 
 1. **`<table>`**: 定义表格容器
@@ -41,6 +47,12 @@
 </table>
 ```
 
+| 姓名 | 年龄 |
+| ---- | ---- |
+| 张三 | 25   |
+| 李四 | 30   |
+| 总计 | 2人  |
+
 
 
 ### 合并单元格
@@ -49,14 +61,32 @@
 - `rowspan`: 垂直合并单元格
 
 ```html
-<tr>
-    <td colspan="2">跨两列</td>
-</tr>
-<tr>
-    <td rowspan="2">跨两行</td>
-    <td>数据</td>
-</tr>
+<table>
+    <tbody>
+        <tr>
+            <td colspan="2">跨两列</td>
+        </tr>
+        <tr>
+            <td rowspan="2">跨两行</td>
+            <td>数据</td>
+        </tr>
+    </tbody>
+</table>
 ```
+
+<div>
+    <table>
+        <tbody>
+            <tr>
+                <td colspan="2">跨两列</td>
+            </tr>
+            <tr>
+                <td rowspan="2">跨两行</td>
+                <td>数据</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 
 
@@ -64,9 +94,9 @@
 
 ```css
 table {
+    width: 100%;
     border: 1px solid #333;
     border-collapse: collapse;  /* 合并边框 */
-    width: 100%;
 }
 
 td, th {

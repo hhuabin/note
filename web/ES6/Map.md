@@ -56,47 +56,129 @@ const map2 = new Map([
 
 
 
+## 实例属性
+
+1. `Map.prototype.size`：返回 `Map` 中键值对的数量
+
+    ```typescript
+    readonly size: number;
+    ```
+
+    ```javascript
+    console.log(map.size);  // 2
+    ```
+
+
+
+
+
 ## 常用方法
 
-1. `set(key, value)`：向 `Map` 中添加一个键值对，如果键已存在，更新其对应的值。
+1. `get(key)`：根据键获取值。如果键不存在，返回 `undefined`
 
-   ```javascript
-   map.set('name', 'Alice');
-   map.set('age', 30);
+   ```typescript
+   get(key: K): V | undefined;
    ```
-
-2. `get(key)`：根据键获取值。如果键不存在，返回 `undefined`。
 
    ```javascript
    console.log(map.get('name'));  // 'Alice'
    console.log(map.get('age'));   // 30
    ```
 
-3. `has(key)`：判断 `Map` 中是否存在某个键，返回 `true` 或 `false`。
+2. `has(key)`：判断 `Map` 中是否存在某个键，返回 `true` 或 `false`
 
-   ```javascript
-   console.log(map.has('name'));  // true
-   console.log(map.has('address'));  // false
+    ```typescript
+    has(key: K): boolean;
+    ```
+
+    ```javascript
+    console.log(map.has('name'));  // true
+    console.log(map.has('address'));  // false
+    ```
+
+3. `Map.prototype.set(key, value)`：向 `Map` 中添加一个键值对，如果键已存在，更新其对应的值
+
+   ```typescript
+   set(key: K, value: V): this;
    ```
 
-4. `delete(key)`：删除指定的键值对。
+   ```javascript
+   map.set('name', 'Alice');
+   map.set('age', 30);
+   ```
+
+4. `Map.prototype.keys()`
+
+   返回一个新的迭代器对象，其包含 `Map` 对象中所有元素的键，以插入顺序排列
+
+   ```typescript
+   /**
+    * Returns an iterable of keys in the map
+    */
+   keys(): MapIterator<K>;
+   ```
+
+   ```javascript
+   map.keys()         // {}
+   ```
+
+5. `Map.prototype.values()`
+
+   返回一个新的迭代对象，其中按插入顺序包含 `Map` 对象中每个元素的值
+
+   ```typescript
+   /**
+    * Returns an iterable of values in the map
+    */
+   values(): MapIterator<V>;
+   ```
+
+   ```javascript
+   map.values()       // {}
+
+6. `Map.prototype.entries()`
+
+   返回一个新的迭代器对象，其包含 `Map` 对象中所有键值对 `[key, value]` 二元数组，以插入顺序排列
+
+   ```typescript
+   /**
+    * Returns an iterable of key, value pairs for every entry in the map.
+    */
+   entries(): MapIterator<[K, V]>;
+   ```
+
+   ```javascript
+   map.entries()      // {}
+   ```
+
+7. `Map.prototype.delete(key)`：删除指定的键值对
+
+   ```typescript
+   delete(key: K): boolean;
+   ```
 
    ```javascript
    map.delete('name');
    console.log(map.has('name'));  // false
    ```
 
-5. `clear()`：清空所有的键值对。
+8. `Map.prototype.clear()`：清空所有的键值对
+
+   ```typescript
+   clear(): void;
+   ```
 
    ```javascript
    map.clear();
    console.log(map.size);  // 0
    ```
 
-6. `size`：返回 Map 中键值对的数量。
+9. `Map.prototype.forEach` 遍历
 
-   ```javascript
-   console.log(map.size);  // 2
+   以插入顺序为 `Map` 对象中的每个键值对调用一次 `callbackFn`。如果为 `forEach` 提供了 `thisArg` 参数，则它将作为每一次 callback 的 `this` 值
+
+   ```typescript
+   forEach(callbackfn: (value: V, key: K, map: Map<K, V>) => void, thisArg?: any): void;
    ```
 
 
