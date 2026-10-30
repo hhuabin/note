@@ -44,7 +44,7 @@
 new Map()
 new Map(iterable)
 
-const map2 = new Map([
+const map = new Map([
     ['name', 'Alice'],
     ['age', 25],
 ]);
@@ -120,6 +120,10 @@ const map2 = new Map([
 
    ```javascript
    map.keys()         // {}
+   
+   for (const key of map.keys()) {
+       console.log(key); // 'a', 'b'
+   }
    ```
 
 5. `Map.prototype.values()`
@@ -135,6 +139,10 @@ const map2 = new Map([
 
    ```javascript
    map.values()       // {}
+   
+   for (const value of map.values()) {
+       console.log(value); // 1, 2
+   }
 
 6. `Map.prototype.entries()`
 
@@ -149,6 +157,10 @@ const map2 = new Map([
 
    ```javascript
    map.entries()      // {}
+   
+   for (const [key, value] of map.entries()) {
+       console.log(key, value);
+   }
    ```
 
 7. `Map.prototype.delete(key)`：删除指定的键值对
@@ -212,3 +224,31 @@ const map2 = new Map([
    	console.log(key, value);
    }
    ```
+
+
+
+## `Map` 转 `{}`
+
+1.   手动遍历
+
+     ```javascript
+     // forEach 遍历
+     const map = new Map([['a', 1], ['b', 2]]);
+     const obj = {};
+     map.forEach((value, key) => {
+         obj[key] = value;
+     });
+     
+     // reduce 遍历
+     const obj = [...map].reduce((acc, [k, v]) => (acc[k] = v, acc), {});
+     ```
+
+2.   `Object.fromEntries()`（推荐，ES2019+）
+
+     ```javascript
+     const map = new Map([['a', 1], ['b', 2]]);
+     const obj = Object.fromEntries(map);
+     // { a: 1, b: 2 }
+     ```
+
+     

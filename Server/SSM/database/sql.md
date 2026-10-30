@@ -76,7 +76,14 @@ CREATE TABLE `t_order` (
 INSERT INTO `t_emp`(emp_name, emp_salary) VALUES
 	("tom", 200.33),
 	("jerry", 666.66),
-	("andy", 777.77);
+	("andy", 777.77),
+	("a", 100),
+	("b", 200),
+	("c", 300),
+	("d", 400),
+	("e", 500),
+	("f", 600),
+	("g", 700);
 
 INSERT INTO `t_customer` (`customer_name`)
 VALUES ('c01');
