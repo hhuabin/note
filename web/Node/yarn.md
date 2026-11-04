@@ -1,16 +1,16 @@
-# yarn安装使用
+# `yarn` 安装使用
 
-**使用node安装**
+1.   使用 `node`安装
 
-```shell
-npm install --global yarn
-```
+     ```shell
+     npm install --global yarn
+     ```
 
-**查看yarn版本**
+2.   查看 `yarn` 版本
 
-```shell
-yarn --version
-```
+     ```shell
+     yarn --version
+     ```
 
 
 
@@ -22,7 +22,7 @@ yarn --version
    yarn config get registry
    ```
 
-2. 打开终端或命令行，运行以下命令来配置 npm 使用淘宝镜像：
+2. 打开终端或命令行，运行以下命令来配置 `npm` 使用淘宝镜像：
 
    ```bash
    yarn config set registry https://registry.npm.taobao.org
@@ -98,23 +98,23 @@ yarn eject
 
 
 
-## package version
+## `package version`
 
-**package版本号自动更新**
+`package` 版本号自动更新
 
 ```bash
 yarn version --patch --no-git-tag-version
 ```
 
 - `package.json` 和 `yarn.lock` 的版本号更新。
-- **不会** 生成 Git commit 或 tag
+- **不会** 生成 `Git commit` 或 `tag`
 
 | 参数                   | 作用                                             |
 | :--------------------- | :----------------------------------------------- |
 | `--patch`              | 将版本号的 **补丁号** +1（如 `1.0.0` → `1.0.1`） |
 | `--minor`              | 更新次版本号（如 `1.0.0` → `1.1.0`）             |
 | `--major`              | 更新主版本号（如 `1.0.0` → `2.0.0`）             |
-| `--no-git-tag-version` | 禁止自动创建 Git commit 和 tag                   |
+| `--no-git-tag-version` | 禁止自动创建 `Git commit` 和 `tag`               |
 
 ```typescript
 "major": "yarn version --major --no-git-tag-version",
@@ -126,9 +126,9 @@ yarn version --patch --no-git-tag-version
 
 
 
-# Webpack(Vite自动忽略)
+# `Webpack` (`Vite` 自动忽略)
 
-**生产环境打包命令**（craco）
+**生产环境打包命令**（`craco`）
 
 ```json
 "build": "react-scripts build"
@@ -142,9 +142,9 @@ yarn run build
 
 
 
-**开发环境打包命令**（Webpack）
+**开发环境打包命令**（`Webpack`）
 
-1. 使用`dotenv`(推荐)
+1. 使用 `dotenv` (推荐)
 
    ```bash
    yarn add dotenv-cli --dev
@@ -160,9 +160,9 @@ yarn run build
    yarn run build:dev
    ```
 
-   此时会有一个问题，`process.env.NODE_ENV`的值仍然是`"production"`，因为运行的是`craco build`，只是把.env.development文件加载进去了。.env.development的环境变量会生效，但是在 craco 运行的项目中，.env.development不能改变`NODE_ENV`的值，即一定要是`"production"`，不然会报 craco-less错误
+   此时会有一个问题，`process.env.NODE_ENV` 的值仍然是 `"production"`，因为运行的是 `craco build`，只是把 `.env.development` 文件加载进去了。`.env.development` 的环境变量会生效，但是在 `craco` 运行的项目中，`.env.development` 不能改变 `NODE_ENV` 的值，即一定要是 `"production"`，不然会报 `craco-less` 错误
 
-2. 使用`env.cmd`
+2. 使用 `env.cmd`
 
    ```bash
    yarn add env-cmd --dev
@@ -178,4 +178,4 @@ yarn run build
    yarn run build:dev
    ```
    
-   此时会有一个问题，`process.env.NODE_ENV`的值仍然是`"production"`，因为运行的是`craco build`，只是把.env.development文件加载进去了。.env.development的环境变量会生效，但是在 craco 运行的项目中，.env.development不能改变`NODE_ENV`的值，即一定要是`"production"`，不然会报 craco-less错误
+   此时会有一个问题，`process.env.NODE_ENV` 的值仍然是 `"production"`，因为运行的是 `craco build`，只是把 `.env.development` 文件加载进去了。`.env.development` 的环境变量会生效，但是在 `craco` 运行的项目中，`.env.development` 不能改变`NODE_ENV`的值，即一定要是 `"production"`，不然会报 craco-less错误

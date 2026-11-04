@@ -40,64 +40,73 @@ npm -v
 
 # 常用命令
 
-1.   **初始化项目**
+1.   初始化项目
 
      ```shell
      npm init
      ```
 
-2.   **查看全局包**
+2.   查看全局包
 
      ```shell
      npm list -g --depth 0
      ```
 
-3.   **查看当前目录的包**
+3.   查看当前目录的包
 
      ```shell
      npm list --depth=0
      ```
 
-4.   **加入生产依赖**
+4.   加入生产依赖
 
      ```shell
      npm i package-name[@version] --save(-S) [-g]
      ```
 
-5.   **加入开发依赖**
+5.   加入开发依赖
 
      ```shell
      npm i package-name[@version] --save-dev(-D)
      ```
 
-6.   **查看包的当前版本号**
+6.   查看包的当前版本号
 
      ```shell
      npm view package-name version
      ```
 
-7.   **查看包的所有版本号**
+7.   查看包的所有版本号
 
      ```shell
      npm view package-name versions
      ```
 
-8.   **装最新版本的包**
+8.   装最新版本的包
 
      ```shell
      npm install package-name@latest
      ```
 
-9.   **更新包**
+9.   安装某个安装的包
 
      ```shell
-     npm update                                 // 依据package.json进行更新，并同步更新package-lock.json文件
-     npm update package-name                    // 将特定包更新到符合package.json文件中指定版本范围的最新版本
-     npm update package-name@latest             // 将指定包更新至最新版本，并同步修改package.json文件
-     npm update package-name[@version]          // 更新指定包
+     npm install package-name@*
+     
+     # 举例，安装4.*版本的 vue-router
+     npm install vue-router@4
      ```
 
-10.   **清除缓存**
+10.   更新包
+
+      ```shell
+      npm update                                 // 依据package.json进行更新，并同步更新package-lock.json文件
+      npm update package-name                    // 将特定包更新到符合package.json文件中指定版本范围的最新版本
+      npm update package-name@latest             // 将指定包更新至最新版本，并同步修改package.json文件
+      npm update package-name[@version]          // 更新指定包
+      ```
+
+11.   清除缓存
 
       ```shell
       npm cache clean --force
@@ -105,9 +114,9 @@ npm -v
 
 
 
-## package version
+## `package version`
 
-**package版本号自动更新**
+**`package` 版本号自动更新**
 
 ```bash
 npm version major --no-git-tag-version
@@ -167,7 +176,7 @@ set NODE_OPTIONS=--max_old_space_size=4096 && npm run dev
 
 
 
-# Vue
+# `Vue`
 
 **生产环境打包命令**
 

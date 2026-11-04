@@ -1,18 +1,31 @@
-[pinia官网](https://pinia.vuejs.org/core-concepts "pinia")
+[pinia 官网](https://pinia.vuejs.org/core-concepts "pinia")
 
-# Pinia
+# `Pinia`
 
-## 安装 pinia
+## 安装 `pinia`
 
-```shell
-yarn add pinia
-# 或者使用 npm
-npm install pinia
-```
+1.   安装
+
+     ```shell
+     npm install pinia
+     
+     # 或者使用 yarn
+     yarn add pinia
+     ```
+
+2.   从 v4 起，还需要安装 `@vue/devtools-api`，它是 `devtools` 集成所需的对等依赖 (`peer dependency`)
+
+     ```shell
+     yarn add pinia @vue/devtools-api
+     # 或者使用 npm
+     npm install pinia @vue/devtools-api
+     ```
+
+     
 
 
 
-## 使用 pinia
+## 使用 `pinia`
 
 1. 创建一个 pinia 实例 (根 store) 并将其传递给应用
 
@@ -264,5 +277,4 @@ router.beforeEach((to) => {
     if (to.meta.requiresAuth && !store.isLoggedIn) return '/login'
 })
 ```
-
 
