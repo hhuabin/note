@@ -1,4 +1,4 @@
-# ts-ignore
+# `ts-ignore`
 
 1. 忽略整个文件的ts检查
 
@@ -32,9 +32,9 @@
 
 
 
-# eslint
+# `eslint`
 
-1. 忽略整个文件的 eslint 检查
+1. 忽略整个文件的 `eslint` 检查
 
    `/* eslint-disable */`
 
@@ -42,7 +42,7 @@
 
    `// eslint-disable-next-line`
 
-3. 忽略该文件关于any的报错
+3. 忽略该文件关于 `any` 的报错
 
    在文件的**顶部**添加 `eslint-disable` 注释，可以禁用整个文件的 `any` 类型检查
 

@@ -1,12 +1,12 @@
-# 对象类型
+# 一、对象类型
 
-- `{}`：object
-- JSON：JSON
-- 字符串对象： Record<string, string>
+- `{}`：`object`
+- `JSON`：`JSON`
+- 字符串对象： `Record<string, string>`
 
 
 
-# 基本类型
+# 二、基本类型
 
 - 类型断言
 
@@ -55,7 +55,7 @@
 
 
 
-# 高级类型
+# 三、高级类型
 
 ## 交叉类型(&)
 
@@ -111,7 +111,7 @@ type DependentProps = WithAB | WithoutAB;
 
 
 
-# 接口(`interface`)和类型别名(`type`)
+# 四、接口(`interface`)和类型别名(`type`)
 
 ```typescript
 interface ClockInterface {
@@ -170,7 +170,7 @@ interface Square extends Shape, PenStroke {
 
 
 
-# `implements`、`instanceof`、`keyof`类型保护
+# 五、`implements`、`instanceof`、`keyof`类型保护
 
 ##　`instanceof`
 
@@ -233,7 +233,7 @@ for (const key in user) {
 
 
 
-# 泛型
+# 六、泛型
 
 1. 泛型接口
 
@@ -303,11 +303,11 @@ export const runTasksWithLimitSettled = <T extends (() => Promise<any>)[]>(
 ): Promise<{[K in keyof T]: T[K] extends () => Promise<infer R> ? TaskResult<R> : never}>
 ```
 
-- `readonly [...T]`：保持传入参数的“元组精度”并允许 as const 修饰
+- `readonly [...T]`：保持传入参数的“元组精度”并允许 `as const` 修饰
 
 
 
-# 函数
+# 七、函数
 
 **函数默认值**
 
@@ -321,4 +321,15 @@ function keepWholeObject(wholeObject: { a: string, b?: number }) {
 ```
 
 
+
+# 八、编辑器提示
+
+1.   使用 `/** */` 在代码上方包住注释，这样 `VScode` 会有提示
+
+     ```typescript
+     /** vite.config.ts 构建时产生的版本字段 */
+     declare const __APP_VERSION__: string
+     ```
+
+     
 

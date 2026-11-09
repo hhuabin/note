@@ -1,4 +1,4 @@
-# Input输入格式控制
+# `Input` 输入格式控制
 
 ```tsx
 const handleChangeIdNum = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -14,7 +14,7 @@ const handleChangeIdNum = (event: React.ChangeEvent<HTMLInputElement>) => {
 
 
 
-# 防止`XSS`诸如攻击
+# 防止 `XSS` 注入攻击
 
 - 使用`escapeHTML`对输入字符串进行过滤
 
@@ -92,7 +92,7 @@ const Home: React.FC = () => {
 
 
 
-# `type`&`inputMode`
+# `type` & `inputMode`
 
 <table>
     <tr style="text-align:center;">
@@ -131,18 +131,18 @@ const Home: React.FC = () => {
 
 
 
-# `enterKeyHint`键盘回车键显示
+# `enterKeyHint` 键盘回车键显示
 
-| enterKeyHint参数值 | 移动端键盘右下角文字                                         |
-| ------------------ | ------------------------------------------------------------ |
-| `enter`            | 回车符                                                       |
-| `done`             | "完成" 或 "Done"                                             |
-| `go`               | "开始" 或 "Go"                                               |
-| `next`             | "下一步" 或 "Next"                                           |
-| `previous`         | "上一步" 或 "Prev"                                           |
-| `search`           | 搜索图案                                                     |
-| `send`             | "发送" 或 "Send"                                             |
-| `undefined`        | 默认为 "开始" 或 "Go"<br />当输入框下还有输入框时，显示为"下一步"，点击跳转至下一个输入框 |
+| `enterKeyHint` 参数值 | 移动端键盘右下角文字                                         |
+| --------------------- | ------------------------------------------------------------ |
+| `enter`               | 回车符                                                       |
+| `done`                | "完成" 或 "Done"                                             |
+| `go`                  | "开始" 或 "Go"                                               |
+| `next`                | "下一步" 或 "Next"                                           |
+| `previous`            | "上一步" 或 "Prev"                                           |
+| `search`              | 搜索图案                                                     |
+| `send`                | "发送" 或 "Send"                                             |
+| `undefined`           | 默认为 "开始" 或 "Go"<br />当输入框下还有输入框时，显示为"下一步"，点击跳转至下一个输入框 |
 
 ```tsx
 const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {

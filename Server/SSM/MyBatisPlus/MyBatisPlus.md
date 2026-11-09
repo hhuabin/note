@@ -1,9 +1,3 @@
-# `MyBatisPlus`
-
-[Mybatis官网](https://mybatis.org/mybatis-3/zh_CN/ "Mybatis")
-
-[MyBatisPlus官网](https://baomidou.com/introduce/ "MyBatisPlus")
-
 
 
 # 基本使用
