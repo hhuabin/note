@@ -30,8 +30,6 @@
 
 
 
-
-
 # `@WebServlet` 注解
 
 `@WebServlet(name = "MyServlet", urlPatterns = "/hello")`
@@ -59,19 +57,4 @@ public class MyServlet extends HttpServlet {
 )
 ```
 
-
-
-Tips：
-
-当注解的参数名是`value`的时候，可以省略不写，所以一般都会配一个 `value` 参数当默认值。在 `WebServlet` 接口中，`value`指向`urlPatterns`。故而，当不写参数名的时候 `@WebServlet("/hello")` 则是在给`urlPatterns`赋值
-
-```java
-public @interface WebServlet {
-    String name() default "";
-
-    String[] value() default {};
-
-    String[] urlPatterns() default {};
-}
-```
 

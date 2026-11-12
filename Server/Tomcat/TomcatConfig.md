@@ -8,7 +8,7 @@
 
 2. 配置好 `JAVA_HOME` 环境变量
 
-3. 运行 `bin` 目录下的 `startup.bat` 即可启动 Tomcat 服务
+3. 运行 `bin` 目录下的 `startup.bat` 即可启动 `Tomcat` 服务
 
 4. 默认端口号(`8080`)可以在 `conf/server.xml` 里面修改
 
