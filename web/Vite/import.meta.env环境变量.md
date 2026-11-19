@@ -58,26 +58,28 @@ VITE_API_URL=https://api.example.com/production
 
 ## `vite.config.ts`中使用环境变量
 
-使用`loadEnv`方法shi'xian
+1.   使用 `loadEnv` 方法
 
-```typescript
-import { defineConfig, loadEnv } from 'vite'
+     >   如果要使用环境变量，最好使用 `const env = loadEnv(mode, process.cwd())` 的方式获取 `env`，不然，代理地址会被认为是动态的，导致无法代理，报错
 
-export default defineConfig(({ mode }) => {
-    const env = loadEnv(mode, process.cwd())
-    console.log('当前环境变量：', env.VITE_API_BASE_URL)
-
-    return {
-        server: {
-            proxy: {
-                '/api': {
-                    target: env.VITE_API_BASE_URL,
-                    changeOrigin: true,
-                    rewrite: path => path.replace(/^\/api/, '')
-                }
-            }
-        }
-    }
-})
-```
+     ```typescript
+     import { defineConfig, loadEnv } from 'vite'
+     
+     export default defineConfig(({ mode }) => {
+         const env = loadEnv(mode, process.cwd())
+         console.log('当前环境变量：', env.VITE_API_BASE_URL)
+     
+         return {
+             server: {
+                 proxy: {
+                     '/api': {
+                         target: env.VITE_API_BASE_URL,
+                         changeOrigin: true,
+                         rewrite: path => path.replace(/^\/api/, '')
+                     }
+                 }
+             }
+         }
+     })
+     ```
 

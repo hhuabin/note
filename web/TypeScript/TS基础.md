@@ -282,7 +282,7 @@ for (const key in user) {
    }
    ```
 
-4. Map泛型
+4. `Map` 泛型
 
    ```typescript
    interface Map<T> {
