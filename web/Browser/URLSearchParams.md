@@ -1,4 +1,4 @@
-# URLSearchParams
+# `URLSearchParams`
 
 [**URLSearchParams**](https://developer.mozilla.org/zh-CN/docs/Web/API/URLSearchParams/URLSearchParams "URLSearchParams") 接口定义了一些实用的方法来处理 URL 的查询字符串。
 
@@ -62,5 +62,4 @@ const mySearchParams = new URLSearchParams(window.location.search)
 // 哈希路由
 const mySearchParams = new URLSearchParams(window.location.href.split('?')[1])
 ```
-
 
