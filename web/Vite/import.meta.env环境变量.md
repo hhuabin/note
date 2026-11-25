@@ -56,7 +56,7 @@ VITE_API_URL=https://api.example.com/production
 
 
 
-## `vite.config.ts`中使用环境变量
+## `vite.config.ts` 中使用环境变量
 
 1.   使用 `loadEnv` 方法
 

@@ -14,9 +14,9 @@ npm install react-router-dom
 
 
 
-# ReactRouter路由原理：
+# 一、`ReactRouter` 路由原理：
 
-通过 **history.listen**（这个 history 是经过封装的，不是window.history）监听路由变化。再匹配显示对应的组件
+通过 **`history.listen`**（这个 `history` 是经过封装的，不是 `window.history` ）监听路由变化。再匹配显示对应的组件
 
 ```javascript
 // 引入 history.js 库
@@ -32,17 +32,17 @@ history.listen((location) => {
 
 
 
-# 路由参数
+# 二、路由参数
 
-1. **params**
+1. `params`
 
    ```tsx
    this.props.match.params
    ```
 
-   会在地址栏展示（/home/:id）
+   会在地址栏展示（`/home/:id`）
 
-2. **search**
+2. `search`
 
    ```tsx
    this.props.location.search
@@ -50,7 +50,7 @@ history.listen((location) => {
 
    会在地址栏展示（/home?id=1），相当于 `query`
 
-3. **state**
+3. `state`
 
    ```tsx
    this.props.location.state
@@ -60,40 +60,50 @@ history.listen((location) => {
 
 
 
-# ReactRouter 6
+# 三、`ReactRouter 6`
 
-## 与ReactRouter 5相比
+## 3.1 与 `ReactRouter 5` 相比
 
 1. 内置组件变化
-   - 移除 \<Switch/>，\<Redirect/>
-   - 新增 **\<Routes/>**, **\<Navigate/>**
+   - 移除 `<Switch/>`，`<Redirect/>`
+   - 新增 `<Routes/>`, `<Navigate/>`
 2. 语法变化
-   - component={Home} 变为 **element**={\<Home/>}
-3. 新增多个hook
-   - useParams
-   - useMatch
-   - useNavigate
+   - `component={Home}` 变为 `element={\<Home/>}`
+3. 新增多个 `hook`
+   - `useParams`
+   - `useMatch`
+   - `useNavigate`
 4. 官方明确推荐使用函数式组件
 
 
 
-## 内置组件
+## 3.2 内置组件
 
-- **\<Routes/>**
+1.  `<Routes/>`
 
-  \<Routes/> 具备 \<Switch/> 的功能
+  `<Routes/>` 具备 `<Switch/>` 的功能
 
-  \<Routes/> 与 \<Route/>配合使用，\<Route/> 必须用 \<Routes/> 包裹
+  `<Routes/>` 与 `<Route/>` 配合使用，`<Route/>` 必须用 `<Routes/>` 包裹
 
-- **\<Navigate/>**：
+2.  `<Navigate/>`：重定向组件
 
-  只要 \<Navigate/> 组件被渲染就会修改路径
+  只要 `<Navigate/>` 组件被渲染就会修改路径，所以直接使用重定向的时候要注意 `query` 参数被吃掉
 
-- **\<Route/>**
+  可以包装 `<Navigate/>` 解决该问题
+
+  ```java
+  // 顶部加一个极小的组件
+  const IndexRedirect: React.FC<{ to: string }> = ({ to }) => {
+      const { search, hash } = useLocation()
+      return <Navigate to={{ pathname: to, search, hash }} replace />
+  }
+  ```
+
+3.  `<Route/>`
 
   - `path`：指定路由的匹配路径。可以使用字符串、数组或正则表达式来定义多个路径匹配规则。
 
-    You can have multiple dynamic segments in one route path:
+    `You can have multiple dynamic segments in one route path:`
 
     ```jsx
     <Route path="/c/:categoryId/p/:productId" />;
@@ -122,7 +132,7 @@ history.listen((location) => {
 
   Route 的匹配是无条件渲染的。即 / 的组件为 \<Home/>， /about 的组件为 \<About/>。当此时的路由为 /about 的时候 \<Home/> 和 \<About/> 都会被渲染，要想只匹配到一个，需要使用 \<Routes/> 包裹
 
-- **\<NavLink>**
+4.  `<NavLink>`
 
   删除 activeClassName 属性，动态类名需要写成函数
 
@@ -135,13 +145,13 @@ history.listen((location) => {
 
   - end：当匹配了自己路由，active样式失效
 
-- **\<Outlet/>**
+5.  `<Outlet/>`
 
   指定路由组件的呈现位置，相当于 vue 里的 \<router-view />
 
-- **useRoutes**
+6.  `useRoutes`
 
-  可以将 useRoutes 抽出来做成一个文件
+  可以将 `useRoutes` 抽出来做成一个文件
 
   ```tsx
   import { Routes, Route, Navigate, useRoutes } from 'react-router-dom'
@@ -179,7 +189,7 @@ history.listen((location) => {
   }
   ```
 
-- useResolvedPath，解析路径用
+7.  `useResolvedPath`，解析路径用
 
   ```tsx
   import { useResolvedPath } from 'react-router-dom';
@@ -192,13 +202,13 @@ history.listen((location) => {
 
 
 
-## 路由参数
+## 3.3 路由参数
 
-### params参数 **useParams, useMatch**
+### 3.3.1 `params` 参数 `useParams`, `useMatch`
 
-- useParams：获取 params
+- `useParams`：获取 `params`
 
-- useMatch：获取 match
+- `useMatch`：获取 `match`
 
   - 返回值：
 
@@ -221,7 +231,9 @@ const match = useMatch("/home")
 console.log(params, match);
 ```
 
-### search参数 **useSearchParams, useLocation**
+
+
+### 3.3.2 `search` 参数 `useSearchParams`, `useLocation`
 
 - useSearchParams：获取 search
 - useLocation：获取 location
@@ -239,9 +251,11 @@ setSearch("id=0&name=bin")
 console.log(search.get("id"), location);
 ```
 
-### state 参数
 
-使用 useLocation 获得 location，location 里面有 state 参数
+
+### 3.3.3 `state` 参数
+
+使用 `useLocation` 获得 `location`，`location` 里面有 `state` 参数
 
 ```tsx
 const { state } = useLocation()
@@ -249,7 +263,7 @@ const { state } = useLocation()
 
 
 
-## 编程式路由导航 useNavigate
+## 3.4 编程式路由导航 `useNavigate`
 
 ```tsx
 import { useNavigate } from 'react-router-dom';
@@ -279,9 +293,9 @@ export default function Home() {
 
 
 
-## 弹窗返回关闭/表单返回保存
+## 3.5 弹窗返回关闭/表单返回保存
 
-由于 ReactRouter6 去掉了 Prompt 组件，使得 ReactRouter6 并不具备返回拦截功能。下面提供两种思路实现此功能
+由于 `ReactRouter6` 去掉了 `Prompt` 组件，使得 `ReactRouter6` 并不具备返回拦截功能。下面提供两种思路实现此功能
 
 1. 使用 `window.history.pushState` 跳转至该路由下的子路由，假性增加路由层级。再使用 `history.popstate` 监听路由返回，实现此功能。注意移除监听
 
@@ -309,21 +323,19 @@ export default function Home() {
 
 
 
-PS: 
-
-1. 在 React Router 中，当**父级路由加载子路由时，父级路由组件会被重新渲染**，
-
-   这可能导致父级路由重新加载的表象。这是由于 React Router 的工作原理和组件生命周期的机制导致的。
-
-   当父级路由加载子路由时，父级路由组件会首先被渲染，然后再渲染匹配的子路由组件。这是为了确保在渲染子路由之前，父级路由组件能够执行一些必要的操作，比如准备数据、执行路由守卫等。
-
-   因此，父级路由的重新加载可能是正常的行为，并且符合 React Router 的设计原则。如果你希望在父级路由加载子路由时避免父级路由的重新加载，可以考虑优化父级路由组件的逻辑，避免不必要的操作和副作用，以减少重新渲染的开销。
+>   在 `React Router` 中，当**父级路由加载子路由时，父级路由组件会被重新渲染**，
+>
+>   这可能导致父级路由重新加载的表象。这是由于 `React Router` 的工作原理和组件生命周期的机制导致的。
+>
+>   当父级路由加载子路由时，父级路由组件会首先被渲染，然后再渲染匹配的子路由组件。这是为了确保在渲染子路由之前，父级路由组件能够执行一些必要的操作，比如准备数据、执行路由守卫等。
+>
+>   因此，父级路由的重新加载可能是正常的行为，并且符合 `React Router` 的设计原则。如果你希望在父级路由加载子路由时避免父级路由的重新加载，可以考虑优化父级路由组件的逻辑，避免不必要的操作和副作用，以减少重新渲染的开销。
 
 
 
-# ReactRouter 5
+# 四、`ReactRouter 5`
 
-## ReactRouter 5 内置组件
+## 4.1 `ReactRouter 5` 内置组件
 
 - **\<BrowserRouter>**：history 路由，整个应用应该用一个路由去管理
 
@@ -345,7 +357,7 @@ PS:
 
 
 
-## 路由组件通过 props 传递的仨对象
+## 4.2 路由组件通过 props 传递的仨对象
 
 PS: 在 React Router 5 中，如果你是通过 \<BrowserRouter> 或者 \<Router> 组件将你的根组件包裹起来的话，那么**在根组件内部，是无法直接访问 history 对象的**，因为它不是通过 props 传递到组件内部的。
 
@@ -369,7 +381,7 @@ PS: 在 React Router 5 中，如果你是通过 \<BrowserRouter> 或者 \<Router
 
 
 
-## 路由参数
+## 4.3 路由参数
 
 ### **params**: this.props.match.params
 
@@ -436,7 +448,7 @@ replace 模式
 
 
 
-## 编程式路由导航
+## 4.4 编程式路由导航
 
 ```javascript
 back = ()=>{
@@ -470,7 +482,7 @@ replace = () => {
 
 
 
-## withRouter
+## 4.5 withRouter
 
 - withRouter可以加工一般组件，让一般组件具备路由组件所特有的API
 
